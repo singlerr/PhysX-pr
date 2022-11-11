@@ -27,6 +27,7 @@ typedef physx::PxArticulationJointType::Enum PxArticulationJointTypeEnum;
 typedef physx::PxArticulationMotion::Enum PxArticulationMotionEnum;
 typedef physx::PxBaseFlag::Enum PxBaseFlagEnum;
 typedef physx::PxBroadPhaseType::Enum PxBroadPhaseTypeEnum;
+typedef physx::PxBVHBuildStrategy::Enum PxBVHBuildStrategyEnum;
 typedef physx::PxCapsuleClimbingMode::Enum PxCapsuleClimbingModeEnum;
 typedef physx::PxCombineMode::Enum PxCombineModeEnum;
 typedef physx::PxConstraintFlag::Enum PxConstraintFlagEnum;
@@ -46,6 +47,7 @@ typedef physx::PxD6Drive::Enum PxD6DriveEnum;
 typedef physx::PxD6Motion::Enum PxD6MotionEnum;
 typedef physx::PxD6JointDriveFlag::Enum PxD6JointDriveFlagEnum;
 typedef physx::PxDistanceJointFlag::Enum PxDistanceJointFlagEnum;
+typedef physx::PxDynamicTreeSecondaryPruner::Enum PxDynamicTreeSecondaryPrunerEnum;
 typedef physx::PxErrorCode::Enum PxErrorCodeEnum;
 typedef physx::PxFilterFlag::Enum PxFilterFlagEnum;
 typedef physx::PxFilterObjectFlag::Enum PxFilterObjectFlagEnum;
@@ -65,9 +67,12 @@ typedef physx::PxMeshMidPhase::Enum PxMeshMidPhaseEnum;
 typedef physx::PxMeshPreprocessingFlag::Enum PxMeshPreprocessingFlagEnum;
 typedef physx::PxPairFilteringMode::Enum PxPairFilteringModeEnum;
 typedef physx::PxPairFlag::Enum PxPairFlagEnum;
+typedef physx::PxParticleSolverType::Enum PxParticleSolverTypeEnum;
 typedef physx::PxPrismaticJointFlag::Enum PxPrismaticJointFlagEnum;
+typedef physx::PxPruningStructureType::Enum PxPruningStructureTypeEnum;
 typedef physx::PxQueryFlag::Enum PxQueryFlagEnum;
 typedef physx::PxQueryHitType::Enum PxQueryHitType;
+typedef physx::PxRevoluteJointFlag::Enum PxRevoluteJointFlagEnum;
 typedef physx::PxRigidBodyFlag::Enum PxRigidBodyFlagEnum;
 typedef physx::PxRigidDynamicLockFlag::Enum PxRigidDynamicLockFlagEnum;
 typedef physx::PxSceneFlag::Enum PxSceneFlagEnum;
@@ -75,8 +80,6 @@ typedef physx::PxSceneQueryUpdateMode::Enum PxSceneQueryUpdateModeEnum;
 typedef physx::PxShapeFlag::Enum PxShapeFlagEnum;
 typedef physx::PxSphericalJointFlag::Enum PxSphericalJointFlagEnum;
 typedef physx::PxSolverType::Enum PxSolverTypeEnum;
-typedef physx::PxPruningStructureType::Enum PxPruningStructureTypeEnum;
-typedef physx::PxRevoluteJointFlag::Enum PxRevoluteJointFlagEnum;
 typedef physx::PxTriangleMeshFlag::Enum PxTriangleMeshFlagEnum;
 typedef physx::PxTriggerPairFlag::Enum PxTriggerPairFlagEnum;
 typedef physx::PxVehicleClutchAccuracyMode::Enum PxVehicleClutchAccuracyModeEnum;
@@ -86,6 +89,7 @@ typedef physx::PxVehicleDriveTankControlModel::Enum PxVehicleDriveTankControlMod
 typedef physx::PxVehicleGearsData::Enum PxVehicleGearEnum;
 typedef physx::PxVehicleUpdateMode::Enum PxVehicleUpdateModeEnum;
 typedef physx::PxVehicleWheelsSimFlag::Enum PxVehicleWheelsSimFlagEnum;
+typedef physx::PxVisualizationParameter::Enum PxVisualizationParameterEnum;
 
 // typedefs for pointer types
 typedef const physx::PxU8* PxU8ConstPtr;
@@ -359,6 +363,18 @@ class PxTopLevelFunctions {
 
         static physx::PxSphericalJoint* SphericalJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
             return physx::PxSphericalJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+        }
+
+        static physx::PxConvexMesh* CreateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc) {
+            return PxCreateConvexMesh(params, desc);
+        }
+
+        static physx::PxTriangleMesh* CreateTriangleMesh(const physx::PxCookingParams &params, const physx::PxTriangleMeshDesc &desc) {
+            return PxCreateTriangleMesh(params, desc);
+        }
+
+        static physx::PxHeightField* CreateHeightField(const physx::PxHeightFieldDesc &desc) {
+            return PxCreateHeightField(desc);
         }
 };
 
