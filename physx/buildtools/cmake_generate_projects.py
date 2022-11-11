@@ -214,6 +214,11 @@ class CMakePreset:
             outString = outString + ' -DTARGET_BUILD_PLATFORM=mac'
             outString = outString + ' -DPX_OUTPUT_ARCH=x86'
             return outString
+        elif self.targetPlatform == 'jni-win64':
+            outString = outString + ' -Ax64'
+            outString = outString + ' -DTARGET_BUILD_PLATFORM=jni-windows'
+            outString = outString + ' -DPX_OUTPUT_ARCH=x86'
+            return outString
         return ''
 
 

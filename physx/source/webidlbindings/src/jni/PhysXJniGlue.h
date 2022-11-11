@@ -1,0 +1,1 @@
+#error "JNI glue code was not generated. See https://github.com/fabmax/physx-jni"
