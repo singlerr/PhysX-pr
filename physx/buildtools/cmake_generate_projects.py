@@ -1,9 +1,9 @@
-import sys
-import os
 import glob
+import os
 import os.path
 import shutil
 import subprocess
+import sys
 import xml.etree.ElementTree
 
 
@@ -113,6 +113,8 @@ class CMakePreset:
             return False
         elif self.targetPlatform == 'linuxAarch64':
             return False
+        if self.targetPlatform == 'jni-linux':
+            return False
         return True
 
     def getCMakeSwitches(self):
@@ -218,6 +220,12 @@ class CMakePreset:
             outString = outString + ' -Ax64'
             outString = outString + ' -DTARGET_BUILD_PLATFORM=jni-windows'
             outString = outString + ' -DPX_OUTPUT_ARCH=x86'
+            return outString
+        elif self.targetPlatform == 'jni-linux':
+            outString = outString + ' -DTARGET_BUILD_PLATFORM=jni-linux'
+            outString = outString + ' -DPX_OUTPUT_ARCH=x86'
+            outString = outString + ' -DCMAKE_C_COMPILER=clang'
+            outString = outString + ' -DCMAKE_CXX_COMPILER=clang++'
             return outString
         return ''
 

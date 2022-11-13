@@ -91,7 +91,7 @@ TARGET_LINK_LIBRARIES(PhysXJniBindings
 	PUBLIC PhysXFoundation
 	PUBLIC PhysXExtensions
 	PUBLIC PhysXCooking
-	PUBLIC PhysXVehicle
+	PUBLIC PhysXVehicle2
 	PUBLIC PhysXTask
 	PUBLIC PhysXCharacterKinematic
 )
