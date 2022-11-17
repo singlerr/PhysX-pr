@@ -7,12 +7,6 @@
 #include <cstring>
 #include <iostream>
 
-//#if defined(__EMSCRIPTEN__) || defined(__APPLE__)
-//    #include "PhysXCudaMock.h"
-//#endif
-//
-//#include "BatchVehicleUpdate.h"
-
 // enums within namespaces are not supported by webidl binder, as a hack we can use typedefs
 typedef physx::PxActorFlag::Enum PxActorFlagEnum;
 typedef physx::PxPvdInstrumentationFlag::Enum PxPvdInstrumentationFlagEnum;
@@ -41,7 +35,6 @@ typedef physx::PxControllerShapeType::Enum PxControllerShapeTypeEnum;
 typedef physx::PxConvexFlag::Enum PxConvexFlagEnum;
 typedef physx::PxConvexMeshCookingType::Enum PxConvexMeshCookingTypeEnum;
 typedef physx::PxConvexMeshGeometryFlag::Enum PxConvexMeshGeometryFlagEnum;
-//typedef physx::PxCudaBufferMemorySpace::Enum PxCudaBufferMemorySpaceEnum;
 typedef physx::PxCudaInteropMode::Enum PxCudaInteropModeEnum;
 typedef physx::PxD6Axis::Enum PxD6AxisEnum;
 typedef physx::PxD6Drive::Enum PxD6DriveEnum;
@@ -387,10 +380,6 @@ class PxVehicleTopLevelFunctions {
             physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
         }
 
-//        static void PxVehicleSuspensionRaycasts(physx::PxBatchQuery* batchQuery, Vector_PxVehicleWheels& vehicles, physx::PxU32 nbSceneQueryResults, physx::PxRaycastQueryResult* sceneQueryResults) {
-//            physx::PxVehicleSuspensionRaycasts(batchQuery, physx::PxU32(vehicles.size()), vehicles.data(), nbSceneQueryResults, sceneQueryResults);
-//        }
-
         static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
                                      Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
             physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
@@ -411,14 +400,6 @@ class PxVehicleTopLevelFunctions {
         static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
             tireData->mFrictionVsSlipGraph[m][n] = value;
         }
-
-//        static physx::PxBatchQueryPreFilterShader DefaultWheelSceneQueryPreFilterBlocking() {
-//            return &defaultWheelSceneQueryPreFilterBlocking;
-//        }
-
-//        static physx::PxBatchQueryPostFilterShader DefaultWheelSceneQueryPostFilterBlocking() {
-//            return &defaultWheelSceneQueryPostFilterBlocking;
-//        }
 };
 
 // Various helper functions for pointer access and conversion
@@ -502,19 +483,6 @@ class TypeHelpers {
 
         static PxRealPtr voidToRealPtr(void* voidPtr) {
             return (PxRealPtr) voidPtr;
-        }
-
-//        static physx::PxArticulationJoint* articulationBaseJointToJoint(physx::PxArticulationJointBase* baseJoint) {
-//            return static_cast<physx::PxArticulationJoint*>(baseJoint);
-//        }
-
-//        static physx::PxArticulationJointReducedCoordinate* articulationBaseJointToJointReducedCoordinate(physx::PxArticulationJointBase* baseJoint) {
-//            return static_cast<physx::PxArticulationJointReducedCoordinate*>(baseJoint);
-//        }
-
-        // looks a bit ridiculous, but we need this as a work-around to get the native address of an object in js
-        static void* voidToAny(void* voidPtr) {
-            return voidPtr;
         }
 };
 

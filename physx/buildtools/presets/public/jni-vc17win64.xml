@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preset name="jni-vc17win64" comment="VC16 Win64 PhysX JNI wrapper general settings">
+<preset name="jni-vc17win64" comment="VC17 (2022) Win64 PhysX JNI wrapper general settings">
   <platform targetPlatform="jni-win64" compiler="vc17" />
   <CMakeSwitches>
     <cmakeSwitch name="PX_BUILDSNIPPETS" value="False" comment="Generate the snippets" />
