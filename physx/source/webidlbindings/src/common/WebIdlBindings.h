@@ -274,240 +274,226 @@ class SimpleQueryFilterCallback : physx::PxQueryFilterCallback {
 };
 
 // top-level functions are not supported by webidl binder, we need to wrap them in a class
-class PxTopLevelFunctions {
-    public:
-        static const physx::PxU32 PHYSICS_VERSION = PX_PHYSICS_VERSION;
+struct PxTopLevelFunctions {
+    static const physx::PxU32 PHYSICS_VERSION = PX_PHYSICS_VERSION;
 
-        static physx::PxSimulationFilterShader DefaultFilterShader() {
-            return &defaultFilterShader;
-        }
+    static physx::PxSimulationFilterShader DefaultFilterShader() {
+        return &defaultFilterShader;
+    }
 
-        static void setupPassThroughFilterShader(physx::PxSceneDesc* sceneDesc, PassThroughFilterShader* filterShader) {
-            PassThroughFilterShader** data = new PassThroughFilterShader*[1];
-            data[0] = filterShader;
-            sceneDesc->filterShader = &passThrFilterShader;
-            sceneDesc->filterShaderData = data;
-            sceneDesc->filterShaderDataSize = sizeof(PassThroughFilterShader*);
-        }
+    static void setupPassThroughFilterShader(physx::PxSceneDesc* sceneDesc, PassThroughFilterShader* filterShader) {
+        PassThroughFilterShader** data = new PassThroughFilterShader*[1];
+        data[0] = filterShader;
+        sceneDesc->filterShader = &passThrFilterShader;
+        sceneDesc->filterShaderData = data;
+        sceneDesc->filterShaderDataSize = sizeof(PassThroughFilterShader*);
+    }
 
-        static physx::PxFoundation* CreateFoundation(physx::PxU32 version, physx::PxDefaultAllocator& allocator, physx::PxErrorCallback& errorCallback) {
-            return PxCreateFoundation(version, allocator, errorCallback);
-        }
+    static physx::PxFoundation* CreateFoundation(physx::PxU32 version, physx::PxDefaultAllocator& allocator, physx::PxErrorCallback& errorCallback) {
+        return PxCreateFoundation(version, allocator, errorCallback);
+    }
 
-        static physx::PxPhysics *CreatePhysics(physx::PxU32 version, physx::PxFoundation &foundation, const physx::PxTolerancesScale &scale, physx::PxPvd* pvd = NULL)
-        {
-            return PxCreatePhysics(version, foundation, scale, false, pvd);
-        }
+    static physx::PxPhysics *CreatePhysics(physx::PxU32 version, physx::PxFoundation &foundation, const physx::PxTolerancesScale &scale, physx::PxPvd* pvd = NULL)
+    {
+        return PxCreatePhysics(version, foundation, scale, false, pvd);
+    }
 
-        static physx::PxCooking* CreateCooking(physx::PxU32 version, physx::PxFoundation& foundation, const physx::PxCookingParams& params) {
-            return PxCreateCooking(version, foundation, params);
-        }
+    static physx::PxCooking* CreateCooking(physx::PxU32 version, physx::PxFoundation& foundation, const physx::PxCookingParams& params) {
+        return PxCreateCooking(version, foundation, params);
+    }
 
-        static physx::PxControllerManager* CreateControllerManager(physx::PxScene& scene, bool lockingEnabled = false) {
-            return PxCreateControllerManager(scene, lockingEnabled);
-        }
+    static physx::PxControllerManager* CreateControllerManager(physx::PxScene& scene, bool lockingEnabled = false) {
+        return PxCreateControllerManager(scene, lockingEnabled);
+    }
 
-        static physx::PxPvd *CreatePvd(physx::PxFoundation &foundation) {
-            return PxCreatePvd(foundation);
-        }
+    static physx::PxPvd *CreatePvd(physx::PxFoundation &foundation) {
+        return PxCreatePvd(foundation);
+    }
 
-        static physx::PxDefaultCpuDispatcher* DefaultCpuDispatcherCreate(physx::PxU32 numThreads) {
-            return physx::PxDefaultCpuDispatcherCreate(numThreads);
-        }
+    static physx::PxDefaultCpuDispatcher* DefaultCpuDispatcherCreate(physx::PxU32 numThreads) {
+        return physx::PxDefaultCpuDispatcherCreate(numThreads);
+    }
 
-        static bool InitExtensions(physx::PxPhysics& physics) {
-            return PxInitExtensions(physics, NULL);
-        }
+    static bool InitExtensions(physx::PxPhysics& physics) {
+        return PxInitExtensions(physics, NULL);
+    }
 
-        static void CloseExtensions() {
-            PxCloseExtensions();
-        }
+    static void CloseExtensions() {
+        PxCloseExtensions();
+    }
 
-        static physx::PxCudaContextManager* CreateCudaContextManager(physx::PxFoundation& foundation, const physx::PxCudaContextManagerDesc& desc) {
-            #if defined(__EMSCRIPTEN__) || defined(__APPLE__)
-                PX_UNUSED(foundation);
-                PX_UNUSED(desc);
-                return NULL;
-            #else
-                return PxCreateCudaContextManager(foundation, desc);
-            #endif
-        }
+    static physx::PxD6Joint* D6JointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxD6JointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxD6Joint* D6JointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxD6JointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxDistanceJoint* DistanceJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxDistanceJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxDistanceJoint* DistanceJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxDistanceJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxFixedJoint* FixedJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxFixedJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxFixedJoint* FixedJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxFixedJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxPrismaticJoint* PrismaticJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxPrismaticJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxPrismaticJoint* PrismaticJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxPrismaticJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxRevoluteJoint* RevoluteJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxRevoluteJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxRevoluteJoint* RevoluteJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxRevoluteJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxSphericalJoint* SphericalJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
+        return physx::PxSphericalJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
+    }
 
-        static physx::PxSphericalJoint* SphericalJointCreate(physx::PxPhysics& physics, physx::PxRigidActor* actor0, physx::PxTransform& localFrame0, physx::PxRigidActor* actor1, physx::PxTransform& localFrame1) {
-            return physx::PxSphericalJointCreate(physics, actor0, localFrame0, actor1, localFrame1);
-        }
+    static physx::PxConvexMesh* CreateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc) {
+        return PxCreateConvexMesh(params, desc);
+    }
 
-        static physx::PxConvexMesh* CreateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc) {
-            return PxCreateConvexMesh(params, desc);
-        }
+    static physx::PxTriangleMesh* CreateTriangleMesh(const physx::PxCookingParams &params, const physx::PxTriangleMeshDesc &desc) {
+        return PxCreateTriangleMesh(params, desc);
+    }
 
-        static physx::PxTriangleMesh* CreateTriangleMesh(const physx::PxCookingParams &params, const physx::PxTriangleMeshDesc &desc) {
-            return PxCreateTriangleMesh(params, desc);
-        }
-
-        static physx::PxHeightField* CreateHeightField(const physx::PxHeightFieldDesc &desc) {
-            return PxCreateHeightField(desc);
-        }
+    static physx::PxHeightField* CreateHeightField(const physx::PxHeightFieldDesc &desc) {
+        return PxCreateHeightField(desc);
+    }
 };
 
-class PxVehicleTopLevelFunctions {
-    public:
-        static bool InitVehicleSDK(physx::PxPhysics& physics) {
-            return PxInitVehicleSDK(physics, NULL);
-        }
+struct PxVehicleTopLevelFunctions {
+    static bool InitVehicleSDK(physx::PxPhysics& physics) {
+        return PxInitVehicleSDK(physics, NULL);
+    }
 
-        static void PxVehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const physx::PxVec3* sprungMassCoordinates, const physx::PxVec3& centreOfMass, physx::PxReal totalMass, physx::PxU32 gravityDirection, physx::PxReal* sprungMasses) {
-            physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
-        }
+    static void PxVehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const physx::PxVec3* sprungMassCoordinates, const physx::PxVec3& centreOfMass, physx::PxReal totalMass, physx::PxU32 gravityDirection, physx::PxReal* sprungMasses) {
+        physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
+    }
 
-        static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
-                                     Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
-            physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
-        }
+    static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
+                                 Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
+        physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
+    }
 
-        static void VehicleSetBasisVectors(const physx::PxVec3& up, const physx::PxVec3& forward) {
-            physx::PxVehicleSetBasisVectors(up, forward);
-        }
+    static void VehicleSetBasisVectors(const physx::PxVec3& up, const physx::PxVec3& forward) {
+        physx::PxVehicleSetBasisVectors(up, forward);
+    }
 
-        static void VehicleSetUpdateMode(physx::PxVehicleUpdateMode::Enum vehicleUpdateMode) {
-            physx::PxVehicleSetUpdateMode(vehicleUpdateMode);
-        }
+    static void VehicleSetUpdateMode(physx::PxVehicleUpdateMode::Enum vehicleUpdateMode) {
+        physx::PxVehicleSetUpdateMode(vehicleUpdateMode);
+    }
 
-        static float PxVehicleTireData_getFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n) {
-            return tireData->mFrictionVsSlipGraph[m][n];
-        }
+    static float PxVehicleTireData_getFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n) {
+        return tireData->mFrictionVsSlipGraph[m][n];
+    }
 
-        static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
-            tireData->mFrictionVsSlipGraph[m][n] = value;
-        }
+    static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
+        tireData->mFrictionVsSlipGraph[m][n] = value;
+    }
 };
 
 // Various helper functions for pointer access and conversion
-class TypeHelpers {
-    public:
-        static physx::PxU8 getU8At(const physx::PxU8* base, int index) {
-            return base[index];
-        }
+struct TypeHelpers {
+    static physx::PxU8 getU8At(const physx::PxU8* base, int index) {
+        return base[index];
+    }
 
-        static physx::PxU16 getU16At(const physx::PxU16* base, int index) {
-            return base[index];
-        }
+    static physx::PxU16 getU16At(const physx::PxU16* base, int index) {
+        return base[index];
+    }
 
-        static physx::PxU32 getU32At(const physx::PxU32* base, int index) {
-            return base[index];
-        }
+    static physx::PxU32 getU32At(const physx::PxU32* base, int index) {
+        return base[index];
+    }
 
-        static physx::PxReal getRealAt(physx::PxReal* base, int index) {
-            return base[index];
-        }
+    static physx::PxReal getRealAt(physx::PxReal* base, int index) {
+        return base[index];
+    }
 
-        static physx::PxActor* getActorAt(physx::PxActor* base, int index) {
-            return &base[index];
-        }
+    static physx::PxActor* getActorAt(physx::PxActor* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxBounds3* getBounds3At(physx::PxBounds3* base, int index) {
-            return &base[index];
-        }
+    static physx::PxBounds3* getBounds3At(physx::PxBounds3* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxContactPair* getContactPairAt(physx::PxContactPair* base, int index) {
-            return &base[index];
-        }
+    static physx::PxContactPair* getContactPairAt(physx::PxContactPair* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxContactPairHeader* getContactPairHeaderAt(physx::PxContactPairHeader* base, int index) {
-            return &base[index];
-        }
+    static physx::PxContactPairHeader* getContactPairHeaderAt(physx::PxContactPairHeader* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxController* getControllerAt(physx::PxController* base, int index) {
-            return &base[index];
-        }
+    static physx::PxController* getControllerAt(physx::PxController* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxControllerShapeHit* getControllerShapeHitAt(physx::PxControllerShapeHit* base, int index) {
-            return &base[index];
-        }
+    static physx::PxControllerShapeHit* getControllerShapeHitAt(physx::PxControllerShapeHit* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxControllersHit* getControllersHitAt(physx::PxControllersHit* base, int index) {
-            return &base[index];
-        }
+    static physx::PxControllersHit* getControllersHitAt(physx::PxControllersHit* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxControllerObstacleHit* getControllerObstacleHitAt(physx::PxControllerObstacleHit* base, int index) {
-            return &base[index];
-        }
+    static physx::PxControllerObstacleHit* getControllerObstacleHitAt(physx::PxControllerObstacleHit* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxObstacle* getObstacleAt(physx::PxObstacle* base, int index) {
-            return &base[index];
-        }
+    static physx::PxObstacle* getObstacleAt(physx::PxObstacle* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxShape* getShapeAt(physx::PxShape* base, int index) {
-            return &base[index];
-        }
+    static physx::PxShape* getShapeAt(physx::PxShape* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxTriggerPair* getTriggerPairAt(physx::PxTriggerPair* base, int index) {
-            return &base[index];
-        }
+    static physx::PxTriggerPair* getTriggerPairAt(physx::PxTriggerPair* base, int index) {
+        return &base[index];
+    }
 
-        static physx::PxVec3* getVec3At(physx::PxVec3* base, int index) {
-            return &base[index];
-        }
+    static physx::PxVec3* getVec3At(physx::PxVec3* base, int index) {
+        return &base[index];
+    }
 
-        static PxU8Ptr voidToU8Ptr(void* voidPtr) {
-            return (PxU8Ptr) voidPtr;
-        }
+    static PxU8Ptr voidToU8Ptr(void* voidPtr) {
+        return (PxU8Ptr) voidPtr;
+    }
 
-        static PxU16Ptr voidToU16Ptr(void* voidPtr) {
-            return (PxU16Ptr) voidPtr;
-        }
+    static PxU16Ptr voidToU16Ptr(void* voidPtr) {
+        return (PxU16Ptr) voidPtr;
+    }
 
-        static PxU32Ptr voidToU32Ptr(void* voidPtr) {
-            return (PxU32Ptr) voidPtr;
-        }
+    static PxU32Ptr voidToU32Ptr(void* voidPtr) {
+        return (PxU32Ptr) voidPtr;
+    }
 
-        static PxRealPtr voidToRealPtr(void* voidPtr) {
-            return (PxRealPtr) voidPtr;
-        }
+    static PxRealPtr voidToRealPtr(void* voidPtr) {
+        return (PxRealPtr) voidPtr;
+    }
 };
 
 // Helper functions for accessing functions, which don't map well to JS / Java
-class SupportFunctions {
-    public:
-        static physx::PxShape* PxActor_getShape(physx::PxRigidActor& actor, physx::PxU32 i) {
-            physx::PxShape* shapePtr;
-            actor.getShapes(&shapePtr, 1, i);
-            return shapePtr;
-        }
+struct SupportFunctions {
+    static physx::PxShape* PxActor_getShape(physx::PxRigidActor& actor, physx::PxU32 i) {
+        physx::PxShape* shapePtr;
+        actor.getShapes(&shapePtr, 1, i);
+        return shapePtr;
+    }
 
-        static physx::PxActor* PxContactPairHeader_getActor(physx::PxContactPairHeader& pairHeader, physx::PxU32 i) {
-            return pairHeader.actors[i];
-        }
+    static physx::PxActor* PxContactPairHeader_getActor(physx::PxContactPairHeader& pairHeader, physx::PxU32 i) {
+        return pairHeader.actors[i];
+    }
 
-        static Vector_PxActorPtr& PxScene_getActiveActors(physx::PxScene* scene) {
-            static Vector_PxActorPtr activeActors;
-            physx::PxU32 nbActors;
-            physx::PxActor** actors = scene->getActiveActors(nbActors);
+    static Vector_PxActorPtr& PxScene_getActiveActors(physx::PxScene* scene) {
+        static Vector_PxActorPtr activeActors;
+        physx::PxU32 nbActors;
+        physx::PxActor** actors = scene->getActiveActors(nbActors);
 
-            activeActors.resize(static_cast<size_t>(nbActors));
-            std::memcpy(activeActors.data(), actors, static_cast<size_t>(sizeof(physx::PxActor*) * nbActors));
-            return activeActors;
-        }
+        activeActors.resize(static_cast<size_t>(nbActors));
+        std::memcpy(activeActors.data(), actors, static_cast<size_t>(sizeof(physx::PxActor*) * nbActors));
+        return activeActors;
+    }
 };
 
 #endif
