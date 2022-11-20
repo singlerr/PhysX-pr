@@ -32,7 +32,11 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/poll.h>
+#ifdef __EMSCRIPTEN__
+	#include <poll.h>
+#elif
+	#include <sys/poll.h>
+#endif
 #include <sys/time.h>
 #include <netdb.h>
 #include <arpa/inet.h>
