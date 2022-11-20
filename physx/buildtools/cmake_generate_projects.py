@@ -115,6 +115,8 @@ class CMakePreset:
             return False
         if self.targetPlatform == 'jni-linux':
             return False
+        if self.targetPlatform == 'emscripten':
+            return False
         return True
 
     def getCMakeSwitches(self):
@@ -232,6 +234,11 @@ class CMakePreset:
             outString = outString + ' -DPX_OUTPUT_ARCH=x86'
             outString = outString + ' -DCMAKE_C_COMPILER=clang'
             outString = outString + ' -DCMAKE_CXX_COMPILER=clang++'
+            return outString
+        elif self.targetPlatform == 'emscripten':
+            outString = outString + ' -DTARGET_BUILD_PLATFORM=emscripten'
+            outString = outString + ' -DCMAKE_TOOLCHAIN_FILE=\"' + \
+                os.path.join(os.environ['EMSDK'] + '/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\"')
             return outString
         return ''
 

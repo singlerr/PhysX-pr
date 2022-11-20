@@ -35,7 +35,6 @@ typedef physx::PxControllerShapeType::Enum PxControllerShapeTypeEnum;
 typedef physx::PxConvexFlag::Enum PxConvexFlagEnum;
 typedef physx::PxConvexMeshCookingType::Enum PxConvexMeshCookingTypeEnum;
 typedef physx::PxConvexMeshGeometryFlag::Enum PxConvexMeshGeometryFlagEnum;
-typedef physx::PxCudaInteropMode::Enum PxCudaInteropModeEnum;
 typedef physx::PxD6Axis::Enum PxD6AxisEnum;
 typedef physx::PxD6Drive::Enum PxD6DriveEnum;
 typedef physx::PxD6Motion::Enum PxD6MotionEnum;
