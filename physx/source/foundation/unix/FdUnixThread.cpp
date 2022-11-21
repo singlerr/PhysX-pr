@@ -269,10 +269,10 @@ void PxThreadImpl::yieldProcessor()
 {
 #if (PX_ARM || PX_A64)
 	__asm__ __volatile__("yield");
-#else
-	#ifndef __EMSCRIPTEN__
-		__asm__ __volatile__("pause");
-	#endif
+#elif defined(__EMSCRIPTEN__)
+	// not supoorted?
+#else 
+	__asm__ __volatile__("pause");
 #endif
 }
 

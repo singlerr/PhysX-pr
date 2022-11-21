@@ -1,6 +1,7 @@
 #ifndef CUDA_BINDINGS_H
 #define CUDA_BINDINGS_H
 
+#include "cudamanager/PxCudaContext.h"
 #include "PxPhysicsAPI.h"
 
 typedef physx::PxCudaInteropMode::Enum PxCudaInteropModeEnum;

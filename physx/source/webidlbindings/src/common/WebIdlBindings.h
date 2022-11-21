@@ -390,7 +390,7 @@ struct PxVehicleTopLevelFunctions {
 };
 
 // Various helper functions for pointer access and conversion
-struct TypeHelpers {
+struct NativeArrayHelpers {
     static physx::PxU8 getU8At(const physx::PxU8* base, int index) {
         return base[index];
     }
