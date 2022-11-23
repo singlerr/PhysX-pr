@@ -34,7 +34,7 @@
 #include <sys/socket.h>
 #ifdef __EMSCRIPTEN__
 	#include <poll.h>
-#elif
+#else
 	#include <sys/poll.h>
 #endif
 #include <sys/time.h>
