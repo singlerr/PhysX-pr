@@ -141,19 +141,19 @@ public:
 		PxVehicleArrayData<PxVehicleWheelRigidBody1dState>& wheelRigidBody1dStates,
 		PxVehicleEngineState*& engineState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		commands = &mCommandState;
-		physxActor = &mPhysXState.physxActor;
-		physxSteerState = &mPhysXState.physxSteerState;
-		physxConstraints = &mPhysXState.physxConstraints;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
+		axleDescription = &baseParams.axleDescription;
+		commands = &commandState;
+		physxActor = &physXState.physxActor;
+		physxSteerState = &physXState.physxSteerState;
+		physxConstraints = &physXState.physxConstraints;
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
 
-		transmissionCommands = &mTransmissionCommandState;
-		gearParams = &mEngineDriveParams.gearBoxParams;
-		gearState =  &mEngineDriveState.gearboxState;
-		engineParams = &mEngineDriveParams.engineParams;
-		engineState =  &mEngineDriveState.engineState;
+		transmissionCommands = &transmissionCommandState;
+		gearParams = &engineDriveParams.gearBoxParams;
+		gearState =  &engineDriveState.gearboxState;
+		engineParams = &engineDriveParams.engineParams;
+		engineState =  &engineDriveState.engineState;
 	}
 
 	virtual void getDataForPhysXActorEndComponent(
@@ -166,15 +166,15 @@ public:
 		const PxVehicleGearboxState*& gearState,
 		PxVehiclePhysXActor*& physxActor)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelParams.setData(mBaseParams.wheelParams);
-		wheelShapeLocalPoses.setData(mPhysXParams.physxWheelShapeLocalPoses);
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
-		wheelLocalPoses.setData(mBaseState.wheelLocalPoses);
-		physxActor = &mPhysXState.physxActor;
+		axleDescription = &baseParams.axleDescription;
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelParams.setData(baseParams.wheelParams);
+		wheelShapeLocalPoses.setData(physXParams.physxWheelShapeLocalPoses);
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
+		wheelLocalPoses.setData(baseState.wheelLocalPoses);
+		physxActor = &physXState.physxActor;
 
-		gearState = &mEngineDriveState.gearboxState;
+		gearState = &engineDriveState.gearboxState;
 	}
 
 	virtual void getDataForEngineDriveCommandResponseComponent(
@@ -197,24 +197,24 @@ public:
 		PxVehicleClutchCommandResponseState*& clutchResponseState,
 		PxVehicleAutoboxState*& autoboxState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		brakeResponseParams.setDataAndCount(mBaseParams.brakeResponseParams, sizeof(mBaseParams.brakeResponseParams) / sizeof(PxVehicleBrakeCommandResponseParams));
-		steerResponseParams = &mBaseParams.steerResponseParams;
-		ackermannParams.setDataAndCount(mBaseParams.ackermannParams, sizeof(mBaseParams.ackermannParams)/sizeof(PxVehicleAckermannParams));
-		gearboxParams = &mEngineDriveParams.gearBoxParams;
-		clutchResponseParams = &mEngineDriveParams.clutchCommandResponseParams;
-		engineParams = &mEngineDriveParams.engineParams;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		engineState = &mEngineDriveState.engineState;
-		autoboxParams = &mEngineDriveParams.autoboxParams;
-		commands = &mCommandState;
-		transmissionCommands = (Enum::eDIFFTYPE_TANKDRIVE == mDifferentialType) ? &mTankDriveTransmissionCommandState : &mTransmissionCommandState;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		throttleResponseState = &mEngineDriveState.throttleCommandResponseState;
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
-		gearboxResponseState = &mEngineDriveState.gearboxState;
-		clutchResponseState = &mEngineDriveState.clutchCommandResponseState;
-		autoboxState = &mEngineDriveState.autoboxState;
+		axleDescription = &baseParams.axleDescription;
+		brakeResponseParams.setDataAndCount(baseParams.brakeResponseParams, sizeof(baseParams.brakeResponseParams) / sizeof(PxVehicleBrakeCommandResponseParams));
+		steerResponseParams = &baseParams.steerResponseParams;
+		ackermannParams.setDataAndCount(baseParams.ackermannParams, sizeof(baseParams.ackermannParams)/sizeof(PxVehicleAckermannParams));
+		gearboxParams = &engineDriveParams.gearBoxParams;
+		clutchResponseParams = &engineDriveParams.clutchCommandResponseParams;
+		engineParams = &engineDriveParams.engineParams;
+		rigidBodyState = &baseState.rigidBodyState;
+		engineState = &engineDriveState.engineState;
+		autoboxParams = &engineDriveParams.autoboxParams;
+		commands = &commandState;
+		transmissionCommands = (Enum::eDIFFTYPE_TANKDRIVE == differentialType) ? &tankDriveTransmissionCommandState : &transmissionCommandState;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		throttleResponseState = &engineDriveState.throttleCommandResponseState;
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
+		gearboxResponseState = &engineDriveState.gearboxState;
+		clutchResponseState = &engineDriveState.clutchCommandResponseState;
+		autoboxState = &engineDriveState.autoboxState;
 	}
 
 	virtual void getDataForFourWheelDriveDifferentialStateComponent(
@@ -223,11 +223,11 @@ public:
 		PxVehicleArrayData<const PxVehicleWheelRigidBody1dState>& wheelRigidbody1dStates,
 		PxVehicleDifferentialState*& differentialState, PxVehicleWheelConstraintGroupState*& wheelConstraintGroups)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		differentialParams = &mEngineDriveParams.fourWheelDifferentialParams;
-		wheelRigidbody1dStates.setData(mBaseState.wheelRigidBody1dStates);
-		differentialState = &mEngineDriveState.differentialState;
-		wheelConstraintGroups = &mEngineDriveState.wheelConstraintGroupState;
+		axleDescription = &baseParams.axleDescription;
+		differentialParams = &engineDriveParams.fourWheelDifferentialParams;
+		wheelRigidbody1dStates.setData(baseState.wheelRigidBody1dStates);
+		differentialState = &engineDriveState.differentialState;
+		wheelConstraintGroups = &engineDriveState.wheelConstraintGroupState;
 	}
 
 	virtual void getDataForMultiWheelDriveDifferentialStateComponent(
@@ -235,9 +235,9 @@ public:
 		const PxVehicleMultiWheelDriveDifferentialParams*& differentialParams,
 		PxVehicleDifferentialState*& differentialState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		differentialParams = &mEngineDriveParams.multiWheelDifferentialParams;
-		differentialState = &mEngineDriveState.differentialState;
+		axleDescription = &baseParams.axleDescription;
+		differentialParams = &engineDriveParams.multiWheelDifferentialParams;
+		differentialState = &engineDriveState.differentialState;
 	}
 
 	virtual void getDataForTankDriveDifferentialStateComponent(
@@ -248,12 +248,12 @@ public:
 		PxVehicleDifferentialState *& differentialState,
 		PxVehicleWheelConstraintGroupState*& wheelConstraintGroups)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		tankDriveTransmissionCommands = &mTankDriveTransmissionCommandState;
-		wheelParams.setData(mBaseParams.wheelParams);
-		differentialParams = &mEngineDriveParams.tankDifferentialParams;
-		differentialState = &mEngineDriveState.differentialState;
-		wheelConstraintGroups = &mEngineDriveState.wheelConstraintGroupState;
+		axleDescription = &baseParams.axleDescription;
+		tankDriveTransmissionCommands = &tankDriveTransmissionCommandState;
+		wheelParams.setData(baseParams.wheelParams);
+		differentialParams = &engineDriveParams.tankDifferentialParams;
+		differentialState = &engineDriveState.differentialState;
+		wheelConstraintGroups = &engineDriveState.wheelConstraintGroupState;
 	}
 
 	virtual void getDataForEngineDriveActuationStateComponent(
@@ -266,14 +266,14 @@ public:
 		const PxVehicleClutchCommandResponseState*& clutchResponseState,
 		PxVehicleArrayData<PxVehicleWheelActuationState>& actuationStates)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		gearboxParams = &mEngineDriveParams.gearBoxParams;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		throttleResponseState = &mEngineDriveState.throttleCommandResponseState;
-		gearboxState = &mEngineDriveState.gearboxState;
-		differentialState = &mEngineDriveState.differentialState;
-		clutchResponseState = &mEngineDriveState.clutchCommandResponseState;
-		actuationStates.setData(mBaseState.actuationStates);
+		axleDescription = &baseParams.axleDescription;
+		gearboxParams = &engineDriveParams.gearBoxParams;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		throttleResponseState = &engineDriveState.throttleCommandResponseState;
+		gearboxState = &engineDriveState.gearboxState;
+		differentialState = &engineDriveState.differentialState;
+		clutchResponseState = &engineDriveState.clutchCommandResponseState;
+		actuationStates.setData(baseState.actuationStates);
 	}
 
 	virtual void getDataForEngineDrivetrainComponent(
@@ -294,32 +294,32 @@ public:
 		PxVehicleGearboxState*& gearboxState,
 		PxVehicleClutchSlipState*& clutchState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		wheelParams.setData(mBaseParams.wheelParams);
-		engineParams = &mEngineDriveParams.engineParams;
-		clutchParams = &mEngineDriveParams.clutchParams;
-		gearboxParams = &mEngineDriveParams.gearBoxParams;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		actuationStates.setData(mBaseState.actuationStates);
-		tireForces.setData(mBaseState.tireForces);
-		throttleResponseState = &mEngineDriveState.throttleCommandResponseState;
-		clutchResponseState = &mEngineDriveState.clutchCommandResponseState;
-		differentialState = &mEngineDriveState.differentialState;
-		constraintGroupState = Enum::eDIFFTYPE_TANKDRIVE == mDifferentialType ? &mEngineDriveState.wheelConstraintGroupState : NULL;
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
-		engineState = &mEngineDriveState.engineState;
-		gearboxState = &mEngineDriveState.gearboxState;
-		clutchState = &mEngineDriveState.clutchState;
+		axleDescription = &baseParams.axleDescription;
+		wheelParams.setData(baseParams.wheelParams);
+		engineParams = &engineDriveParams.engineParams;
+		clutchParams = &engineDriveParams.clutchParams;
+		gearboxParams = &engineDriveParams.gearBoxParams;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		actuationStates.setData(baseState.actuationStates);
+		tireForces.setData(baseState.tireForces);
+		throttleResponseState = &engineDriveState.throttleCommandResponseState;
+		clutchResponseState = &engineDriveState.clutchCommandResponseState;
+		differentialState = &engineDriveState.differentialState;
+		constraintGroupState = Enum::eDIFFTYPE_TANKDRIVE == differentialType ? &engineDriveState.wheelConstraintGroupState : NULL;
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
+		engineState = &engineDriveState.engineState;
+		gearboxState = &engineDriveState.gearboxState;
+		clutchState = &engineDriveState.clutchState;
 	}
 
 
 	//Parameters and states of the vehicle's engine drivetrain.
-	EngineDrivetrainParams mEngineDriveParams;
-	EngineDrivetrainState mEngineDriveState;
+	EngineDrivetrainParams engineDriveParams;
+	EngineDrivetrainState engineDriveState;
 
 	//The commands that will control the vehicle's transmission
-	PxVehicleEngineDriveTransmissionCommandState mTransmissionCommandState;
-	PxVehicleTankDriveTransmissionCommandState mTankDriveTransmissionCommandState;
+	PxVehicleEngineDriveTransmissionCommandState transmissionCommandState;
+	PxVehicleTankDriveTransmissionCommandState tankDriveTransmissionCommandState;
 
 	//The type of differential that will be used.
 	//If eDIFFTYPE_TANKDRIVE is chosen then the vehicle's transmission
@@ -327,7 +327,7 @@ public:
 	//If eDIFFTYPE_FOURWHEELDRIVE or eDIFFTYPE_MULTIWHEELDRIVE is chosen
 	//then the vehicle's transmission commands are stored in 
 	//mTransmissionCommandState
-	Enum mDifferentialType;
+	Enum differentialType;
 };
 
 }//namespace snippetvehicle2

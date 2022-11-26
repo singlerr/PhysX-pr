@@ -130,22 +130,22 @@ void PhysXIntegrationState::destroyState()
 
 bool PhysXActorVehicle::initialize(PxPhysics& physics, const PxCookingParams& params, PxMaterial& defaultMaterial)
 {
-	mCommandState.setToDefault();
+	commandState.setToDefault();
 
 	if (!BaseVehicle::initialize())
 		return false;
 	
-	if (!mPhysXParams.isValid(mBaseParams.axleDescription))
+	if (!physXParams.isValid(baseParams.axleDescription))
 		return false;
 
-	mPhysXState.create(mBaseParams, mPhysXParams, physics, params, defaultMaterial);
+	physXState.create(baseParams, physXParams, physics, params, defaultMaterial);
 
 	return true;
 }
 
 void PhysXActorVehicle::destroyState()
 {
-	mPhysXState.destroyState();
+	physXState.destroyState();
 
 	BaseVehicle::destroyState();
 }
@@ -158,17 +158,17 @@ void PhysXActorVehicle::setUpActor(PxScene& scene, const PxTransform& pose, cons
 	//vehicle simulation update. This allows PhysX to manage any collisions that might happen in-between 
 	//each vehicle update. This is not essential but it is anticipated that this will be a typical component 
 	//configuration. 
-	mPhysXState.physxActor.rigidBody->setGlobalPose(pose);
+	physXState.physxActor.rigidBody->setGlobalPose(pose);
 
 	//Add the physx actor to the physx scene.
 	//As described above, a vehicle may be coupled to a physx scene or it can be simulated without any reference to 
 	//to a PxRigidDynamic or PxScene. This snippet vehicle employs a configuration that includes coupling to a PxScene and a 
 	//PxRigidDynamic. This being the case, the PxRigidDynamic associated with the vehicle needs to be added to the 
 	//PxScene instance.
-	scene.addActor(*mPhysXState.physxActor.rigidBody);
+	scene.addActor(*physXState.physxActor.rigidBody);
 
 	//Give the physx actor a name to help identification in PVD
-	mPhysXState.physxActor.rigidBody->setName(vehicleName);
+	physXState.physxActor.rigidBody->setName(vehicleName);
 }
 
 }//namespace snippetvehicle2

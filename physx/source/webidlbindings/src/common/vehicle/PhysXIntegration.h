@@ -134,13 +134,13 @@ public:
 		PxVehicleArrayData<PxVehicleWheelRigidBody1dState>& wheelRigidBody1dStates,
 		PxVehicleEngineState*& engineState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		commands = &mCommandState;
-		physxActor = &mPhysXState.physxActor;
-		physxSteerState = &mPhysXState.physxSteerState;
-		physxConstraints = &mPhysXState.physxConstraints;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
+		axleDescription = &baseParams.axleDescription;
+		commands = &commandState;
+		physxActor = &physXState.physxActor;
+		physxSteerState = &physXState.physxSteerState;
+		physxConstraints = &physXState.physxConstraints;
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
 
 		transmissionCommands = NULL;
 		gearParams = NULL;
@@ -159,13 +159,13 @@ public:
 		const PxVehicleGearboxState*& gearState,
 		PxVehiclePhysXActor*& physxActor)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelParams.setData(mBaseParams.wheelParams);
-		wheelShapeLocalPoses.setData(mPhysXParams.physxWheelShapeLocalPoses);
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
-		wheelLocalPoses.setData(mBaseState.wheelLocalPoses);
-		physxActor = &mPhysXState.physxActor;
+		axleDescription = &baseParams.axleDescription;
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelParams.setData(baseParams.wheelParams);
+		wheelShapeLocalPoses.setData(physXParams.physxWheelShapeLocalPoses);
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
+		wheelLocalPoses.setData(baseState.wheelLocalPoses);
+		physxActor = &physXState.physxActor;
 
 		gearState = NULL;
 	}
@@ -182,16 +182,16 @@ public:
 		PxVehicleArrayData<const PxVehicleTireStickyState>& tireStickyStates,
 		PxVehiclePhysXConstraints*& constraints)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		suspensionParams.setData(mBaseParams.suspensionParams);
-		suspensionLimitParams.setData(mPhysXParams.physxSuspensionLimitConstraintParams);
-		suspensionStates.setData(mBaseState.suspensionStates);
-		suspensionComplianceStates.setData(mBaseState.suspensionComplianceStates);
-		wheelRoadGeomStates.setData(mBaseState.roadGeomStates);
-		tireDirectionStates.setData(mBaseState.tireDirectionStates);
-		tireStickyStates.setData(mBaseState.tireStickyStates);
-		constraints = &mPhysXState.physxConstraints;
+		axleDescription = &baseParams.axleDescription;
+		rigidBodyState = &baseState.rigidBodyState;
+		suspensionParams.setData(baseParams.suspensionParams);
+		suspensionLimitParams.setData(physXParams.physxSuspensionLimitConstraintParams);
+		suspensionStates.setData(baseState.suspensionStates);
+		suspensionComplianceStates.setData(baseState.suspensionComplianceStates);
+		wheelRoadGeomStates.setData(baseState.roadGeomStates);
+		tireDirectionStates.setData(baseState.tireDirectionStates);
+		tireStickyStates.setData(baseState.tireStickyStates);
+		constraints = &physXState.physxConstraints;
 	}
 
 	virtual void getDataForPhysXRoadGeometrySceneQueryComponent(
@@ -205,21 +205,21 @@ public:
 		PxVehicleArrayData<PxVehicleRoadGeometryState>& roadGeometryStates,
 		PxVehicleArrayData<PxVehiclePhysXRoadGeometryQueryState>& physxRoadGeometryStates)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		roadGeomParams = &mPhysXParams.physxRoadGeometryQueryParams;
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelParams.setData(mBaseParams.wheelParams);
-		suspensionParams.setData(mBaseParams.suspensionParams);
-		materialFrictionParams.setData(mPhysXParams.physxMaterialFrictionParams);
-		roadGeometryStates.setData(mBaseState.roadGeomStates);
+		axleDescription = &baseParams.axleDescription;
+		roadGeomParams = &physXParams.physxRoadGeometryQueryParams;
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelParams.setData(baseParams.wheelParams);
+		suspensionParams.setData(baseParams.suspensionParams);
+		materialFrictionParams.setData(physXParams.physxMaterialFrictionParams);
+		roadGeometryStates.setData(baseState.roadGeomStates);
 		physxRoadGeometryStates.setEmpty();
 	}
 
 
 	//Parameters and states of the vehicle's physx integration.
-	PhysXIntegrationParams mPhysXParams;
-	PhysXIntegrationState mPhysXState;
+	PhysXIntegrationParams physXParams;
+	PhysXIntegrationState physXState;
 
 	//The commands that will control the vehicle
 	//
@@ -227,7 +227,7 @@ public:
 	// put in here to be shared by all vehicle types that will be based on this
 	// class. It keeps the code simpler for the purpose of the snippets.
 	//
-	PxVehicleCommandState mCommandState;
+	PxVehicleCommandState commandState;
 };
 
 }//namespace snippetvehicle2

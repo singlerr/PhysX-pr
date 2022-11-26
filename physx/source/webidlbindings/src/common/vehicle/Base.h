@@ -209,12 +209,12 @@ public:
 		const PxVehicleAntiRollTorque*& antiRollTorque,
 		PxVehicleRigidBodyState*& rigidBodyState)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		rigidBodyParams = &mBaseParams.rigidBodyParams;
-		suspensionForces.setData(mBaseState.suspensionForces);
-		tireForces.setData(mBaseState.tireForces);
+		axleDescription = &baseParams.axleDescription;
+		rigidBodyParams = &baseParams.rigidBodyParams;
+		suspensionForces.setData(baseState.suspensionForces);
+		tireForces.setData(baseState.tireForces);
 		antiRollTorque = NULL;
-		rigidBodyState = &mBaseState.rigidBodyState;
+		rigidBodyState = &baseState.rigidBodyState;
 	}
 
 	virtual void getDataForSuspensionComponent(
@@ -234,20 +234,20 @@ public:
 		PxVehicleArrayData<PxVehicleSuspensionForce>& suspensionForces,
 		PxVehicleAntiRollTorque*& antiRollTorque)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		rigidBodyParams = &mBaseParams.rigidBodyParams;
-		suspensionStateCalculationParams = &mBaseParams.suspensionStateCalculationParams;
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
-		rigidBodyState = &mBaseState.rigidBodyState;
-		wheelParams.setData(mBaseParams.wheelParams);
-		suspensionParams.setData(mBaseParams.suspensionParams);
-		suspensionComplianceParams.setData(mBaseParams.suspensionComplianceParams);
-		suspensionForceParams.setData(mBaseParams.suspensionForceParams);
+		axleDescription = &baseParams.axleDescription;
+		rigidBodyParams = &baseParams.rigidBodyParams;
+		suspensionStateCalculationParams = &baseParams.suspensionStateCalculationParams;
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
+		rigidBodyState = &baseState.rigidBodyState;
+		wheelParams.setData(baseParams.wheelParams);
+		suspensionParams.setData(baseParams.suspensionParams);
+		suspensionComplianceParams.setData(baseParams.suspensionComplianceParams);
+		suspensionForceParams.setData(baseParams.suspensionForceParams);
 		antiRollForceParams.setEmpty();
-		wheelRoadGeomStates.setData(mBaseState.roadGeomStates);
-		suspensionStates.setData(mBaseState.suspensionStates);
-		suspensionComplianceStates.setData(mBaseState.suspensionComplianceStates);
-		suspensionForces.setData(mBaseState.suspensionForces);
+		wheelRoadGeomStates.setData(baseState.roadGeomStates);
+		suspensionStates.setData(baseState.suspensionStates);
+		suspensionComplianceStates.setData(baseState.suspensionComplianceStates);
+		suspensionForces.setData(baseState.suspensionForces);
 		antiRollTorque = NULL;
 	}
 
@@ -272,25 +272,25 @@ public:
 		PxVehicleArrayData<PxVehicleTireStickyState>& tireStickyStates,
 		PxVehicleArrayData<PxVehicleTireForce>& tireForces)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
-		rigidBodyState = &mBaseState.rigidBodyState;
-		actuationStates.setData(mBaseState.actuationStates);
-		wheelParams.setData(mBaseParams.wheelParams);
-		suspensionParams.setData(mBaseParams.suspensionParams);
-		tireForceParams.setData(mBaseParams.tireForceParams);
-		roadGeomStates.setData(mBaseState.roadGeomStates);
-		suspensionStates.setData(mBaseState.suspensionStates);
-		suspensionComplianceStates.setData(mBaseState.suspensionComplianceStates);
-		suspensionForces.setData(mBaseState.suspensionForces);
-		wheelRigidBody1DStates.setData(mBaseState.wheelRigidBody1dStates);
-		tireGripStates.setData(mBaseState.tireGripStates);
-		tireDirectionStates.setData(mBaseState.tireDirectionStates);
-		tireSpeedStates.setData(mBaseState.tireSpeedStates);
-		tireSlipStates.setData(mBaseState.tireSlipStates);
-		tireCamberAngleStates.setData(mBaseState.tireCamberAngleStates);
-		tireStickyStates.setData(mBaseState.tireStickyStates);
-		tireForces.setData(mBaseState.tireForces);
+		axleDescription = &baseParams.axleDescription;
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
+		rigidBodyState = &baseState.rigidBodyState;
+		actuationStates.setData(baseState.actuationStates);
+		wheelParams.setData(baseParams.wheelParams);
+		suspensionParams.setData(baseParams.suspensionParams);
+		tireForceParams.setData(baseParams.tireForceParams);
+		roadGeomStates.setData(baseState.roadGeomStates);
+		suspensionStates.setData(baseState.suspensionStates);
+		suspensionComplianceStates.setData(baseState.suspensionComplianceStates);
+		suspensionForces.setData(baseState.suspensionForces);
+		wheelRigidBody1DStates.setData(baseState.wheelRigidBody1dStates);
+		tireGripStates.setData(baseState.tireGripStates);
+		tireDirectionStates.setData(baseState.tireDirectionStates);
+		tireSpeedStates.setData(baseState.tireSpeedStates);
+		tireSlipStates.setData(baseState.tireSlipStates);
+		tireCamberAngleStates.setData(baseState.tireCamberAngleStates);
+		tireStickyStates.setData(baseState.tireStickyStates);
+		tireForces.setData(baseState.tireForces);
 	}
 
 	virtual void getDataForWheelComponent(
@@ -305,32 +305,32 @@ public:
 		PxVehicleArrayData<PxVehicleWheelRigidBody1dState>& wheelRigidBody1dStates,
   	    PxVehicleArrayData<PxVehicleWheelLocalPose>& wheelLocalPoses)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
-		wheelParams.setData(mBaseParams.wheelParams);
-		suspensionParams.setData(mBaseParams.suspensionParams);
-		actuationStates.setData(mBaseState.actuationStates);
-		suspensionStates.setData(mBaseState.suspensionStates);
-		suspensionComplianceStates.setData(mBaseState.suspensionComplianceStates);
-		tireSpeedStates.setData(mBaseState.tireSpeedStates);
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
-		wheelLocalPoses.setData(mBaseState.wheelLocalPoses);
+		axleDescription = &baseParams.axleDescription;
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
+		wheelParams.setData(baseParams.wheelParams);
+		suspensionParams.setData(baseParams.suspensionParams);
+		actuationStates.setData(baseState.actuationStates);
+		suspensionStates.setData(baseState.suspensionStates);
+		suspensionComplianceStates.setData(baseState.suspensionComplianceStates);
+		tireSpeedStates.setData(baseState.tireSpeedStates);
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
+		wheelLocalPoses.setData(baseState.wheelLocalPoses);
 	}
 
 
 	//Parameters and statess of the vehicle's mechanical base.
-	BaseVehicleParams mBaseParams;
-	BaseVehicleState mBaseState;
+	BaseVehicleParams baseParams;
+	BaseVehicleState baseState;
 
 	//The sequence of components that will simulate the vehicle.
 	//To be assembled by specific vehicle types that are built
 	//on top of this class
-	PxVehicleComponentSequence mComponentSequence;
+	PxVehicleComponentSequence componentSequence;
 	
 	//A sub-group of components can be simulated with multiple substeps
 	//to improve simulation fidelity without running the full sequence
 	//at a lower timestep.
-	PxU8 mComponentSequenceSubstepGroupHandle;
+	PxU8 componentSequenceSubstepGroupHandle;
 };
 
 }//namespace snippetvehicle2

@@ -49,21 +49,21 @@ EngineDrivetrainParams EngineDrivetrainParams::transformAndScale(
 
 
 bool EngineDriveVehicle::initialize(PxPhysics& physics, const PxCookingParams& params, PxMaterial& defaultMaterial,
-	Enum differentialTye, bool addPhysXBeginEndComponents)
+	Enum diffType, bool addPhysXBeginEndComponents)
 {
-	mDifferentialType = differentialTye;
+	differentialType = diffType;
 
-	mTransmissionCommandState.setToDefault();
-	mTankDriveTransmissionCommandState.setToDefault();
+	transmissionCommandState.setToDefault();
+	tankDriveTransmissionCommandState.setToDefault();
 
 	if (!PhysXActorVehicle::initialize(physics, params, defaultMaterial))
 		return false;
 
-	if (!mEngineDriveParams.isValid(mBaseParams.axleDescription))
+	if (!engineDriveParams.isValid(baseParams.axleDescription))
 		return false;
 
 	//Set the drivetrain state to default.
-	mEngineDriveState.setToDefault();
+	engineDriveState.setToDefault();
 
 	//Add all the components in sequence that will simulate a vehicle with an engine drive drivetrain.
 	initComponentSequence(addPhysXBeginEndComponents);
@@ -77,24 +77,24 @@ void EngineDriveVehicle::initComponentSequence(bool addPhysXBeginEndComponents)
 	//intent to change state.
 	//Read from the physx actor and write the state (position, velocity etc) to the vehicle.
 	if(addPhysXBeginEndComponents)
-		mComponentSequence.add(static_cast<PxVehiclePhysXActorBeginComponent*>(this));
+		componentSequence.add(static_cast<PxVehiclePhysXActorBeginComponent*>(this));
 
 	//Read the input commands (throttle, brake, steer, clutch etc) and forward them to the drivetrain and steering mechanism.
 	//When using automatic transmission, the autobox determines if it wants to begin a gear change. If it does, it will overwrite
 	//the target gear command and set throttle to 0 internally.
-	mComponentSequence.add(static_cast<PxVehicleEngineDriveCommandResponseComponent*>(this));
+	componentSequence.add(static_cast<PxVehicleEngineDriveCommandResponseComponent*>(this));
 
 	//The differential determines the fraction of available drive torque that will be delivered to each wheel.
-	switch (mDifferentialType)
+	switch (differentialType)
 	{
 	case eDIFFTYPE_FOURWHEELDRIVE:
-		mComponentSequence.add(static_cast<PxVehicleFourWheelDriveDifferentialStateComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleFourWheelDriveDifferentialStateComponent*>(this));
 		break;
 	case eDIFFTYPE_MULTIWHEELDRIVE:
-		mComponentSequence.add(static_cast<PxVehicleMultiWheelDriveDifferentialStateComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleMultiWheelDriveDifferentialStateComponent*>(this));
 		break;
 	case eDIFFTYPE_TANKDRIVE:
-		mComponentSequence.add(static_cast<PxVehicleTankDriveDifferentialStateComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleTankDriveDifferentialStateComponent*>(this));
 		break;
 	default:
 		PX_ASSERT(false);
@@ -105,10 +105,10 @@ void EngineDriveVehicle::initComponentSequence(bool addPhysXBeginEndComponents)
 	//Work out which wheels have a non-zero drive torque and non-zero brake torque.
 	//This is used to determine if any tire is to enter the "sticky" regime that will bring the 
 	//vehicle to rest.
-	mComponentSequence.add(static_cast<PxVehicleEngineDriveActuationStateComponent*>(this));
+	componentSequence.add(static_cast<PxVehicleEngineDriveActuationStateComponent*>(this));
 
 	//Perform a scene query against the physx scene to determine the plane and friction under each wheel.
-	mComponentSequence.add(static_cast<PxVehiclePhysXRoadGeometrySceneQueryComponent*>(this));
+	componentSequence.add(static_cast<PxVehiclePhysXRoadGeometrySceneQueryComponent*>(this));
 
 	//Start a substep group that can be ticked multiple times per update.
 	//Record the handle returned by PxVehicleComponentSequence::beginSubstepGroup() because this 
@@ -116,41 +116,41 @@ void EngineDriveVehicle::initComponentSequence(bool addPhysXBeginEndComponents)
 	//In this example, we allow the update of the suspensions, tires and wheels multiple times without recalculating 
 	//the plane underneath the wheel.  This is useful for stability at low forward speeds and is much cheaper
 	//than setting a smaller timestep for the whole vehicle.
-	mComponentSequenceSubstepGroupHandle = mComponentSequence.beginSubstepGroup(3);
+	componentSequenceSubstepGroupHandle = componentSequence.beginSubstepGroup(3);
 
 		//Update the suspension compression given the plane under each wheel.
 		//Update the kinematic compliance from the compression state of each suspension.
 		//Convert suspension state to suspension force and torque.
-		mComponentSequence.add(static_cast<PxVehicleSuspensionComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleSuspensionComponent*>(this));
 
 		//Compute the load on the tire, the friction experienced by the tire 
 		//and the lateral/longitudinal slip angles.
 		//Convert load/friction/slip to tire force and torque.
 		//If the vehicle is to come rest then compute the "sticky" velocity constraints to apply to the
 		//vehicle.
-		mComponentSequence.add(static_cast<PxVehicleTireComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleTireComponent*>(this));
 
 		//Apply any "sticky" velocity constraints to a data buffer that will be consumed by the physx scene
 		//during the next physx scene update.
-		mComponentSequence.add(static_cast<PxVehiclePhysXConstraintComponent*>(this));
+		componentSequence.add(static_cast<PxVehiclePhysXConstraintComponent*>(this));
 
 		//Update the rotational speed of the engine and wheels by applying the available drive torque 
 		//to the wheels through the clutch, differential and gears and accounting for the longitudinal
 		//tire force that is applied to the wheel's angular momentum.
-		mComponentSequence.add(static_cast<PxVehicleEngineDrivetrainComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleEngineDrivetrainComponent*>(this));
 
 		//Apply the suspension and tire forces to the vehicle's rigid body and forward 
 		//integrate the state of the rigid body.
-		mComponentSequence.add(static_cast<PxVehicleRigidBodyComponent*>(this));
+		componentSequence.add(static_cast<PxVehicleRigidBodyComponent*>(this));
 
 	//Mark the end of the substep group.
-	mComponentSequence.endSubstepGroup();
+	componentSequence.endSubstepGroup();
 
 	//Update the rotation angle of the wheel by forwarding integrating the rotational
 	//speed of each wheel.
 	//Compute the local pose of the wheel in the rigid body frame after accounting 
 	//suspension compression and compliance.
-	mComponentSequence.add(static_cast<PxVehicleWheelComponent*>(this));
+	componentSequence.add(static_cast<PxVehicleWheelComponent*>(this));
 
 	//Write the local poses of each wheel to the corresponding shapes on the physx actor.
 	//Write the momentum change applied to the vehicle's rigid body to the physx actor.
@@ -158,7 +158,7 @@ void EngineDriveVehicle::initComponentSequence(bool addPhysXBeginEndComponents)
 	//The physx scene will account for collisions and constraints to be applied to the vehicle 
 	//that occur by applying the change.
 	if (addPhysXBeginEndComponents)
-		mComponentSequence.add(static_cast<PxVehiclePhysXActorEndComponent*>(this));
+		componentSequence.add(static_cast<PxVehiclePhysXActorEndComponent*>(this));
 }
 
 }//namespace snippetvehicle2

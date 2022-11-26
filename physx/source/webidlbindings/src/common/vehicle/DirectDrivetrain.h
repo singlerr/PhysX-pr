@@ -92,17 +92,17 @@ public:
 		PxVehicleArrayData<PxReal>& brakeResponseStates, PxVehicleArrayData<PxReal>& throttleResponseStates, 
 		PxVehicleArrayData<PxReal>& steerResponseStates)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		brakeResponseParams.setDataAndCount(mBaseParams.brakeResponseParams, sizeof(mBaseParams.brakeResponseParams) / sizeof(PxVehicleBrakeCommandResponseParams));
-		throttleResponseParams = &mDirectDriveParams.directDriveThrottleResponseParams;
-		steerResponseParams = &mBaseParams.steerResponseParams;
-		ackermannParams.setDataAndCount(mBaseParams.ackermannParams, sizeof(mBaseParams.ackermannParams)/sizeof(PxVehicleAckermannParams));
-		commands = &mCommandState;
-		transmissionCommands = &mTransmissionCommandState;
-		rigidBodyState = &mBaseState.rigidBodyState;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		throttleResponseStates.setData(mDirectDriveState.directDriveThrottleResponseStates);
-		steerResponseStates.setData(mBaseState.steerCommandResponseStates);
+		axleDescription = &baseParams.axleDescription;
+		brakeResponseParams.setDataAndCount(baseParams.brakeResponseParams, sizeof(baseParams.brakeResponseParams) / sizeof(PxVehicleBrakeCommandResponseParams));
+		throttleResponseParams = &directDriveParams.directDriveThrottleResponseParams;
+		steerResponseParams = &baseParams.steerResponseParams;
+		ackermannParams.setDataAndCount(baseParams.ackermannParams, sizeof(baseParams.ackermannParams)/sizeof(PxVehicleAckermannParams));
+		commands = &commandState;
+		transmissionCommands = &transmissionCommandState;
+		rigidBodyState = &baseState.rigidBodyState;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		throttleResponseStates.setData(directDriveState.directDriveThrottleResponseStates);
+		steerResponseStates.setData(baseState.steerCommandResponseStates);
 	}
 
 	virtual void getDataForDirectDriveActuationStateComponent(
@@ -111,10 +111,10 @@ public:
 		PxVehicleArrayData<const PxReal>& throttleResponseStates,
 		PxVehicleArrayData<PxVehicleWheelActuationState>& actuationStates)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		throttleResponseStates.setData(mDirectDriveState.directDriveThrottleResponseStates);
-		actuationStates.setData(mBaseState.actuationStates);
+		axleDescription = &baseParams.axleDescription;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		throttleResponseStates.setData(directDriveState.directDriveThrottleResponseStates);
+		actuationStates.setData(baseState.actuationStates);
 	}
 
 	virtual void getDataForDirectDrivetrainComponent(
@@ -126,22 +126,22 @@ public:
 		PxVehicleArrayData<const PxVehicleTireForce>& tireForces,
 		PxVehicleArrayData<PxVehicleWheelRigidBody1dState>& wheelRigidBody1dStates)
 	{
-		axleDescription = &mBaseParams.axleDescription;
-		brakeResponseStates.setData(mBaseState.brakeCommandResponseStates);
-		throttleResponseStates.setData(mDirectDriveState.directDriveThrottleResponseStates);
-		wheelParams.setData(mBaseParams.wheelParams);
-		actuationStates.setData(mBaseState.actuationStates);
-		tireForces.setData(mBaseState.tireForces);
-		wheelRigidBody1dStates.setData(mBaseState.wheelRigidBody1dStates);
+		axleDescription = &baseParams.axleDescription;
+		brakeResponseStates.setData(baseState.brakeCommandResponseStates);
+		throttleResponseStates.setData(directDriveState.directDriveThrottleResponseStates);
+		wheelParams.setData(baseParams.wheelParams);
+		actuationStates.setData(baseState.actuationStates);
+		tireForces.setData(baseState.tireForces);
+		wheelRigidBody1dStates.setData(baseState.wheelRigidBody1dStates);
 	}
 
 
 	//Parameters and states of the vehicle's direct drivetrain.
-	DirectDrivetrainParams mDirectDriveParams;
-	DirectDrivetrainState mDirectDriveState;
+	DirectDrivetrainParams directDriveParams;
+	DirectDrivetrainState directDriveState;
 
 	//The commands that will control the vehicle's transmission
-	PxVehicleDirectDriveTransmissionCommandState mTransmissionCommandState;
+	PxVehicleDirectDriveTransmissionCommandState transmissionCommandState;
 };
 
 }//namespace snippetvehicle2

@@ -67,18 +67,18 @@ BaseVehicleParams BaseVehicleParams::transformAndScale
 
 bool BaseVehicle::initialize()
 {
-	if (!mBaseParams.isValid())
+	if (!baseParams.isValid())
 		return false;
 
 	//Set the base state to default.
-	mBaseState.setToDefault();
+	baseState.setToDefault();
 
 	return true;
 }
 
 void BaseVehicle::step(const PxReal dt, const PxVehicleSimulationContext& context)
 {
-	mComponentSequence.update(dt, context);
+	componentSequence.update(dt, context);
 }
 
 }//namespace snippetvehicle2

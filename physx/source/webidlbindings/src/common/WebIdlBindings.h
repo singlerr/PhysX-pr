@@ -97,6 +97,11 @@ typedef physx::vehicle2::PxVehicleSuspensionJounceCalculationType::Enum PxVehicl
 typedef physx::vehicle2::PxVehicleTireDirectionModes::Enum PxVehicleTireDirectionModesEnum;
 typedef physx::PxVisualizationParameter::Enum PxVisualizationParameterEnum;
 
+// typedefs for vehicle lookup tables
+typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxReal,3> PxVehicleFixedSizeLookupTableFloat_3;
+typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxVec3,3> PxVehicleFixedSizeLookupTableVec3_3;
+typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxReal,8> PxVehicleTorqueCurveLookupTable;
+
 // typedefs for pointer types
 typedef const physx::PxU8* PxU8ConstPtr;
 typedef const physx::PxU16* PxU16ConstPtr;
@@ -411,6 +416,16 @@ struct PxVehicleTopLevelFunctions {
 //    static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
 //        tireData->mFrictionVsSlipGraph[m][n] = value;
 //    }
+};
+
+struct PxVehicleTireForceParamsExt {
+    static void setFrictionVsSlip(physx::vehicle2::PxVehicleTireForceParams* tireForceParams, int i, int j, float value) {
+        tireForceParams->frictionVsSlip[i][j] = value;
+    }
+
+    static void setLoadFilter(physx::vehicle2::PxVehicleTireForceParams* tireForceParams, int i, int j, float value) {
+        tireForceParams->loadFilter[i][j] = value;
+    }
 };
 
 // Various helper functions for pointer access and conversion
