@@ -9,12 +9,11 @@ SET(CMAKE_TOOLCHAIN_FILE ${EMSCRIPTEN_ROOT}/cmake/Modules/Platform/Emscripten.cm
 SET(WEBIDL_BINDER_SCRIPT ${EMSCRIPTEN_ROOT}/tools/webidl_binder.py)
 
 SET(PHYSX_SOURCE_DIR ${PHYSX_ROOT_DIR}/source)
-SET(LL_SOURCE_DIR ${PHYSX_SOURCE_DIR}/webidlbindings/src)
+SET(PHYSX_WASM_SOURCE_DIR ${PHYSX_SOURCE_DIR}/webidlbindings/src)
 
 SET(PHYSXWASM_INCLUDE_DIR ${PHYSX_ROOT_DIR}/include)
-SET(PHYSXWASM_GLUE_WRAPPER ${LL_SOURCE_DIR}/wasm/PhysXWasm.cpp)
-SET(PHYSXWASM_GLUE_WRAPPER ${LL_SOURCE_DIR}/wasm/PhysXWasm.cpp)
-SET(PHYSXWASM_IDL_FILE ${LL_SOURCE_DIR}/wasm/PhysXWasm.idl)
+SET(PHYSXWASM_GLUE_WRAPPER ${PHYSX_WASM_SOURCE_DIR}/wasm/PhysXWasm.cpp)
+SET(PHYSXWASM_IDL_FILE ${PHYSX_WASM_SOURCE_DIR}/wasm/PhysXWasm.idl)
 SET(EMCC_WASM_ARGS
 		--post-js glue.js
 		-s MODULARIZE=1
@@ -55,7 +54,7 @@ ADD_CUSTOM_COMMAND(
 )
 ADD_CUSTOM_TARGET(physx-js-bindings ALL DEPENDS glue.js glue.o)
 
-SET(PHYSX_TARGETS PhysX PhysXCharacterKinematic PhysXCommon PhysXCooking PhysXExtensions PhysXFoundation PhysXVehicle PhysXPvdSDK)
+SET(PHYSX_TARGETS PhysX PhysXCharacterKinematic PhysXCommon PhysXCooking PhysXExtensions PhysXFoundation PhysXVehicle2 PhysXPvdSDK)
 FOREACH(_TARGET ${PHYSX_TARGETS})
 	LIST(APPEND PHYSX_LIBS $<TARGET_FILE:${_TARGET}>)
 ENDFOREACH()
