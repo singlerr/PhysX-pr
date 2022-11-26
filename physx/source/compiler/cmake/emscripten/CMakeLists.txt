@@ -81,6 +81,7 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Wstrict-aliasing=2 -W
     -Wno-weak-vtables \
     -Wno-zero-as-null-pointer-constant \
 	-Wno-unused-but-set-variable \
+	-Wno-unused-parameter \
 ")
 
 # Set to true to enable multi-threading - works but is difficult to use
@@ -125,9 +126,6 @@ IF(PUBLIC_RELEASE)
 ELSE()
 	SET(PUBLIC_RELEASE_FLAG "PX_PUBLIC_RELEASE=0")
 ENDIF()
-
-# TODO: Turn on SIMD 
-#ADD_DEFINITIONS(-DPX_SIMD_DISABLED)
 
 # Controls PX_NVTX for all projects
 SET(NVTX_FLAG "PX_NVTX=0")
