@@ -1,11 +1,17 @@
 #ifndef WEB_IDL_BINDINGS_H
 #define WEB_IDL_BINDINGS_H
 
-#include "PxPhysicsAPI.h"
-#include "extensions/PxCollectionExt.h"
 #include <vector>
 #include <cstring>
 #include <iostream>
+
+#include "PxPhysicsAPI.h"
+#include "extensions/PxCollectionExt.h"
+
+#include "vehicle/Base.h"
+#include "vehicle/DirectDrivetrain.h"
+#include "vehicle/EngineDrivetrain.h"
+#include "vehicle/PhysXIntegration.h"
 
 // enums within namespaces are not supported by webidl binder, as a hack we can use typedefs
 typedef physx::PxActorFlag::Enum PxActorFlagEnum;
@@ -75,13 +81,20 @@ typedef physx::PxSphericalJointFlag::Enum PxSphericalJointFlagEnum;
 typedef physx::PxSolverType::Enum PxSolverTypeEnum;
 typedef physx::PxTriangleMeshFlag::Enum PxTriangleMeshFlagEnum;
 typedef physx::PxTriggerPairFlag::Enum PxTriggerPairFlagEnum;
-typedef physx::PxVehicleClutchAccuracyMode::Enum PxVehicleClutchAccuracyModeEnum;
-typedef physx::PxVehicleDifferential4WData::Enum PxVehicleDifferential4WDataEnum;
-typedef physx::PxVehicleDrive4WControl::Enum PxVehicleDrive4WControlEnum;
-typedef physx::PxVehicleDriveTankControlModel::Enum PxVehicleDriveTankControlModelEnum;
-typedef physx::PxVehicleGearsData::Enum PxVehicleGearEnum;
-typedef physx::PxVehicleUpdateMode::Enum PxVehicleUpdateModeEnum;
-typedef physx::PxVehicleWheelsSimFlag::Enum PxVehicleWheelsSimFlagEnum;
+typedef physx::vehicle2::PxVehicleAxes::Enum PxVehicleAxesEnum;
+typedef physx::vehicle2::PxVehicleClutchAccuracyMode::Enum PxVehicleClutchAccuracyModeEnum;
+typedef physx::vehicle2::PxVehicleCommandNonLinearResponseParams::Enum PxVehicleCommandNonLinearResponseParamsEnum;
+typedef physx::vehicle2::PxVehicleCommandValueResponseTable::Enum PxVehicleCommandValueResponseTableEnum;
+typedef physx::vehicle2::PxVehicleDirectDriveTransmissionCommandState::Enum PxVehicleDirectDriveTransmissionCommandStateEnum;
+typedef physx::vehicle2::PxVehicleGearboxParams::Enum PxVehicleGearboxParamsEnum;
+typedef physx::vehicle2::PxVehicleLimits::Enum PxVehicleLimitsEnum;
+typedef physx::vehicle2::PxVehiclePhysXActorUpdateMode::Enum PxVehiclePhysXActorUpdateModeEnum;
+typedef physx::vehicle2::PxVehiclePhysXConstraintLimits::Enum PxVehiclePhysXConstraintLimitsEnum;
+typedef physx::vehicle2::PxVehiclePhysXRoadGeometryQueryType::Enum PxVehiclePhysXRoadGeometryQueryTypeEnum;
+typedef physx::vehicle2::PxVehiclePhysXSuspensionLimitConstraintParams::DirectionSpecifier PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum;
+typedef physx::vehicle2::PxVehicleSimulationContextType::Enum PxVehicleSimulationContextTypeEnum;
+typedef physx::vehicle2::PxVehicleSuspensionJounceCalculationType::Enum PxVehicleSuspensionJounceCalculationTypeEnum;
+typedef physx::vehicle2::PxVehicleTireDirectionModes::Enum PxVehicleTireDirectionModesEnum;
 typedef physx::PxVisualizationParameter::Enum PxVisualizationParameterEnum;
 
 // typedefs for pointer types
@@ -359,34 +372,45 @@ struct PxTopLevelFunctions {
 };
 
 struct PxVehicleTopLevelFunctions {
-    static bool InitVehicleSDK(physx::PxPhysics& physics) {
-        return PxInitVehicleSDK(physics, NULL);
+
+    static bool InitVehicleExtension(physx::PxFoundation& foundation) {
+        return physx::vehicle2::PxInitVehicleExtension(foundation);
     }
 
-    static void PxVehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const physx::PxVec3* sprungMassCoordinates, const physx::PxVec3& centreOfMass, physx::PxReal totalMass, physx::PxU32 gravityDirection, physx::PxReal* sprungMasses) {
-        physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
+    static void CloseVehicleExtension() {
+        physx::vehicle2::PxCloseVehicleExtension();
     }
 
-    static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
-                                 Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
-        physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
-    }
+    static const physx::PxU32 MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES = physx::vehicle2::PxVehicleEngineParams::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 
-    static void VehicleSetBasisVectors(const physx::PxVec3& up, const physx::PxVec3& forward) {
-        physx::PxVehicleSetBasisVectors(up, forward);
-    }
-
-    static void VehicleSetUpdateMode(physx::PxVehicleUpdateMode::Enum vehicleUpdateMode) {
-        physx::PxVehicleSetUpdateMode(vehicleUpdateMode);
-    }
-
-    static float PxVehicleTireData_getFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n) {
-        return tireData->mFrictionVsSlipGraph[m][n];
-    }
-
-    static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
-        tireData->mFrictionVsSlipGraph[m][n] = value;
-    }
+//    static bool InitVehicleSDK(physx::PxPhysics& physics) {
+//        return PxInitVehicleSDK(physics, NULL);
+//    }
+//
+//    static void PxVehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const physx::PxVec3* sprungMassCoordinates, const physx::PxVec3& centreOfMass, physx::PxReal totalMass, physx::PxU32 gravityDirection, physx::PxReal* sprungMasses) {
+//        physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
+//    }
+//
+//    static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
+//                                 Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
+//        physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
+//    }
+//
+//    static void VehicleSetBasisVectors(const physx::PxVec3& up, const physx::PxVec3& forward) {
+//        physx::PxVehicleSetBasisVectors(up, forward);
+//    }
+//
+//    static void VehicleSetUpdateMode(physx::PxVehicleUpdateMode::Enum vehicleUpdateMode) {
+//        physx::PxVehicleSetUpdateMode(vehicleUpdateMode);
+//    }
+//
+//    static float PxVehicleTireData_getFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n) {
+//        return tireData->mFrictionVsSlipGraph[m][n];
+//    }
+//
+//    static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
+//        tireData->mFrictionVsSlipGraph[m][n] = value;
+//    }
 };
 
 // Various helper functions for pointer access and conversion
