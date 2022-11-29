@@ -118,8 +118,6 @@ public:
 	bool initialize(PxPhysics& physics, const PxCookingParams& params, PxMaterial& defaultMaterial);
 	virtual void destroyState();
 
-	void setUpActor(PxScene& scene, const PxTransform& pose, const char* vehicleName);
-
 	virtual void getDataForPhysXActorBeginComponent(
 		const PxVehicleAxleDescription*& axleDescription,
 		const PxVehicleCommandState*& commands,

@@ -86,6 +86,7 @@ typedef physx::vehicle2::PxVehicleClutchAccuracyMode::Enum PxVehicleClutchAccura
 typedef physx::vehicle2::PxVehicleCommandNonLinearResponseParams::Enum PxVehicleCommandNonLinearResponseParamsEnum;
 typedef physx::vehicle2::PxVehicleCommandValueResponseTable::Enum PxVehicleCommandValueResponseTableEnum;
 typedef physx::vehicle2::PxVehicleDirectDriveTransmissionCommandState::Enum PxVehicleDirectDriveTransmissionCommandStateEnum;
+typedef physx::vehicle2::PxVehicleEngineDriveTransmissionCommandState::Enum PxVehicleEngineDriveTransmissionCommandStateEnum;
 typedef physx::vehicle2::PxVehicleGearboxParams::Enum PxVehicleGearboxParamsEnum;
 typedef physx::vehicle2::PxVehicleLimits::Enum PxVehicleLimitsEnum;
 typedef physx::vehicle2::PxVehiclePhysXActorUpdateMode::Enum PxVehiclePhysXActorUpdateModeEnum;

@@ -108,26 +108,6 @@ void PhysXIntegrationState::destroyState()
 }
 
 
-/*void setPhysXIntegrationParams(const PxVehicleAxleDescription& axleDescription,
-	PxVehiclePhysXMaterialFriction* physXMaterialFrictions, PxU32 nbPhysXMaterialFrictions,
-	PxReal physXDefaultMaterialFriction, PhysXIntegrationParams& physXParams)
-{
-	//The physx integration params are hardcoded rather than loaded from file.
-	const PxQueryFilterData queryFilterData(PxFilterData(0, 0, 0, 0), PxQueryFlag::eSTATIC);
-	PxQueryFilterCallback* queryFilterCallback = NULL;
-	const PxTransform physxActorCMassLocalPose(PxVec3(0.0f, 0.55f, 1.594f), PxQuat(PxIdentity));
-	const PxVec3 physxActorBoxShapeHalfExtents(0.84097f, 0.65458f, 2.46971f);
-	const PxTransform physxActorBoxShapeLocalPose(PxVec3(0.0f, 0.830066f, 1.37003f), PxQuat(PxIdentity));
-
-	physXParams.create(
-		axleDescription,
-		queryFilterData, queryFilterCallback,
-		physXMaterialFrictions, nbPhysXMaterialFrictions, physXDefaultMaterialFriction,
-		physxActorCMassLocalPose,
-		physxActorBoxShapeHalfExtents, physxActorBoxShapeLocalPose);
-}*/
-
-
 bool PhysXActorVehicle::initialize(PxPhysics& physics, const PxCookingParams& params, PxMaterial& defaultMaterial)
 {
 	commandState.setToDefault();
@@ -148,27 +128,6 @@ void PhysXActorVehicle::destroyState()
 	physXState.destroyState();
 
 	BaseVehicle::destroyState();
-}
-
-void PhysXActorVehicle::setUpActor(PxScene& scene, const PxTransform& pose, const char* vehicleName)
-{
-	//Give the vehicle a start pose by appylying a pose to the PxRigidDynamic associated with the vehicle. 
-	//This vehicle has components that are configured to read the pose from the PxRigidDynamic 
-	//at the start of the vehicle simulation update and to write back an updated pose at the end of the 
-	//vehicle simulation update. This allows PhysX to manage any collisions that might happen in-between 
-	//each vehicle update. This is not essential but it is anticipated that this will be a typical component 
-	//configuration. 
-	physXState.physxActor.rigidBody->setGlobalPose(pose);
-
-	//Add the physx actor to the physx scene.
-	//As described above, a vehicle may be coupled to a physx scene or it can be simulated without any reference to 
-	//to a PxRigidDynamic or PxScene. This snippet vehicle employs a configuration that includes coupling to a PxScene and a 
-	//PxRigidDynamic. This being the case, the PxRigidDynamic associated with the vehicle needs to be added to the 
-	//PxScene instance.
-	scene.addActor(*physXState.physxActor.rigidBody);
-
-	//Give the physx actor a name to help identification in PVD
-	physXState.physxActor.rigidBody->setName(vehicleName);
 }
 
 }//namespace snippetvehicle2
