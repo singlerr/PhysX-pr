@@ -44,22 +44,33 @@ struct PhysXIntegrationParams
 	PxVehiclePhysXMaterialFrictionParams physxMaterialFrictionParams[PxVehicleLimits::eMAX_NB_WHEELS];
 	PxVehiclePhysXSuspensionLimitConstraintParams physxSuspensionLimitConstraintParams[PxVehicleLimits::eMAX_NB_WHEELS];
 	PxTransform physxActorCMassLocalPose;
-	PxVec3 physxActorBoxShapeHalfExtents;
+	PxGeometry* physxActorGeometry = NULL;
 	PxTransform physxActorBoxShapeLocalPose;
 	PxTransform physxWheelShapeLocalPoses[PxVehicleLimits::eMAX_NB_WHEELS];
 
+	PxShapeFlags physxActorShapeFlags = PxShapeFlags(0);
+	PxFilterData physxActorSimulationFilterData;
+	PxFilterData physxActorQueryFilterData;
+	PxShapeFlags physxActorWheelShapeFlags = PxShapeFlags(0);
+	PxFilterData physxActorWheelSimulationFilterData;
+	PxFilterData physxActorWheelQueryFilterData;
+
 	void create
 		(const PxVehicleAxleDescription& axleDescription,
-		 const PxQueryFilterData& queryFilterData, PxQueryFilterCallback* queryFilterCallback,
+		 const PxQueryFilterData& roadQueryFilterData, PxQueryFilterCallback* roadQueryFilterCallback,
 		 PxVehiclePhysXMaterialFriction* materialFrictions, const PxU32 nbMaterialFrictions, const PxReal defaultFriction,
 		 const PxTransform& physXActorCMassLocalPose,
-		 const PxVec3& physXActorBoxShapeHalfExtents, const PxTransform& physxActorBoxShapeLocalPose);
+		 PxGeometry& actorGeometry, const PxTransform& physxActorBoxShapeLocalPose,
+		 PxVehiclePhysXRoadGeometryQueryType::Enum roadGeometryQueryType);
 
 	PhysXIntegrationParams transformAndScale(
 		const PxVehicleFrame& srcFrame, const PxVehicleFrame& trgFrame, const PxVehicleScale& srcScale, const PxVehicleScale& trgScale) const;
 
 	PX_FORCE_INLINE bool isValid(const PxVehicleAxleDescription& axleDesc) const
 	{
+		if (physxActorGeometry == NULL) {
+			return false;
+		}
 		if (!physxRoadGeometryQueryParams.isValid())
 			return false;
 		for (PxU32 i = 0; i < axleDesc.nbWheels; i++)
@@ -94,12 +105,6 @@ struct PhysXIntegrationState
 	void destroyState();
 
 };
-
-
-//void setPhysXIntegrationParams(const PxVehicleAxleDescription&,
-//	PxVehiclePhysXMaterialFriction*, PxU32 nbPhysXMaterialFrictions,
-//	PxReal physXDefaultMaterialFriction, PhysXIntegrationParams&);
-
 
 //
 //This class holds the parameters, state and logic needed to implement a vehicle that

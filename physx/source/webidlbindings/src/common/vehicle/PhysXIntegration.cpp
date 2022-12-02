@@ -33,14 +33,15 @@ namespace snippetvehicle2
 
 void PhysXIntegrationParams::create
 (const PxVehicleAxleDescription& axleDescription,
- const PxQueryFilterData& queryFilterData, PxQueryFilterCallback* queryFilterCallback,
+ const PxQueryFilterData& roadQueryFilterData, PxQueryFilterCallback* roadQueryFilterCallback,
  PxVehiclePhysXMaterialFriction* materialFrictions, const PxU32 nbMaterialFrictions, const PxReal defaultFriction,
  const PxTransform& actorCMassLocalPose,
- const PxVec3& actorBoxShapeHalfExtents, const PxTransform& actorBoxShapeLocalPose)
+ PxGeometry& actorGeometry, const PxTransform& actorBoxShapeLocalPose,
+ PxVehiclePhysXRoadGeometryQueryType::Enum roadGeometryQueryType)
 {
-	physxRoadGeometryQueryParams.roadGeometryQueryType = PxVehiclePhysXRoadGeometryQueryType::eRAYCAST;
-	physxRoadGeometryQueryParams.filterData = queryFilterData;
-	physxRoadGeometryQueryParams.filterCallback = queryFilterCallback;
+	physxRoadGeometryQueryParams.roadGeometryQueryType = roadGeometryQueryType;
+	physxRoadGeometryQueryParams.filterData = roadQueryFilterData;
+	physxRoadGeometryQueryParams.filterCallback = roadQueryFilterCallback;
 
 	for(PxU32 i = 0; i < axleDescription.nbWheels; i++)
 	{
@@ -56,7 +57,7 @@ void PhysXIntegrationParams::create
 	}
 
 	physxActorCMassLocalPose = actorCMassLocalPose;
-	physxActorBoxShapeHalfExtents = actorBoxShapeHalfExtents;
+	physxActorGeometry = &actorGeometry;
 	physxActorBoxShapeLocalPose = actorBoxShapeLocalPose;
 }
 
@@ -70,7 +71,6 @@ PhysXIntegrationParams PhysXIntegrationParams::transformAndScale
 		r.physxSuspensionLimitConstraintParams[i] = physxSuspensionLimitConstraintParams[i].transformAndScale(srcFrame, trgFrame, srcScale, trgScale);
 	}
 	r.physxActorCMassLocalPose = PxVehicleTransformFrameToFrame(srcFrame, trgFrame, srcScale, trgScale, physxActorCMassLocalPose);
-	r.physxActorBoxShapeHalfExtents = PxVehicleTransformFrameToFrame(srcFrame, trgFrame, srcScale, trgScale, physxActorBoxShapeHalfExtents);
 	r.physxActorBoxShapeLocalPose = PxVehicleTransformFrameToFrame(srcFrame, trgFrame, srcScale, trgScale, physxActorBoxShapeLocalPose);
 	return r;
 }
@@ -84,10 +84,9 @@ void PhysXIntegrationState::create
 	//physxActor needs to be populated with an actor and its shapes.
 	{
 		const PxVehiclePhysXRigidActorParams physxActorParams(baseParams.rigidBodyParams, NULL);
-		const PxBoxGeometry boxGeom(physxParams.physxActorBoxShapeHalfExtents);
-		const PxVehiclePhysXRigidActorShapeParams physxActorShapeParams(boxGeom, physxParams.physxActorBoxShapeLocalPose, defaultMaterial, PxShapeFlags(0), PxFilterData(), PxFilterData());
+		const PxVehiclePhysXRigidActorShapeParams physxActorShapeParams(*physxParams.physxActorGeometry, physxParams.physxActorBoxShapeLocalPose, defaultMaterial, physxParams.physxActorShapeFlags, physxParams.physxActorSimulationFilterData, physxParams.physxActorQueryFilterData);
 		const PxVehiclePhysXWheelParams physxWheelParams(baseParams.axleDescription, baseParams.wheelParams);
-		const PxVehiclePhysXWheelShapeParams physxWheelShapeParams(defaultMaterial, PxShapeFlags(0), PxFilterData(), PxFilterData());
+		const PxVehiclePhysXWheelShapeParams physxWheelShapeParams(defaultMaterial, physxParams.physxActorWheelShapeFlags, physxParams.physxActorWheelSimulationFilterData, physxParams.physxActorWheelQueryFilterData);
 
 		PxVehiclePhysXActorCreate(
 			baseParams.frame,

@@ -387,36 +387,11 @@ struct PxVehicleTopLevelFunctions {
         physx::vehicle2::PxCloseVehicleExtension();
     }
 
-    static const physx::PxU32 MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES = physx::vehicle2::PxVehicleEngineParams::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
+    static bool VehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const Vector_PxVec3& sprungMassCoordinates, physx::PxReal totalMass, PxVehicleAxesEnum gravityDirection, Vector_PxReal& sprungMasses) {
+        return physx::vehicle2::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates.data(), totalMass, gravityDirection, sprungMasses.data());
+    }
 
-//    static bool InitVehicleSDK(physx::PxPhysics& physics) {
-//        return PxInitVehicleSDK(physics, NULL);
-//    }
-//
-//    static void PxVehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const physx::PxVec3* sprungMassCoordinates, const physx::PxVec3& centreOfMass, physx::PxReal totalMass, physx::PxU32 gravityDirection, physx::PxReal* sprungMasses) {
-//        physx::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates, centreOfMass, totalMass, gravityDirection, sprungMasses);
-//    }
-//
-//    static void PxVehicleUpdates(const physx::PxReal timestep, const physx::PxVec3& gravity, const physx::PxVehicleDrivableSurfaceToTireFrictionPairs& vehicleDrivableSurfaceToTireFrictionPairs,
-//                                 Vector_PxVehicleWheels& vehicles, physx::PxVehicleWheelQueryResult* vehicleWheelQueryResults) {
-//        physx::PxVehicleUpdates(timestep, gravity, vehicleDrivableSurfaceToTireFrictionPairs, physx::PxU32(vehicles.size()), vehicles.data(), vehicleWheelQueryResults);
-//    }
-//
-//    static void VehicleSetBasisVectors(const physx::PxVec3& up, const physx::PxVec3& forward) {
-//        physx::PxVehicleSetBasisVectors(up, forward);
-//    }
-//
-//    static void VehicleSetUpdateMode(physx::PxVehicleUpdateMode::Enum vehicleUpdateMode) {
-//        physx::PxVehicleSetUpdateMode(vehicleUpdateMode);
-//    }
-//
-//    static float PxVehicleTireData_getFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n) {
-//        return tireData->mFrictionVsSlipGraph[m][n];
-//    }
-//
-//    static void PxVehicleTireData_setFrictionVsSlipGraph(physx::PxVehicleTireData* tireData, physx::PxU32 m, physx::PxU32 n, float value) {
-//        tireData->mFrictionVsSlipGraph[m][n] = value;
-//    }
+    static const physx::PxU32 MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES = physx::vehicle2::PxVehicleEngineParams::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
 struct PxVehicleTireForceParamsExt {

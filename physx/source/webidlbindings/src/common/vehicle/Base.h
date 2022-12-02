@@ -53,6 +53,10 @@ struct BaseVehicleParams
 	PxVehicleSuspensionComplianceParams suspensionComplianceParams[PxVehicleLimits::eMAX_NB_WHEELS];
 	PxVehicleSuspensionForceParams suspensionForceParams[PxVehicleLimits::eMAX_NB_WHEELS];
 
+	// Anti-roll bars
+	PxVehicleAntiRollForceParams antiRollForceParams[PxVehicleLimits::eMAX_NB_WHEELS];
+	PxU32 nbAntiRollForceParams = 0;
+
 	//Tires
 	PxVehicleTireForceParams tireForceParams[PxVehicleLimits::eMAX_NB_WHEELS];
 
@@ -102,6 +106,12 @@ struct BaseVehicleParams
 			if (!wheelParams[wheelId].isValid())
 				return false;
 		}
+		
+		for (PxU32 i = 0; i < nbAntiRollForceParams; i++)
+		{
+			if (!antiRollForceParams[i].isValid(axleDescription))
+				return false;
+		}
 
 		if (!rigidBodyParams.isValid())
 			return false;
@@ -124,6 +134,7 @@ struct BaseVehicleState
 	PxVehicleSuspensionState suspensionStates[PxVehicleLimits::eMAX_NB_WHEELS];
 	PxVehicleSuspensionComplianceState suspensionComplianceStates[PxVehicleLimits::eMAX_NB_WHEELS];
 	PxVehicleSuspensionForce suspensionForces[PxVehicleLimits::eMAX_NB_WHEELS];
+	PxVehicleAntiRollTorque antiRollTorque;
 
 	//Tires
 	PxVehicleTireGripState tireGripStates[PxVehicleLimits::eMAX_NB_WHEELS];
@@ -168,6 +179,7 @@ struct BaseVehicleState
 			wheelLocalPoses[i].setToDefault();
 		}
 
+		antiRollTorque.setToDefault();
 		rigidBodyState.setToDefault();
 	}
 };
@@ -243,12 +255,12 @@ public:
 		suspensionParams.setData(baseParams.suspensionParams);
 		suspensionComplianceParams.setData(baseParams.suspensionComplianceParams);
 		suspensionForceParams.setData(baseParams.suspensionForceParams);
-		antiRollForceParams.setEmpty();
+		antiRollForceParams.setDataAndCount(baseParams.antiRollForceParams, baseParams.nbAntiRollForceParams);
 		wheelRoadGeomStates.setData(baseState.roadGeomStates);
 		suspensionStates.setData(baseState.suspensionStates);
 		suspensionComplianceStates.setData(baseState.suspensionComplianceStates);
 		suspensionForces.setData(baseState.suspensionForces);
-		antiRollTorque = NULL;
+		antiRollTorque = &baseState.antiRollTorque;
 	}
 
 	virtual void getDataForTireComponent(
