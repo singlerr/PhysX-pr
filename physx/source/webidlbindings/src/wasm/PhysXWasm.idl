@@ -11,6 +11,7 @@ interface BaseVehicle {
     void step(float dt, [Const, Ref] PxVehicleSimulationContext context);
     [Value] attribute BaseVehicleParams baseParams;
     [Value] attribute BaseVehicleState baseState;
+    [Value] attribute PxVehicleComponentSequence componentSequence;
     attribute octet componentSequenceSubstepGroupHandle;
 };
 
@@ -29,6 +30,8 @@ interface BaseVehicleParams {
     [Value] attribute PxVehicleSuspensionParams[] suspensionParams;
     [Value] attribute PxVehicleSuspensionComplianceParams[] suspensionComplianceParams;
     [Value] attribute PxVehicleSuspensionForceParams[] suspensionForceParams;
+    [Value] attribute PxVehicleAntiRollForceParams[] antiRollForceParams;
+    attribute unsigned long nbAntiRollForceParams;
     [Value] attribute PxVehicleTireForceParams[] tireForceParams;
     [Value] attribute PxVehicleWheelParams[] wheelParams;
     [Value] attribute PxVehicleRigidBodyParams rigidBodyParams;
@@ -45,6 +48,7 @@ interface BaseVehicleState {
     [Value] attribute PxVehicleSuspensionState[] suspensionStates;
     [Value] attribute PxVehicleSuspensionComplianceState[] suspensionComplianceStates;
     [Value] attribute PxVehicleSuspensionForce[] suspensionForces;
+    [Value] attribute PxVehicleAntiRollTorque antiRollTorque;
     [Value] attribute PxVehicleTireGripState[] tireGripStates;
     [Value] attribute PxVehicleTireDirectionState[] tireDirectionStates;
     [Value] attribute PxVehicleTireSpeedState[] tireSpeedStates;
@@ -163,7 +167,6 @@ interface PassThroughFilterShaderImpl {
 [Prefix="snippetvehicle2::"]
 interface PhysXActorVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
-    void setUpActor([Ref] PxScene scene, [Const, Ref] PxTransform pose, [Const] DOMString vehicleName);
     [Value] attribute PhysXIntegrationParams physXParams;
     [Value] attribute PhysXIntegrationState physXState;
     [Value] attribute PxVehicleCommandState commandState;
@@ -175,14 +178,20 @@ interface PhysXIntegrationParams {
     void PhysXIntegrationParams();
     [Value] PhysXIntegrationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
-    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData queryFilterData, PxQueryFilterCallback queryFilterCallback, PxVehiclePhysXMaterialFriction materialFrictions, unsigned long nbMaterialFrictions, float defaultFriction, [Const, Ref] PxTransform physxActorCMassLocalPose, [Const, Ref] PxVec3 physXActorBoxShapeHalfExtents, [Const, Ref] PxTransform physxActorBoxShapeLocalPose);
+    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData roadQueryFilterData, PxQueryFilterCallback roadQueryFilterCallback, PxVehiclePhysXMaterialFriction materialFrictions, unsigned long nbMaterialFrictions, float defaultFriction, [Const, Ref] PxTransform physxActorCMassLocalPose, [Ref] PxGeometry actorGeometry, [Const, Ref] PxTransform physxActorBoxShapeLocalPose, PxVehiclePhysXRoadGeometryQueryTypeEnum roadGeometryQueryType);
     [Value] attribute PxVehiclePhysXRoadGeometryQueryParams physxRoadGeometryQueryParams;
     [Value] attribute PxVehiclePhysXMaterialFrictionParams[] physxMaterialFrictionParams;
     [Value] attribute PxVehiclePhysXSuspensionLimitConstraintParams[] physxSuspensionLimitConstraintParams;
     [Value] attribute PxTransform physxActorCMassLocalPose;
-    [Value] attribute PxVec3 physxActorBoxShapeHalfExtents;
+    attribute PxGeometry physxActorGeometry;
     [Value] attribute PxTransform physxActorBoxShapeLocalPose;
     [Value] attribute PxTransform[] physxWheelShapeLocalPoses;
+    [Value] attribute PxShapeFlags physxActorShapeFlags;
+    [Value] attribute PxFilterData physxActorSimulationFilterData;
+    [Value] attribute PxFilterData physxActorQueryFilterData;
+    [Value] attribute PxShapeFlags physxActorWheelShapeFlags;
+    [Value] attribute PxFilterData physxActorWheelSimulationFilterData;
+    [Value] attribute PxFilterData physxActorWheelQueryFilterData;
 };
 
 [Prefix="snippetvehicle2::"]
@@ -1610,6 +1619,24 @@ interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
     void PxQuat(float x, float y, float z, float w);
+    boolean isIdentity();
+    boolean isFinite();
+    boolean isUnit();
+    boolean isSane();
+    float getAngle();
+    float getAngle([Const, Ref] PxQuat q);
+    float magnitudeSquared();
+    float dot([Const, Ref] PxQuat q);
+    [Value] PxQuat getNormalized();
+    float magnitude();
+    float normalize();
+    [Value] PxQuat getConjugate();
+    [Value] PxVec3 getImaginaryPart();
+    [Value] PxVec3 getBasisVector0();
+    [Value] PxVec3 getBasisVector1();
+    [Value] PxVec3 getBasisVector2();
+    [Value] PxVec3 rotate([Const, Ref] PxVec3 v);
+    [Value] PxVec3 rotateInv([Const, Ref] PxVec3 v);
     attribute float x;
     attribute float y;
     attribute float z;
@@ -2371,6 +2398,23 @@ interface PxUserControllerHitReportImpl {
 interface PxVec3 {
     void PxVec3();
     void PxVec3(float x, float y, float z);
+    boolean isZero();
+    boolean isFinite();
+    boolean isNormalized();
+    float magnitudeSquared();
+    float magnitude();
+    float dot([Const, Ref] PxVec3 v);
+    [Value] PxVec3 cross([Const, Ref] PxVec3 v);
+    [Value] PxVec3 getNormalized();
+    float normalize();
+    float normalizeSafe();
+    float normalizeFast();
+    [Value] PxVec3 multiply([Const, Ref] PxVec3 a);
+    [Value] PxVec3 minimum([Const, Ref] PxVec3 v);
+    float minElement();
+    [Value] PxVec3 maximum([Const, Ref] PxVec3 v);
+    float maxElement();
+    [Value] PxVec3 abs();
     attribute float x;
     attribute float y;
     attribute float z;
@@ -2385,6 +2429,23 @@ interface PxVehicleAckermannParams {
     attribute float wheelBase;
     attribute float trackWidth;
     attribute float strength;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAntiRollForceParams {
+    void PxVehicleAntiRollForceParams();
+    [Value] PxVehicleAntiRollForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+    attribute unsigned long wheel0;
+    attribute unsigned long wheel1;
+    attribute float stiffness;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAntiRollTorque {
+    void PxVehicleAntiRollTorque();
+    void setToDefault();
+    [Value] attribute PxVec3 antiRollTorque;
 };
 
 [Prefix="physx::vehicle2::"]
@@ -2495,6 +2556,20 @@ interface PxVehicleCommandState {
 interface PxVehicleCommandValueResponseTable {
     void PxVehicleCommandValueResponseTable();
     attribute float commandValue;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleComponent {
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleComponentSequence {
+    void PxVehicleComponentSequence();
+    boolean add(PxVehicleComponent component);
+    octet beginSubstepGroup(optional octet nbSubSteps);
+    void endSubstepGroup();
+    void setSubsteps(octet subGroupHandle, octet nbSteps);
+    void update(float dt, [Const, Ref] PxVehicleSimulationContext context);
 };
 
 [Prefix="physx::vehicle2::"]
@@ -2994,6 +3069,7 @@ interface PxVehicleTireStickyState {
 interface PxVehicleTopLevelFunctions {
     static boolean InitVehicleExtension([Ref] PxFoundation foundation);
     static void CloseVehicleExtension();
+    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Const, Ref] Vector_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] Vector_PxReal sprungMasses);
     static readonly attribute unsigned long MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
@@ -3705,6 +3781,10 @@ enum PxVehicleDirectDriveTransmissionCommandStateEnum {
     "PxVehicleDirectDriveTransmissionCommandStateEnum::eREVERSE",
     "PxVehicleDirectDriveTransmissionCommandStateEnum::eNEUTRAL",
     "PxVehicleDirectDriveTransmissionCommandStateEnum::eFORWARD"
+};
+
+enum PxVehicleEngineDriveTransmissionCommandStateEnum {
+    "PxVehicleEngineDriveTransmissionCommandStateEnum::eAUTOMATIC_GEAR"
 };
 
 enum PxVehicleGearboxParamsEnum {
