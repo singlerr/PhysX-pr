@@ -6,7 +6,9 @@
 #include <iostream>
 
 #include "PxPhysicsAPI.h"
+#include "common/PxRenderOutput.h"
 #include "extensions/PxCollectionExt.h"
+#include "geomutils/PxContactBuffer.h"
 
 #include "vehicle/Base.h"
 #include "vehicle/DirectDrivetrain.h"
@@ -228,6 +230,66 @@ class SimpleSimulationEventCallback : physx::PxSimulationEventCallback {
         // implement onAdvance with empty body so it does not have to be implemented
         // in non-native code (for the sake of performance)
         virtual void onAdvance(const physx::PxRigidBody *const *, const physx::PxTransform*, const physx::PxU32) { }
+};
+
+// Slightly simplified PxCustomGeometry::Callbacks which can be implemented in non-native code
+class SimpleCustomGeometryCallbacks : public physx::PxCustomGeometry::Callbacks {
+    public:
+        // non-const virtual methods
+        virtual physx::PxBounds3* getLocalBoundsImpl(const physx::PxGeometry& geometry) = 0;
+        virtual bool generateContactsImpl(const physx::PxGeometry& geom0, const physx::PxGeometry& geom1, const physx::PxTransform& pose0, const physx::PxTransform& pose1,
+            physx::PxReal contactDistance, physx::PxReal meshContactMargin, physx::PxReal toleranceLength,
+            physx::PxContactBuffer& contactBuffer) = 0;
+        virtual physx::PxU32 raycastImpl(const physx::PxVec3& origin, const physx::PxVec3& unitDir, const physx::PxGeometry& geom, const physx::PxTransform& pose,
+            physx::PxReal maxDist, physx::PxHitFlags& hitFlags, physx::PxU32 maxHits, physx::PxGeomRaycastHit* rayHits, physx::PxU32 stride) = 0;
+        virtual bool overlapImpl(const physx::PxGeometry& geom0, const physx::PxTransform& pose0, const physx::PxGeometry& geom1, const physx::PxTransform& pose1) = 0;
+        virtual bool sweepImpl(const physx::PxVec3& unitDir, physx::PxReal maxDist,
+            const physx::PxGeometry& geom0, const physx::PxTransform& pose0, const physx::PxGeometry& geom1, const physx::PxTransform& pose1,
+            physx::PxGeomSweepHit& sweepHit, physx::PxHitFlags& hitFlags, physx::PxReal inflation) = 0;
+        virtual void computeMassPropertiesImpl(const physx::PxGeometry& geometry, physx::PxMassProperties& massProperties) = 0;
+        virtual bool usePersistentContactManifoldImpl(const physx::PxGeometry& geometry) = 0;
+
+        // original callbacks methods, forwarding to non-const methods
+        virtual physx::PxBounds3 getLocalBounds(const physx::PxGeometry& geometry) const {
+            return *((SimpleCustomGeometryCallbacks*) this)->getLocalBoundsImpl(geometry);
+        }
+        virtual bool generateContacts(const physx::PxGeometry& geom0, const physx::PxGeometry& geom1, const physx::PxTransform& pose0, const physx::PxTransform& pose1,
+            const physx::PxReal contactDistance, const physx::PxReal meshContactMargin, const physx::PxReal toleranceLength,
+            physx::PxContactBuffer& contactBuffer) const
+        {
+            return ((SimpleCustomGeometryCallbacks*) this)->generateContactsImpl(geom0, geom1, pose0, pose1, contactDistance, meshContactMargin, toleranceLength, contactBuffer);
+        }
+        virtual physx::PxU32 raycast(const physx::PxVec3& origin, const physx::PxVec3& unitDir, const physx::PxGeometry& geom, const physx::PxTransform& pose,
+            physx::PxReal maxDist, physx::PxHitFlags hitFlags, physx::PxU32 maxHits, physx::PxGeomRaycastHit* rayHits, physx::PxU32 stride, physx::PxRaycastThreadContext*) const
+        {
+            return ((SimpleCustomGeometryCallbacks*) this)->raycastImpl(origin, unitDir, geom, pose, maxDist, hitFlags, maxHits, rayHits, stride);
+        }
+        virtual bool overlap(const physx::PxGeometry& geom0, const physx::PxTransform& pose0, const physx::PxGeometry& geom1, const physx::PxTransform& pose1, physx::PxOverlapThreadContext*) const
+        {
+            return ((SimpleCustomGeometryCallbacks*) this)->overlapImpl(geom0, pose0, geom1, pose1);
+        }
+        virtual bool sweep(const physx::PxVec3& unitDir, const physx::PxReal maxDist,
+            const physx::PxGeometry& geom0, const physx::PxTransform& pose0, const physx::PxGeometry& geom1, const physx::PxTransform& pose1,
+            physx::PxGeomSweepHit& sweepHit, physx::PxHitFlags hitFlags, const physx::PxReal inflation, physx::PxSweepThreadContext*) const
+        {
+            return ((SimpleCustomGeometryCallbacks*) this)->sweepImpl(unitDir, maxDist, geom0, pose0, geom1, pose1, sweepHit, hitFlags, inflation);
+        }
+        virtual void computeMassProperties(const physx::PxGeometry& geometry, physx::PxMassProperties& massProperties) const
+        {
+            return ((SimpleCustomGeometryCallbacks*) this)->computeMassPropertiesImpl(geometry, massProperties);
+        }
+        virtual bool usePersistentContactManifold(const physx::PxGeometry& geometry, physx::PxReal& breakingThreshold) const
+        {
+            bool retVal = ((SimpleCustomGeometryCallbacks*) this)->usePersistentContactManifoldImpl(geometry);
+            breakingThreshold = persistentContactManifold_outBreakingThreshold;
+            return retVal;
+        }
+
+        // unused / not-available in non-native code
+        virtual physx::PxCustomGeometry::Type getCustomType() const { return physx::PxCustomGeometry::Type(); }
+        virtual void visualize(const physx::PxGeometry&, physx::PxRenderOutput&, const physx::PxTransform&, const physx::PxBounds3&) const { }
+
+        physx::PxReal persistentContactManifold_outBreakingThreshold;
 };
 
 class SimplePvdTransport : physx::PxPvdTransport {

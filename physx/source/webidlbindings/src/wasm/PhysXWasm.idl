@@ -764,6 +764,17 @@ interface PxConstraintSolverPrep {
 };
 
 [Prefix="physx::"]
+interface PxContactBuffer {
+    void reset();
+    boolean contact([Const, Ref] PxVec3 worldPoint, [Const, Ref] PxVec3 worldNormalIn, float separation, optional unsigned long faceIndex1);
+    boolean contact([Const, Ref] PxContactPoint pt);
+    [Value] attribute PxContactPoint[] contacts;
+    attribute unsigned long count;
+    attribute unsigned long pad;
+    static readonly attribute unsigned long MAX_CONTACTS;
+};
+
+[Prefix="physx::"]
 interface PxContactPair {
     unsigned long extractContacts(PxContactPairPoint userBuffer, unsigned long bufferSize);
     attribute PxShape[] shapes;
@@ -805,6 +816,22 @@ interface PxContactPairPoint {
     attribute unsigned long internalFaceIndex0;
     [Value] attribute PxVec3 impulse;
     attribute unsigned long internalFaceIndex1;
+};
+
+[Prefix="physx::"]
+interface PxContactPoint {
+    void PxContactPoint();
+    [Value] attribute PxVec3 normal;
+    [Value] attribute PxVec3 point;
+    [Value] attribute PxVec3 targetVel;
+    attribute float separation;
+    attribute float maxImpulse;
+    attribute float staticFriction;
+    attribute octet materialFlags;
+    attribute unsigned long internalFaceIndex1;
+    attribute float dynamicFriction;
+    attribute float restitution;
+    attribute float damping;
 };
 
 [Prefix="physx::", NoDelete]
@@ -1200,6 +1227,20 @@ interface PxFoundation {
 };
 
 [Prefix="physx::"]
+interface PxGeomRaycastHit {
+    boolean hadInitialOverlap();
+    attribute float u;
+    attribute float v;
+};
+PxGeomRaycastHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxGeomSweepHit {
+    boolean hadInitialOverlap();
+};
+PxGeomSweepHit implements PxLocationHit;
+
+[Prefix="physx::"]
 interface PxGeometry {
     PxGeometryTypeEnum getType();
 };
@@ -1399,6 +1440,22 @@ interface PxLocationHit {
     attribute float distance;
 };
 PxLocationHit implements PxQueryHit;
+
+[Prefix="physx::"]
+interface PxMassProperties {
+    void PxMassProperties();
+    void PxMassProperties(float m, [Const, Ref] PxMat33 inertiaT, [Const, Ref] PxVec3 com);
+    void PxMassProperties([Const, Ref] PxGeometry geometry);
+    void translate([Const, Ref] PxVec3 t);
+    [Value] static PxVec3 getMassSpaceInertia([Const, Ref] PxMat33 inertia, [Ref] PxQuat massFrame);
+    [Value] static PxMat33 translateInertia([Const, Ref] PxMat33 inertia, float mass, [Const, Ref] PxVec3 t);
+    [Value] static PxMat33 rotateInertia([Const, Ref] PxMat33 inertia, [Const, Ref] PxQuat q);
+    [Value] static PxMat33 scaleInertia([Const, Ref] PxMat33 inertia, [Const, Ref] PxQuat scaleRotation, [Const, Ref] PxVec3 scale);
+    [Value] static PxMassProperties sum([Const] PxMassProperties props, [Const] PxTransform transforms, unsigned long count);
+    [Value] attribute PxMat33 inertiaTensor;
+    [Value] attribute PxVec3 centerOfMass;
+    attribute float mass;
+};
 
 [Prefix="physx::"]
 interface PxMat33 {
@@ -1697,12 +1754,10 @@ interface PxRaycastCallback {
 [Prefix="physx::"]
 interface PxRaycastHit {
     void PxRaycastHit();
-    attribute float u;
-    attribute float v;
     attribute PxRigidActor actor;
     attribute PxShape shape;
 };
-PxRaycastHit implements PxLocationHit;
+PxRaycastHit implements PxGeomRaycastHit;
 
 interface PxRealPtr {
 };
@@ -2248,7 +2303,7 @@ interface PxSweepHit {
     attribute PxRigidActor actor;
     attribute PxShape shape;
 };
-PxSweepHit implements PxLocationHit;
+PxSweepHit implements PxGeomSweepHit;
 
 [Prefix="physx::"]
 interface PxTolerancesScale {
