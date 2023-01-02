@@ -432,6 +432,14 @@ struct PxVehicleTopLevelFunctions {
         return physx::vehicle2::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates.data(), totalMass, gravityDirection, sprungMasses.data());
     }
 
+    static physx::PxConvexMesh* VehicleUnitCylinderSweepMeshCreate(const physx::vehicle2::PxVehicleFrame& vehicleFrame, physx::PxPhysics& physics, const physx::PxCookingParams& params) {
+        return physx::vehicle2::PxVehicleUnitCylinderSweepMeshCreate(vehicleFrame, physics, params);
+    }
+
+    static void VehicleUnitCylinderSweepMeshDestroy(physx::PxConvexMesh* mesh) {
+        physx::vehicle2::PxVehicleUnitCylinderSweepMeshDestroy(mesh);
+    }
+
     static const physx::PxU32 MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES = physx::vehicle2::PxVehicleEngineParams::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
