@@ -9,6 +9,8 @@
 #include "common/PxRenderOutput.h"
 #include "extensions/PxCollectionExt.h"
 #include "geomutils/PxContactBuffer.h"
+#include "omnipvd/PxOmniPvd.h"
+#include "pvd/PxPvdTransport.h"
 
 #include "vehicle/Base.h"
 #include "vehicle/DirectDrivetrain.h"
@@ -191,33 +193,6 @@ physx::PxFilterFlags defaultFilterShader(physx::PxFilterObjectAttributes attribu
     return physx::PxFilterFlag::eDEFAULT;
 }
 
-enum VehicleSurfaceTypeMask {
-	DRIVABLE_SURFACE = 0xffff0000,
-	UNDRIVABLE_SURFACE = 0x0000ffff
-};
-
-physx::PxQueryHitType::Enum defaultWheelSceneQueryPreFilterBlocking(physx::PxFilterData filterData0, physx::PxFilterData filterData1,
-                                                                    const void* constantBlock, physx::PxU32 constantBlockSize,
-                                                                    physx::PxHitFlags& queryFlags) {
-	//filterData0 is the vehicle suspension query.
-	//filterData1 is the shape potentially hit by the query.
-	PX_UNUSED(filterData0);
-	PX_UNUSED(constantBlock);
-	PX_UNUSED(constantBlockSize);
-	PX_UNUSED(queryFlags);
-	return ((0 == (filterData1.word3 & DRIVABLE_SURFACE)) ? physx::PxQueryHitType::eNONE : physx::PxQueryHitType::eBLOCK);
-}
-
-physx::PxQueryHitType::Enum defaultWheelSceneQueryPostFilterBlocking(physx::PxFilterData filterData0, physx::PxFilterData filterData1,
-                                                                     const void* constantBlock, physx::PxU32 constantBlockSize,
-                                                                     const physx::PxQueryHit& hit) {
-	PX_UNUSED(filterData0);
-	PX_UNUSED(filterData1);
-	PX_UNUSED(constantBlock);
-	PX_UNUSED(constantBlockSize);
-	return ((static_cast<const physx::PxSweepHit&>(hit)).hadInitialOverlap() ? physx::PxQueryHitType::eNONE : physx::PxQueryHitType::eBLOCK);
-}
-
 // Slightly simplified SimulationEventCallback which can be implemented in non-native code
 class SimpleSimulationEventCallback : physx::PxSimulationEventCallback {
     public:
@@ -297,12 +272,10 @@ class SimplePvdTransport : physx::PxPvdTransport {
         SimplePvdTransport() { }
 
         virtual bool connect() = 0;
-
-        virtual bool isConnected() { return false; }
-
+        virtual bool isConnected() = 0;
         virtual void send(void* inBytes, uint32_t inLength) = 0;
-
-        virtual void disconnect() { }
+        virtual void flush() = 0;
+        virtual void disconnect() = 0;
 
         bool write(const uint8_t *inBytes, uint32_t inLength) {
             send((void*) inBytes, inLength);
@@ -314,7 +287,6 @@ class SimplePvdTransport : physx::PxPvdTransport {
         }
 
         void unlock() { }
-        void flush() { }
         uint64_t getWrittenDataSize() { return 0; }
         void release() { }
 };
@@ -373,9 +345,8 @@ struct PxTopLevelFunctions {
         return PxCreateFoundation(version, allocator, errorCallback);
     }
 
-    static physx::PxPhysics *CreatePhysics(physx::PxU32 version, physx::PxFoundation &foundation, const physx::PxTolerancesScale &scale, physx::PxPvd* pvd = NULL)
-    {
-        return PxCreatePhysics(version, foundation, scale, false, pvd);
+    static physx::PxPhysics *CreatePhysics(physx::PxU32 version, physx::PxFoundation &foundation, const physx::PxTolerancesScale &scale, physx::PxPvd* pvd = NULL, physx::PxOmniPvd* omniPvd = NULL) {
+        return PxCreatePhysics(version, foundation, scale, false, pvd, omniPvd);
     }
 
     static physx::PxCooking* CreateCooking(physx::PxU32 version, physx::PxFoundation& foundation, const physx::PxCookingParams& params) {
@@ -388,6 +359,14 @@ struct PxTopLevelFunctions {
 
     static physx::PxPvd *CreatePvd(physx::PxFoundation &foundation) {
         return PxCreatePvd(foundation);
+    }
+
+    static physx::PxPvdTransport* DefaultPvdSocketTransportCreate(const char *host, int port, unsigned int timeoutInMilliseconds) {
+        return physx::PxDefaultPvdSocketTransportCreate(host, port, timeoutInMilliseconds);
+    }
+
+    static physx::PxOmniPvd *CreateOmniPvd(physx::PxFoundation &foundation) {
+        return PxCreateOmniPvd(foundation);
     }
 
     static physx::PxDefaultCpuDispatcher* DefaultCpuDispatcherCreate(physx::PxU32 numThreads) {

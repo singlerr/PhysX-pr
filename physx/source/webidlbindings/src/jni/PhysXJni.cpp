@@ -1,4 +1,7 @@
 #include "../common/WebIdlBindings.h"
+#include "omnipvd/PxOmniPvd.h"
+#include "OmniPvdWriter.h"
+#include "OmniPvdFileWriteStream.h"
 #include "CudaBindings.h"
 #include "PhysXJniGlue.h"
 

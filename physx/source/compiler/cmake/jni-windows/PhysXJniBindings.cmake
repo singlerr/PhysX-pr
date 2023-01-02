@@ -74,21 +74,8 @@ TARGET_INCLUDE_DIRECTORIES(PhysXJniBindings
 	PRIVATE ${PHYSX_JNIBINDINGS_PLATFORM_INCLUDES}
 
 	PRIVATE ${PHYSX_ROOT_DIR}/include
-
-	PRIVATE ${PHYSX_SOURCE_DIR}/common/include
-	PRIVATE ${PHYSX_SOURCE_DIR}/common/src
-
-	PRIVATE ${PHYSX_SOURCE_DIR}/physxvehicle/src
-	PRIVATE ${PHYSX_SOURCE_DIR}/physxvehicle/src/physxmetadata/include
-
-	PRIVATE ${PHYSX_SOURCE_DIR}/physxmetadata/extensions/include
-	PRIVATE ${PHYSX_SOURCE_DIR}/physxmetadata/core/include
-
-	PRIVATE ${PHYSX_SOURCE_DIR}/physxextensions/src/serialization/Xml
-
-	PRIVATE ${PHYSX_SOURCE_DIR}/pvdsdk/src
-	
-	PRIVATE ${PHYSX_SOURCE_DIR}/pvd/include	
+	PRIVATE ${PHYSX_ROOT_DIR}/pvdruntime/include
+	PRIVATE ${PHYSX_SOURCE_DIR}/pvd/include
 )
 
 TARGET_LINK_LIBRARIES(PhysXJniBindings 
@@ -99,6 +86,7 @@ TARGET_LINK_LIBRARIES(PhysXJniBindings
 	PUBLIC PhysXVehicle2
 	PUBLIC PhysXTask
 	PUBLIC PhysXCharacterKinematic
+	PUBLIC PhysXPvdSDK
 )
 
 TARGET_COMPILE_DEFINITIONS(PhysXJniBindings 
