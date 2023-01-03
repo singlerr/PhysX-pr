@@ -9,6 +9,7 @@
 #include "common/PxRenderOutput.h"
 #include "extensions/PxCollectionExt.h"
 #include "geomutils/PxContactBuffer.h"
+
 #include "omnipvd/PxOmniPvd.h"
 #include "pvd/PxPvdTransport.h"
 
@@ -361,6 +362,7 @@ struct PxTopLevelFunctions {
         return PxCreatePvd(foundation);
     }
 
+#ifndef __EMSCRIPTEN__
     static physx::PxPvdTransport* DefaultPvdSocketTransportCreate(const char *host, int port, unsigned int timeoutInMilliseconds) {
         return physx::PxDefaultPvdSocketTransportCreate(host, port, timeoutInMilliseconds);
     }
@@ -368,6 +370,7 @@ struct PxTopLevelFunctions {
     static physx::PxOmniPvd *CreateOmniPvd(physx::PxFoundation &foundation) {
         return PxCreateOmniPvd(foundation);
     }
+#endif
 
     static physx::PxDefaultCpuDispatcher* DefaultCpuDispatcherCreate(physx::PxU32 numThreads) {
         return physx::PxDefaultCpuDispatcherCreate(numThreads);
