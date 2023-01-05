@@ -1,6 +1,8 @@
 #ifndef CUDA_BINDINGS_H
 #define CUDA_BINDINGS_H
 
+#ifndef __APPLE__
+
 #include "cudamanager/PxCudaContext.h"
 #include "PxPhysicsAPI.h"
 
@@ -17,5 +19,7 @@ struct PxCudaTopLevelFunctions {
         #endif
     }
 };
+
+#endif
 
 #endif

@@ -560,6 +560,20 @@ struct SupportFunctions {
         std::memcpy(activeActors.data(), actors, static_cast<size_t>(sizeof(physx::PxActor*) * nbActors));
         return activeActors;
     }
+
+    static physx::PxU32 PxArticulationReducedCoordinate_getMinSolverPositionIterations(physx::PxArticulationReducedCoordinate* articulation) {
+        physx::PxU32 minPosIters;
+        physx::PxU32 minVelIters;
+        articulation->getSolverIterationCounts(minPosIters, minVelIters);
+        return minPosIters;
+    }
+
+    static physx::PxU32 PxArticulationReducedCoordinate_getMinSolverVelocityIterations(physx::PxArticulationReducedCoordinate* articulation) {
+        physx::PxU32 minPosIters;
+        physx::PxU32 minVelIters;
+        articulation->getSolverIterationCounts(minPosIters, minVelIters);
+        return minVelIters;
+    }
 };
 
 #endif

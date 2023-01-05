@@ -10,6 +10,14 @@ IF(TARGET_BUILD_PLATFORM STREQUAL "jni-windows")
 ELSEIF(TARGET_BUILD_PLATFORM STREQUAL "jni-linux")
     SET(PX_ROOT_LIB_DIR "bin/jni-linux.x86_64" CACHE INTERNAL "Relative root of the lib output directory")
     SET(PX_ROOT_EXE_DIR "bin/jni-linux.x86_64" CACHE INTERNAL "Relative root dir of the exe output directory")
+
+ELSEIF(TARGET_BUILD_PLATFORM STREQUAL "jni-mac" AND PX_OUTPUT_ARCH STREQUAL "arm")
+    SET(PX_ROOT_LIB_DIR "bin/jni-mac.aarch64" CACHE INTERNAL "Relative root of the lib output directory")
+    SET(PX_ROOT_EXE_DIR "bin/jni-mac.aarch64" CACHE INTERNAL "Relative root dir of the exe output directory")
+
+ELSEIF(TARGET_BUILD_PLATFORM STREQUAL "jni-mac")
+    SET(PX_ROOT_LIB_DIR "bin/jni-mac.x86_64" CACHE INTERNAL "Relative root of the lib output directory")
+    SET(PX_ROOT_EXE_DIR "bin/jni-mac.x86_64" CACHE INTERNAL "Relative root dir of the exe output directory")
 ENDIF()
 
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG   "${PX_OUTPUT_LIB_DIR}/${PX_ROOT_LIB_DIR}/debug"   )

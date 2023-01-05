@@ -220,9 +220,13 @@ class CMakePreset:
                     os.environ['PM_CMakeModules_PATH'] + \
                     '/linux/LinuxAarch64.cmake\"'
             return outString
-        elif self.targetPlatform == 'mac64':
-            outString = outString + ' -DTARGET_BUILD_PLATFORM=mac'
+        elif self.targetPlatform == 'jni-mac64':
+            outString = outString + ' -DTARGET_BUILD_PLATFORM=jni-mac'
             outString = outString + ' -DPX_OUTPUT_ARCH=x86'
+            return outString
+        elif self.targetPlatform == 'jni-macAarch64':
+            outString = outString + ' -DTARGET_BUILD_PLATFORM=jni-mac'
+            outString = outString + ' -DPX_OUTPUT_ARCH=arm'
             return outString
         elif self.targetPlatform == 'jni-win64':
             outString = outString + ' -Ax64'
