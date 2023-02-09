@@ -326,6 +326,52 @@ class SimpleQueryFilterCallback : physx::PxQueryFilterCallback {
         virtual ~SimpleQueryFilterCallback() { }
 };
 
+template<typename HitType>
+class PxHitResult : public physx::PxHitCallback<HitType> {
+    public:
+        PxHitResult() : physx::PxHitCallback<HitType>(resultBuf, 8) { }
+
+        PX_INLINE physx::PxU32 getNbAnyHits() const {
+            return getNbTouches() + physx::PxU32(this->hasBlock);
+        }
+        PX_INLINE const HitType& getAnyHit(const physx::PxU32 index) const {
+            PX_ASSERT(index < getNbTouches() + physx::PxU32(this->hasBlock));
+            return index < getNbTouches() ? hits[index] : this->block;
+        }
+
+        PX_INLINE physx::PxU32 getNbTouches() const {
+            return static_cast<physx::PxU32>(hits.size());
+        }
+        PX_INLINE const HitType& getTouch(const physx::PxU32 index) const {
+            PX_ASSERT(index < getNbTouches());
+            return hits[index];
+        }
+
+    protected:
+        virtual physx::PxAgain processTouches(const HitType* buffer, physx::PxU32 nbHits) {
+            if (isFinalized) {
+                hits.clear();
+                isFinalized = false;
+            }
+            for (physx::PxU32 i = 0; i < nbHits; i++) {
+                hits.push_back(buffer[i]);
+            }
+            return true;
+        }
+        virtual void finalizeQuery() {
+            isFinalized = true;
+        }
+
+    private:
+        bool isFinalized = true;
+        HitType resultBuf[8];
+        std::vector<HitType> hits;
+};
+
+typedef PxHitResult<physx::PxOverlapHit> PxOverlapResult;
+typedef PxHitResult<physx::PxRaycastHit> PxRaycastResult;
+typedef PxHitResult<physx::PxSweepHit> PxSweepResult;
+
 // top-level functions are not supported by webidl binder, we need to wrap them in a class
 struct PxTopLevelFunctions {
     static const physx::PxU32 PHYSICS_VERSION = PX_PHYSICS_VERSION;
