@@ -71,7 +71,6 @@ typedef physx::PxMeshMidPhase::Enum PxMeshMidPhaseEnum;
 typedef physx::PxMeshPreprocessingFlag::Enum PxMeshPreprocessingFlagEnum;
 typedef physx::PxPairFilteringMode::Enum PxPairFilteringModeEnum;
 typedef physx::PxPairFlag::Enum PxPairFlagEnum;
-typedef physx::PxParticleSolverType::Enum PxParticleSolverTypeEnum;
 typedef physx::PxPrismaticJointFlag::Enum PxPrismaticJointFlagEnum;
 typedef physx::PxPruningStructureType::Enum PxPruningStructureTypeEnum;
 typedef physx::PxQueryFlag::Enum PxQueryFlagEnum;
@@ -144,6 +143,7 @@ typedef std::vector<physx::PxU8> Vector_PxU8;
 typedef std::vector<physx::PxU16> Vector_PxU16;
 typedef std::vector<physx::PxU32> Vector_PxU32;
 typedef std::vector<physx::PxVec3> Vector_PxVec3;
+typedef std::vector<physx::PxVec4> Vector_PxVec4;
 
 class PassThroughFilterShader {
     public:
@@ -518,6 +518,22 @@ struct NativeArrayHelpers {
 
     static physx::PxReal getRealAt(physx::PxReal* base, int index) {
         return base[index];
+    }
+
+    static void setU8At(void* base, int index, physx::PxU8 value) {
+        static_cast<physx::PxU8*>(base)[index] = value;
+    }
+
+    static void setU16At(void* base, int index, physx::PxU16 value) {
+        static_cast<physx::PxU16*>(base)[index] = value;
+    }
+
+    static void setU32At(void* base, int index, physx::PxU32 value) {
+        static_cast<physx::PxU32*>(base)[index] = value;
+    }
+
+    static void setRealAt(void* base, int index, physx::PxReal value) {
+        static_cast<physx::PxReal*>(base)[index] = value;
     }
 
     static physx::PxActor* getActorAt(physx::PxActor* base, int index) {
