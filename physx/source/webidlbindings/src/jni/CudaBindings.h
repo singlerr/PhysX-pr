@@ -5,6 +5,7 @@
 
 #include "cudamanager/PxCudaContext.h"
 #include "extensions/PxParticleExt.h"
+#include "extensions/PxParticleClothCooker.h"
 #include "PxPhysicsAPI.h"
 #include "PxParticleGpu.h"
 #include "PxAttachment.h"
@@ -21,16 +22,42 @@ struct PxCudaTopLevelFunctions {
         return PxCreateCudaContextManager(foundation, desc);
     }
 
+
     static physx::PxParticleClothPreProcessor* CreateParticleClothPreProcessor(physx::PxCudaContextManager* cudaContextManager) {
         return PxCreateParticleClothPreProcessor(cudaContextManager);
     }
 
-    static physx::ExtGpu::PxParticleClothBufferHelper* CreateParticleClothBufferHelper(const physx::PxU32 maxCloths, const physx::PxU32 maxTriangles, const physx::PxU32 maxSprings, const physx::PxU32 maxParticles, physx::PxCudaContextManager *cudaContextManager) {
+    static physx::ExtGpu::PxParticleClothBufferHelper* CreateParticleClothBufferHelper(
+        const physx::PxU32 maxCloths,
+        const physx::PxU32 maxTriangles,
+        const physx::PxU32 maxSprings,
+        const physx::PxU32 maxParticles,
+        physx::PxCudaContextManager *cudaContextManager
+    ) {
         return physx::ExtGpu::PxCreateParticleClothBufferHelper(maxCloths, maxTriangles, maxSprings, maxParticles, cudaContextManager);
     }
 
-    static physx::PxParticleClothBuffer* CreateAndPopulateParticleClothBuffer(const physx::ExtGpu::PxParticleBufferDesc &desc, const physx::PxParticleClothDesc &clothDesc, physx::PxPartitionedParticleCloth &output, physx::PxCudaContextManager *cudaContextManager) {
+    static physx::PxParticleClothBuffer* CreateAndPopulateParticleClothBuffer(
+        const physx::ExtGpu::PxParticleBufferDesc &desc,
+        const physx::PxParticleClothDesc &clothDesc,
+        physx::PxPartitionedParticleCloth &output,
+        physx::PxCudaContextManager *cudaContextManager
+    ) {
         return physx::ExtGpu::PxCreateAndPopulateParticleClothBuffer(desc, clothDesc, output, cudaContextManager);
+    }
+
+    static physx::PxParticleAndDiffuseBuffer* CreateAndPopulateParticleAndDiffuseBuffer(const physx::ExtGpu::PxParticleAndDiffuseBufferDesc &desc, physx::PxCudaContextManager *cudaContextManager) {
+        return physx::ExtGpu::PxCreateAndPopulateParticleAndDiffuseBuffer(desc, cudaContextManager);
+    }
+
+    static physx::ExtGpu::PxParticleClothCooker* CreateParticleClothCooker(
+        physx::PxU32 vertexCount, physx::PxVec4 *inVertices,
+        physx::PxU32 triangleIndexCount, physx::PxU32 *inTriangleIndices,
+        physx::PxU32 constraintTypeFlags = physx::ExtGpu::PxParticleClothConstraint::eTYPE_ALL,
+        physx::PxVec3 verticalDirection = physx::PxVec3(0.0f, 1.0f, 0.0f),
+        physx::PxReal bendingConstraintMaxAngle = 20.0f / 360.0f * physx::PxTwoPi
+    ) {
+        return physx::PxCreateParticleClothCooker(vertexCount, inVertices, triangleIndexCount, inTriangleIndices, constraintTypeFlags, verticalDirection, bendingConstraintMaxAngle);
     }
 
     static physx::PxU32* allocPinnedHostBufferPxU32(physx::PxCudaContextManager *cudaContextManager, physx::PxU32 numElements) {
@@ -58,6 +85,7 @@ typedef physx::PxParticleBufferFlag::Enum PxParticleBufferFlagEnum;
 typedef physx::PxParticleFlag::Enum PxParticleFlagEnum;
 typedef physx::PxParticlePhaseFlag::Enum PxParticlePhaseFlagEnum;
 typedef physx::PxParticleSolverType::Enum PxParticleSolverTypeEnum;
+typedef physx::ExtGpu::PxParticleClothConstraint PxParticleClothConstraintEnum;
 
 typedef physx::PxGpuMirroredPointer<physx::PxGpuParticleSystem> PxGpuMirroredGpuParticleSystemPointer;
 

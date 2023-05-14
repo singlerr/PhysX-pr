@@ -492,6 +492,16 @@ struct PxVehicleTopLevelFunctions {
     static const physx::PxU32 MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES = physx::vehicle2::PxVehicleEngineParams::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
+struct PxExtensionTopLevelFunctions {
+    static physx::PxRigidStatic* CreatePlane(physx::PxPhysics &sdk, const physx::PxPlane &plane, physx::PxMaterial &material, const physx::PxFilterData &filterData) {
+        physx::PxRigidStatic* actor = physx::PxCreatePlane(sdk, plane, material);
+        physx::PxShape* shapes[1];
+        actor->getShapes(shapes, 1);
+        shapes[0]->setSimulationFilterData(filterData);
+        return actor;
+    }
+};
+
 struct PxVehicleTireForceParamsExt {
     static void setFrictionVsSlip(physx::vehicle2::PxVehicleTireForceParams* tireForceParams, int i, int j, float value) {
         tireForceParams->frictionVsSlip[i][j] = value;

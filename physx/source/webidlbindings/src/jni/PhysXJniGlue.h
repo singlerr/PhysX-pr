@@ -2002,6 +2002,18 @@ JNIEXPORT void JNICALL Java_physx_common_PxOutputStream__1delete_1native_1instan
 JNIEXPORT jint JNICALL Java_physx_common_PxPlane__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxPlane);
 }
+JNIEXPORT jlong JNICALL Java_physx_common_PxPlane__1_1placement_1new_1PxPlane__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) physx::PxPlane();
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxPlane__1_1placement_1new_1PxPlane__JFFFF(JNIEnv*, jclass, jlong _placement_address, jfloat nx, jfloat ny, jfloat nz, jfloat distance) {
+    return (jlong) new((void*)_placement_address) physx::PxPlane(nx, ny, nz, distance);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxPlane__1_1placement_1new_1PxPlane__JJF(JNIEnv*, jclass, jlong _placement_address, jlong normal, jfloat distance) {
+    return (jlong) new((void*)_placement_address) physx::PxPlane(*((physx::PxVec3*) normal), distance);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxPlane__1_1placement_1new_1PxPlane__JJJJ(JNIEnv*, jclass, jlong _placement_address, jlong p0, jlong p1, jlong p2) {
+    return (jlong) new((void*)_placement_address) physx::PxPlane(*((physx::PxVec3*) p0), *((physx::PxVec3*) p1), *((physx::PxVec3*) p2));
+}
 JNIEXPORT jlong JNICALL Java_physx_common_PxPlane__1PxPlane__(JNIEnv*, jclass) {
     return (jlong) new physx::PxPlane();
 }
@@ -2582,6 +2594,21 @@ JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreatePartic
 }
 JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateAndPopulateParticleClothBuffer(JNIEnv*, jclass, jlong desc, jlong clothDesc, jlong output, jlong cudaContextManager) {
     return (jlong) PxCudaTopLevelFunctions::CreateAndPopulateParticleClothBuffer(*((physx::ExtGpu::PxParticleBufferDesc*) desc), *((physx::PxParticleClothDesc*) clothDesc), *((physx::PxPartitionedParticleCloth*) output), (physx::PxCudaContextManager*) cudaContextManager);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateAndPopulateParticleAndDiffuseBuffer(JNIEnv*, jclass, jlong desc, jlong cudaContextManager) {
+    return (jlong) PxCudaTopLevelFunctions::CreateAndPopulateParticleAndDiffuseBuffer(*((physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) desc), (physx::PxCudaContextManager*) cudaContextManager);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateParticleClothCooker__IJIJ(JNIEnv*, jclass, jint vertexCount, jlong inVertices, jint triangleIndexCount, jlong inTriangleIndices) {
+    return (jlong) PxCudaTopLevelFunctions::CreateParticleClothCooker(vertexCount, (physx::PxVec4*) inVertices, triangleIndexCount, *((PxU32Ptr*) inTriangleIndices));
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateParticleClothCooker__IJIJI(JNIEnv*, jclass, jint vertexCount, jlong inVertices, jint triangleIndexCount, jlong inTriangleIndices, jint constraintTypeFlags) {
+    return (jlong) PxCudaTopLevelFunctions::CreateParticleClothCooker(vertexCount, (physx::PxVec4*) inVertices, triangleIndexCount, *((PxU32Ptr*) inTriangleIndices), constraintTypeFlags);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateParticleClothCooker__IJIJIJ(JNIEnv*, jclass, jint vertexCount, jlong inVertices, jint triangleIndexCount, jlong inTriangleIndices, jint constraintTypeFlags, jlong verticalDirection) {
+    return (jlong) PxCudaTopLevelFunctions::CreateParticleClothCooker(vertexCount, (physx::PxVec4*) inVertices, triangleIndexCount, *((PxU32Ptr*) inTriangleIndices), constraintTypeFlags, *((physx::PxVec3*) verticalDirection));
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1CreateParticleClothCooker__IJIJIJF(JNIEnv*, jclass, jint vertexCount, jlong inVertices, jint triangleIndexCount, jlong inTriangleIndices, jint constraintTypeFlags, jlong verticalDirection, jfloat bendingConstraintMaxAngle) {
+    return (jlong) PxCudaTopLevelFunctions::CreateParticleClothCooker(vertexCount, (physx::PxVec4*) inVertices, triangleIndexCount, *((PxU32Ptr*) inTriangleIndices), constraintTypeFlags, *((physx::PxVec3*) verticalDirection), bendingConstraintMaxAngle);
 }
 JNIEXPORT jlong JNICALL Java_physx_common_PxCudaTopLevelFunctions__1allocPinnedHostBufferPxU32(JNIEnv*, jclass, jlong cudaContextManager, jint numElements) {
     return (jlong) PxCudaTopLevelFunctions::allocPinnedHostBufferPxU32((physx::PxCudaContextManager*) cudaContextManager, numElements);
@@ -3393,6 +3420,14 @@ JNIEXPORT jint JNICALL Java_physx_cooking_PxMeshMidPhaseEnum__1geteBVH33(JNIEnv*
 }
 JNIEXPORT jint JNICALL Java_physx_cooking_PxMeshMidPhaseEnum__1geteBVH34(JNIEnv*, jclass) {
     return PxMeshMidPhaseEnum::eBVH34;
+}
+
+// PxExtensionTopLevelFunctions
+JNIEXPORT jint JNICALL Java_physx_extensions_PxExtensionTopLevelFunctions__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxExtensionTopLevelFunctions);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxExtensionTopLevelFunctions__1CreatePlane(JNIEnv*, jclass, jlong sdk, jlong plane, jlong material, jlong filterData) {
+    return (jlong) PxExtensionTopLevelFunctions::CreatePlane(*((physx::PxPhysics*) sdk), *((physx::PxPlane*) plane), *((physx::PxMaterial*) material), *((physx::PxFilterData*) filterData));
 }
 
 // PxCollectionExt
@@ -5792,6 +5827,104 @@ JNIEXPORT void JNICALL Java_physx_particles_PxConeLimitParams__1setAxisAngle(JNI
     _self->axisAngle = *((physx::PxVec4*) value);
 }
 
+// PxDiffuseParticleParams
+JNIEXPORT jint JNICALL Java_physx_particles_PxDiffuseParticleParams__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxDiffuseParticleParams);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxDiffuseParticleParams__1_1placement_1new_1PxDiffuseParticleParams(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) physx::PxDiffuseParticleParams();
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxDiffuseParticleParams__1PxDiffuseParticleParams(JNIEnv*, jclass) {
+    return (jlong) new physx::PxDiffuseParticleParams();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setToDefault(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* self = (physx::PxDiffuseParticleParams*) _address;
+    self->setToDefault();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxDiffuseParticleParams*) _address;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getThreshold(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->threshold;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setThreshold(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->threshold = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getLifetime(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->lifetime;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setLifetime(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->lifetime = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getAirDrag(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->airDrag;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setAirDrag(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->airDrag = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getBubbleDrag(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->bubbleDrag;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setBubbleDrag(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->bubbleDrag = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getBuoyancy(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->buoyancy;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setBuoyancy(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->buoyancy = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getKineticEnergyWeight(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->kineticEnergyWeight;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setKineticEnergyWeight(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->kineticEnergyWeight = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getPressureWeight(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->pressureWeight;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setPressureWeight(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->pressureWeight = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getDivergenceWeight(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->divergenceWeight;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setDivergenceWeight(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->divergenceWeight = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxDiffuseParticleParams__1getCollisionDecay(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jfloat) _self->collisionDecay;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setCollisionDecay(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->collisionDecay = value;
+}
+JNIEXPORT jboolean JNICALL Java_physx_particles_PxDiffuseParticleParams__1getUseAccurateVelocity(JNIEnv*, jclass, jlong _address) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    return (jboolean) _self->useAccurateVelocity;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxDiffuseParticleParams__1setUseAccurateVelocity(JNIEnv*, jclass, jlong _address, jboolean value) {
+    physx::PxDiffuseParticleParams* _self = (physx::PxDiffuseParticleParams*) _address;
+    _self->useAccurateVelocity = value;
+}
+
 // PxGpuMirroredGpuParticleSystemPointer
 JNIEXPORT jint JNICALL Java_physx_particles_PxGpuMirroredGpuParticleSystemPointer__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxGpuMirroredGpuParticleSystemPointer);
@@ -5874,6 +6007,75 @@ JNIEXPORT jlong JNICALL Java_physx_particles_PxGpuParticleSystem__1getMCollision
 JNIEXPORT void JNICALL Java_physx_particles_PxGpuParticleSystem__1setMCollisionIndex(JNIEnv*, jclass, jlong _address, jlong value) {
     physx::PxGpuParticleSystem* _self = (physx::PxGpuParticleSystem*) _address;
     _self->mCollisionIndex = *((PxU32Ptr*) value);
+}
+
+// PxParticleAndDiffuseBuffer
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxParticleAndDiffuseBuffer);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1getDiffusePositionLifeTime(JNIEnv*, jclass, jlong _address) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    return (jlong) self->getDiffusePositionLifeTime();
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1getNbActiveDiffuseParticles(JNIEnv*, jclass, jlong _address) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    return (jint) self->getNbActiveDiffuseParticles();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1setMaxActiveDiffuseParticles(JNIEnv*, jclass, jlong _address, jint maxActiveDiffuseParticles) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    self->setMaxActiveDiffuseParticles(maxActiveDiffuseParticles);
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1getMaxDiffuseParticles(JNIEnv*, jclass, jlong _address) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    return (jint) self->getMaxDiffuseParticles();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1setDiffuseParticleParams(JNIEnv*, jclass, jlong _address, jlong params) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    self->setDiffuseParticleParams(*((physx::PxDiffuseParticleParams*) params));
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleAndDiffuseBuffer__1getDiffuseParticleParams(JNIEnv*, jclass, jlong _address) {
+    physx::PxParticleAndDiffuseBuffer* self = (physx::PxParticleAndDiffuseBuffer*) _address;
+    static thread_local physx::PxDiffuseParticleParams _cache = self->getDiffuseParticleParams();
+    _cache = self->getDiffuseParticleParams();
+    return (jlong) &_cache;
+}
+
+// PxParticleAndDiffuseBufferDesc
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::ExtGpu::PxParticleAndDiffuseBufferDesc);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1_1placement_1new_1PxParticleAndDiffuseBufferDesc(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) physx::ExtGpu::PxParticleAndDiffuseBufferDesc();
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1PxParticleAndDiffuseBufferDesc(JNIEnv*, jclass) {
+    return (jlong) new physx::ExtGpu::PxParticleAndDiffuseBufferDesc();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1getDiffuseParams(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    return (jlong) &_self->diffuseParams;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1setDiffuseParams(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    _self->diffuseParams = *((physx::PxDiffuseParticleParams*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1getMaxDiffuseParticles(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    return (jint) _self->maxDiffuseParticles;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1setMaxDiffuseParticles(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    _self->maxDiffuseParticles = value;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1getMaxActiveDiffuseParticles(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    return (jint) _self->maxActiveDiffuseParticles;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleAndDiffuseBufferDesc__1setMaxActiveDiffuseParticles(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::ExtGpu::PxParticleAndDiffuseBufferDesc* _self = (physx::ExtGpu::PxParticleAndDiffuseBufferDesc*) _address;
+    _self->maxActiveDiffuseParticles = value;
 }
 
 // PxParticleBuffer
@@ -6181,6 +6383,94 @@ JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothBufferHelper__1addClo
 JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleClothBufferHelper__1getParticleClothDesc(JNIEnv*, jclass, jlong _address) {
     physx::ExtGpu::PxParticleClothBufferHelper* self = (physx::ExtGpu::PxParticleClothBufferHelper*) _address;
     return (jlong) &self->getParticleClothDesc();
+}
+
+// PxParticleClothConstraint
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraint__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::ExtGpu::PxParticleClothConstraint);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleClothConstraint__1PxParticleClothConstraint(JNIEnv*, jclass) {
+    return (jlong) new physx::ExtGpu::PxParticleClothConstraint();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothConstraint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::ExtGpu::PxParticleClothConstraint*) _address;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraint__1getParticleIndexA(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    return (jint) _self->particleIndexA;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothConstraint__1setParticleIndexA(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    _self->particleIndexA = value;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraint__1getParticleIndexB(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    return (jint) _self->particleIndexB;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothConstraint__1setParticleIndexB(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    _self->particleIndexB = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxParticleClothConstraint__1getLength(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    return (jfloat) _self->length;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothConstraint__1setLength(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    _self->length = value;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraint__1getConstraintType(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    return (jint) _self->constraintType;
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothConstraint__1setConstraintType(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::ExtGpu::PxParticleClothConstraint* _self = (physx::ExtGpu::PxParticleClothConstraint*) _address;
+    _self->constraintType = value;
+}
+
+// PxParticleClothCooker
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothCooker__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::ExtGpu::PxParticleClothCooker);
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothCooker__1release(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    self->release();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothCooker__1cookConstraints__J(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    self->cookConstraints();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothCooker__1cookConstraints__JJ(JNIEnv*, jclass, jlong _address, jlong constraints) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    self->cookConstraints((physx::ExtGpu::PxParticleClothConstraint*) constraints);
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothCooker__1cookConstraints__JJI(JNIEnv*, jclass, jlong _address, jlong constraints, jint numConstraints) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    self->cookConstraints((physx::ExtGpu::PxParticleClothConstraint*) constraints, numConstraints);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleClothCooker__1getTriangleIndices(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    return (jlong) self->getTriangleIndices();
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothCooker__1getTriangleIndicesCount(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    return (jint) self->getTriangleIndicesCount();
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleClothCooker__1getConstraints(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    return (jlong) self->getConstraints();
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothCooker__1getConstraintCount(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    return (jint) self->getConstraintCount();
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleClothCooker__1calculateMeshVolume(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    self->calculateMeshVolume();
+}
+JNIEXPORT jfloat JNICALL Java_physx_particles_PxParticleClothCooker__1getMeshVolume(JNIEnv*, jclass, jlong _address) {
+    physx::ExtGpu::PxParticleClothCooker* self = (physx::ExtGpu::PxParticleClothCooker*) _address;
+    return (jfloat) self->getMeshVolume();
 }
 
 // PxParticleClothDesc
@@ -7019,6 +7309,29 @@ JNIEXPORT void JNICALL Java_physx_particles_Vector_1PxParticleSpring__1clear(JNI
 }
 JNIEXPORT void JNICALL Java_physx_particles_Vector_1PxParticleSpring__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (Vector_PxParticleSpring*) _address;
+}
+
+// PxParticleClothConstraintEnum
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1INVALID_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_INVALID_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1HORIZONTAL_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_HORIZONTAL_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1VERTICAL_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_VERTICAL_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1DIAGONAL_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_DIAGONAL_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1BENDING_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_BENDING_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1DIAGONAL_1BENDING_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_DIAGONAL_BENDING_CONSTRAINT;
+}
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleClothConstraintEnum__1geteTYPE_1ALL(JNIEnv*, jclass) {
+    return PxParticleClothConstraintEnum::eTYPE_ALL;
 }
 
 // PxParticleBufferFlagEnum
@@ -9489,6 +9802,14 @@ JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createArticulationReduced
     physx::PxPhysics* self = (physx::PxPhysics*) _address;
     return (jlong) self->createArticulationReducedCoordinate();
 }
+JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createMaterial(JNIEnv*, jclass, jlong _address, jfloat staticFriction, jfloat dynamicFriction, jfloat restitution) {
+    physx::PxPhysics* self = (physx::PxPhysics*) _address;
+    return (jlong) self->createMaterial(staticFriction, dynamicFriction, restitution);
+}
+JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1getPhysicsInsertionCallback(JNIEnv*, jclass, jlong _address) {
+    physx::PxPhysics* self = (physx::PxPhysics*) _address;
+    return (jlong) &self->getPhysicsInsertionCallback();
+}
 JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createPBDParticleSystem__JJ(JNIEnv*, jclass, jlong _address, jlong cudaContextManager) {
     physx::PxPhysics* self = (physx::PxPhysics*) _address;
     return (jlong) self->createPBDParticleSystem(*((physx::PxCudaContextManager*) cudaContextManager));
@@ -9505,10 +9826,6 @@ JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createParticleClothBuffer
     physx::PxPhysics* self = (physx::PxPhysics*) _address;
     return (jlong) self->createParticleClothBuffer(maxParticles, maxNumVolumes, maxNumCloths, maxNumTriangles, maxNumSprings, (physx::PxCudaContextManager*) cudaContextManager);
 }
-JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createMaterial(JNIEnv*, jclass, jlong _address, jfloat staticFriction, jfloat dynamicFriction, jfloat restitution) {
-    physx::PxPhysics* self = (physx::PxPhysics*) _address;
-    return (jlong) self->createMaterial(staticFriction, dynamicFriction, restitution);
-}
 JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createPBDMaterial__JFFFFFFFFF(JNIEnv*, jclass, jlong _address, jfloat friction, jfloat damping, jfloat adhesion, jfloat viscosity, jfloat vorticityConfinement, jfloat surfaceTension, jfloat cohesion, jfloat lift, jfloat drag) {
     physx::PxPhysics* self = (physx::PxPhysics*) _address;
     return (jlong) self->createPBDMaterial(friction, damping, adhesion, viscosity, vorticityConfinement, surfaceTension, cohesion, lift, drag);
@@ -9520,10 +9837,6 @@ JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createPBDMaterial__JFFFFF
 JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1createPBDMaterial__JFFFFFFFFFFF(JNIEnv*, jclass, jlong _address, jfloat friction, jfloat damping, jfloat adhesion, jfloat viscosity, jfloat vorticityConfinement, jfloat surfaceTension, jfloat cohesion, jfloat lift, jfloat drag, jfloat cflCoefficient, jfloat gravityScale) {
     physx::PxPhysics* self = (physx::PxPhysics*) _address;
     return (jlong) self->createPBDMaterial(friction, damping, adhesion, viscosity, vorticityConfinement, surfaceTension, cohesion, lift, drag, cflCoefficient, gravityScale);
-}
-JNIEXPORT jlong JNICALL Java_physx_physics_PxPhysics__1getPhysicsInsertionCallback(JNIEnv*, jclass, jlong _address) {
-    physx::PxPhysics* self = (physx::PxPhysics*) _address;
-    return (jlong) &self->getPhysicsInsertionCallback();
 }
 JNIEXPORT void JNICALL Java_physx_physics_PxPhysics__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxPhysics*) _address;
