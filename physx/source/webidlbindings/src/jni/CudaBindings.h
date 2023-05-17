@@ -22,6 +22,7 @@ struct PxCudaTopLevelFunctions {
         return PxCreateCudaContextManager(foundation, desc);
     }
 
+    // cloth particle functions
 
     static physx::PxParticleClothPreProcessor* CreateParticleClothPreProcessor(physx::PxCudaContextManager* cudaContextManager) {
         return PxCreateParticleClothPreProcessor(cudaContextManager);
@@ -37,19 +38,6 @@ struct PxCudaTopLevelFunctions {
         return physx::ExtGpu::PxCreateParticleClothBufferHelper(maxCloths, maxTriangles, maxSprings, maxParticles, cudaContextManager);
     }
 
-    static physx::PxParticleClothBuffer* CreateAndPopulateParticleClothBuffer(
-        const physx::ExtGpu::PxParticleBufferDesc &desc,
-        const physx::PxParticleClothDesc &clothDesc,
-        physx::PxPartitionedParticleCloth &output,
-        physx::PxCudaContextManager *cudaContextManager
-    ) {
-        return physx::ExtGpu::PxCreateAndPopulateParticleClothBuffer(desc, clothDesc, output, cudaContextManager);
-    }
-
-    static physx::PxParticleAndDiffuseBuffer* CreateAndPopulateParticleAndDiffuseBuffer(const physx::ExtGpu::PxParticleAndDiffuseBufferDesc &desc, physx::PxCudaContextManager *cudaContextManager) {
-        return physx::ExtGpu::PxCreateAndPopulateParticleAndDiffuseBuffer(desc, cudaContextManager);
-    }
-
     static physx::ExtGpu::PxParticleClothCooker* CreateParticleClothCooker(
         physx::PxU32 vertexCount, physx::PxVec4 *inVertices,
         physx::PxU32 triangleIndexCount, physx::PxU32 *inTriangleIndices,
@@ -60,6 +48,27 @@ struct PxCudaTopLevelFunctions {
         return physx::PxCreateParticleClothCooker(vertexCount, inVertices, triangleIndexCount, inTriangleIndices, constraintTypeFlags, verticalDirection, bendingConstraintMaxAngle);
     }
 
+    static physx::PxParticleClothBuffer* CreateAndPopulateParticleClothBuffer(
+        const physx::ExtGpu::PxParticleBufferDesc &desc,
+        const physx::PxParticleClothDesc &clothDesc,
+        physx::PxPartitionedParticleCloth &output,
+        physx::PxCudaContextManager *cudaContextManager
+    ) {
+        return physx::ExtGpu::PxCreateAndPopulateParticleClothBuffer(desc, clothDesc, output, cudaContextManager);
+    }
+
+    // fluid particle functions
+
+    static physx::PxParticleBuffer* CreateAndPopulateParticleBuffer(const physx::ExtGpu::PxParticleBufferDesc &desc, physx::PxCudaContextManager *cudaContextManager) {
+        return physx::ExtGpu::PxCreateAndPopulateParticleBuffer(desc, cudaContextManager);
+    }
+
+    static physx::PxParticleAndDiffuseBuffer* CreateAndPopulateParticleAndDiffuseBuffer(const physx::ExtGpu::PxParticleAndDiffuseBufferDesc &desc, physx::PxCudaContextManager *cudaContextManager) {
+        return physx::ExtGpu::PxCreateAndPopulateParticleAndDiffuseBuffer(desc, cudaContextManager);
+    }
+
+    // memory util functions
+    
     static physx::PxU32* allocPinnedHostBufferPxU32(physx::PxCudaContextManager *cudaContextManager, physx::PxU32 numElements) {
         return cudaContextManager->allocPinnedHostBuffer<physx::PxU32>(numElements);
     }
