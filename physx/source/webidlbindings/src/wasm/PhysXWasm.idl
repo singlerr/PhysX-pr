@@ -134,6 +134,10 @@ interface NativeArrayHelpers {
     static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
     static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
+    static void setU8At(VoidPtr base, long index, octet value);
+    static void setU16At(VoidPtr base, long index, unsigned short value);
+    static void setU32At(VoidPtr base, long index, unsigned long value);
+    static void setRealAt(VoidPtr base, long index, float value);
     [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
     [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
     [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
@@ -1202,6 +1206,11 @@ interface PxExtendedVec3 {
     attribute double z;
 };
 
+[NoDelete]
+interface PxExtensionTopLevelFunctions {
+    static PxRigidStatic CreatePlane([Ref] PxPhysics sdk, [Const, Ref] PxPlane plane, [Ref] PxMaterial material, [Const, Ref] PxFilterData filterData);
+};
+
 [Prefix="physx::"]
 interface PxFilterData {
     void PxFilterData();
@@ -1626,7 +1635,7 @@ interface PxPairFlags {
 interface PxPhysics {
     void release();
     [Ref] PxFoundation getFoundation();
-    PxAggregate createAggregate(unsigned long size, unsigned long maxShape, boolean enableSelfCollision);
+    PxAggregate createAggregate(unsigned long maxActor, unsigned long maxShape, boolean enableSelfCollision);
     [Const, Ref] PxTolerancesScale getTolerancesScale();
     PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);
     PxRigidStatic createRigidStatic([Const, Ref] PxTransform pose);
@@ -1973,8 +1982,6 @@ interface PxScene {
     boolean addArticulation([Ref] PxArticulationReducedCoordinate articulation);
     void removeArticulation([Ref] PxArticulationReducedCoordinate articulation, optional boolean wakeOnLostTouch);
     unsigned long getNbActors([Ref] PxActorTypeFlags types);
-    unsigned long getNbSoftBodies();
-    unsigned long getNbParticleSystems(PxParticleSolverTypeEnum type);
     unsigned long getNbArticulations();
     unsigned long getNbConstraints();
     unsigned long getNbAggregates();
@@ -2531,6 +2538,28 @@ interface PxVec3 {
     attribute float x;
     attribute float y;
     attribute float z;
+};
+
+[Prefix="physx::"]
+interface PxVec4 {
+    void PxVec4();
+    void PxVec4(float x, float y, float z, float w);
+    boolean isZero();
+    boolean isFinite();
+    boolean isNormalized();
+    float magnitudeSquared();
+    float magnitude();
+    float dot([Const, Ref] PxVec4 v);
+    [Value] PxVec4 getNormalized();
+    float normalize();
+    [Value] PxVec4 multiply([Const, Ref] PxVec4 a);
+    [Value] PxVec4 minimum([Const, Ref] PxVec4 v);
+    [Value] PxVec4 maximum([Const, Ref] PxVec4 v);
+    [Value] PxVec3 getXYZ();
+    attribute float x;
+    attribute float y;
+    attribute float z;
+    attribute float w;
 };
 
 [Prefix="physx::vehicle2::"]
@@ -3405,6 +3434,16 @@ interface Vector_PxVec3 {
     void clear();
 };
 
+interface Vector_PxVec4 {
+    void Vector_PxVec4();
+    void Vector_PxVec4(unsigned long size);
+    [Ref] PxVec4 at(unsigned long index);
+    PxVec4 data();
+    unsigned long size();
+    void push_back([Ref] PxVec4 value);
+    void clear();
+};
+
 enum EngineDriveVehicleEnum {
     "EngineDriveVehicleEnum::eDIFFTYPE_FOURWHEELDRIVE",
     "EngineDriveVehicleEnum::eDIFFTYPE_MULTIWHEELDRIVE",
@@ -3688,7 +3727,8 @@ enum PxGeometryTypeEnum {
     "PxGeometryTypeEnum::eBOX",
     "PxGeometryTypeEnum::eCONVEXMESH",
     "PxGeometryTypeEnum::eTRIANGLEMESH",
-    "PxGeometryTypeEnum::eHEIGHTFIELD"
+    "PxGeometryTypeEnum::eHEIGHTFIELD",
+    "PxGeometryTypeEnum::eCUSTOM"
 };
 
 enum PxHeightFieldFlagEnum {
@@ -3781,13 +3821,6 @@ enum PxPairFlagEnum {
     "PxPairFlagEnum::eNEXT_FREE",
     "PxPairFlagEnum::eCONTACT_DEFAULT",
     "PxPairFlagEnum::eTRIGGER_DEFAULT"
-};
-
-enum PxParticleSolverTypeEnum {
-    "PxParticleSolverTypeEnum::ePBD",
-    "PxParticleSolverTypeEnum::eFLIP",
-    "PxParticleSolverTypeEnum::eMPM",
-    "PxParticleSolverTypeEnum::eCUSTOM"
 };
 
 enum PxPrismaticJointFlagEnum {
