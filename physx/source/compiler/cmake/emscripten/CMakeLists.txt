@@ -83,6 +83,7 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Wstrict-aliasing=2 -W
 	-Wno-unused-but-set-variable \
 	-Wno-unused-parameter \
     -Wno-reserved-identifier \
+    -Wno-unsafe-buffer-usage \
 ")
 
 # Set to true to enable multi-threading - works but is difficult to use
@@ -96,6 +97,8 @@ SET(PHYSX_WASM_PTHREAD_PX_FLAGS "")
 	SET(PHYSX_WASM_PTHREAD "")
 	SET(PHYSX_WASM_THREAD_POOL_SZ "")
 ENDIF()
+
+SET(WASM_EXPORTED_FUNCTIONS "-sEXPORTED_FUNCTIONS=_malloc")
 
 
 SET(GCC_WARNINGS "-Wall -Werror -Wno-invalid-offsetof -Wno-uninitialized -Wno-nonnull-compare -Wno-mismatched-new-delete -Wno-pragmas -Wno-unused-function")
