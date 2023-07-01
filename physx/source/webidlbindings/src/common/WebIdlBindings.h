@@ -101,6 +101,7 @@ typedef physx::vehicle2::PxVehicleSimulationContextType::Enum PxVehicleSimulatio
 typedef physx::vehicle2::PxVehicleSuspensionJounceCalculationType::Enum PxVehicleSuspensionJounceCalculationTypeEnum;
 typedef physx::vehicle2::PxVehicleTireDirectionModes::Enum PxVehicleTireDirectionModesEnum;
 typedef physx::PxVisualizationParameter::Enum PxVisualizationParameterEnum;
+typedef physx::PxDebugColor::Enum PxDebugColorEnum;
 
 // typedefs for vehicle lookup tables
 typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxReal,3> PxVehicleFixedSizeLookupTableFloat_3;
@@ -591,6 +592,18 @@ struct NativeArrayHelpers {
     }
 
     static physx::PxVec3* getVec3At(physx::PxVec3* base, int index) {
+        return &base[index];
+    }
+
+    static physx::PxDebugPoint* getDebugPointAt(physx::PxDebugPoint* base, int index) {
+        return &base[index];
+    }
+
+    static physx::PxDebugLine* getDebugLineAt(physx::PxDebugLine* base, int index) {
+        return &base[index];
+    }
+
+    static physx::PxDebugTriangle* getDebugTriangleAt(physx::PxDebugTriangle* base, int index) {
         return &base[index];
     }
 
