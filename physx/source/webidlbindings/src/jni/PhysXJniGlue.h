@@ -170,6 +170,42 @@ class PxErrorCallbackImpl : physx::PxErrorCallback {
         jmethodID reportErrorMethodId;
 };
 
+class PxParticleSystemCallbackImpl : physx::PxParticleSystemCallback {
+    public:
+        PxParticleSystemCallbackImpl(JNIEnv* env, jobject javaLocalRef) {
+            javaGlobalRef = env->NewGlobalRef(javaLocalRef);
+            jclass javaClass = env->GetObjectClass(javaLocalRef);
+            onBeginMethodId = env->GetMethodID(javaClass, "_onBegin", "(JJ)V");
+            onAdvanceMethodId = env->GetMethodID(javaClass, "_onAdvance", "(JJ)V");
+            onPostSolveMethodId = env->GetMethodID(javaClass, "_onPostSolve", "(JJ)V");
+        }
+        
+        ~PxParticleSystemCallbackImpl() {
+            jniThreadEnv.getEnv()->DeleteGlobalRef(javaGlobalRef);
+        }
+        
+        virtual void onBegin(const PxGpuMirroredGpuParticleSystemPointer& gpuParticleSystem, CUstream stream) {
+            JNIEnv* _env = jniThreadEnv.getEnv();
+            _env->CallVoidMethod(javaGlobalRef, onBeginMethodId, (jlong) &gpuParticleSystem, (jlong) &stream);
+        }
+
+        virtual void onAdvance(const PxGpuMirroredGpuParticleSystemPointer& gpuParticleSystem, CUstream stream) {
+            JNIEnv* _env = jniThreadEnv.getEnv();
+            _env->CallVoidMethod(javaGlobalRef, onAdvanceMethodId, (jlong) &gpuParticleSystem, (jlong) &stream);
+        }
+
+        virtual void onPostSolve(const PxGpuMirroredGpuParticleSystemPointer& gpuParticleSystem, CUstream stream) {
+            JNIEnv* _env = jniThreadEnv.getEnv();
+            _env->CallVoidMethod(javaGlobalRef, onPostSolveMethodId, (jlong) &gpuParticleSystem, (jlong) &stream);
+        }
+
+    private:
+        jobject javaGlobalRef;
+        jmethodID onBeginMethodId;
+        jmethodID onAdvanceMethodId;
+        jmethodID onPostSolveMethodId;
+};
+
 class SimpleCustomGeometryCallbacksImpl : SimpleCustomGeometryCallbacks {
     public:
         SimpleCustomGeometryCallbacksImpl(JNIEnv* env, jobject javaLocalRef) {
@@ -2947,6 +2983,182 @@ JNIEXPORT void JNICALL Java_physx_common_PxgDynamicsMemoryConfig__1setMaxHairCon
     _self->maxHairContacts = value;
 }
 
+// PxDebugPoint
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugPoint__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxDebugPoint);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugPoint__1getPos(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugPoint* _self = (physx::PxDebugPoint*) _address;
+    return (jlong) &_self->pos;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugPoint__1setPos(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugPoint* _self = (physx::PxDebugPoint*) _address;
+    _self->pos = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugPoint__1getColor(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugPoint* _self = (physx::PxDebugPoint*) _address;
+    return (jint) _self->color;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugPoint__1setColor(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugPoint* _self = (physx::PxDebugPoint*) _address;
+    _self->color = value;
+}
+
+// PxDebugLine
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugLine__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxDebugLine);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugLine__1getPos0(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    return (jlong) &_self->pos0;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugLine__1setPos0(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    _self->pos0 = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugLine__1getColor0(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    return (jint) _self->color0;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugLine__1setColor0(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    _self->color0 = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugLine__1getPos1(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    return (jlong) &_self->pos1;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugLine__1setPos1(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    _self->pos1 = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugLine__1getColor1(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    return (jint) _self->color1;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugLine__1setColor1(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugLine* _self = (physx::PxDebugLine*) _address;
+    _self->color1 = value;
+}
+
+// PxDebugTriangle
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugTriangle__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxDebugTriangle);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugTriangle__1getPos0(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jlong) &_self->pos0;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setPos0(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->pos0 = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugTriangle__1getColor0(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jint) _self->color0;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setColor0(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->color0 = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugTriangle__1getPos1(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jlong) &_self->pos1;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setPos1(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->pos1 = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugTriangle__1getColor1(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jint) _self->color1;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setColor1(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->color1 = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxDebugTriangle__1getPos2(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jlong) &_self->pos2;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setPos2(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->pos2 = *((physx::PxVec3*) value);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugTriangle__1getColor2(JNIEnv*, jclass, jlong _address) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    return (jint) _self->color2;
+}
+JNIEXPORT void JNICALL Java_physx_common_PxDebugTriangle__1setColor2(JNIEnv*, jclass, jlong _address, jint value) {
+    physx::PxDebugTriangle* _self = (physx::PxDebugTriangle*) _address;
+    _self->color2 = value;
+}
+
+// PxRenderBuffer
+JNIEXPORT jint JNICALL Java_physx_common_PxRenderBuffer__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxRenderBuffer);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxRenderBuffer__1getNbPoints(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jint) self->getNbPoints();
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxRenderBuffer__1getPoints(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jlong) self->getPoints();
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1addPoint(JNIEnv*, jclass, jlong _address, jlong point) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->addPoint(*((physx::PxDebugPoint*) point));
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxRenderBuffer__1getNbLines(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jint) self->getNbLines();
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxRenderBuffer__1getLines(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jlong) self->getLines();
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1addLine(JNIEnv*, jclass, jlong _address, jlong line) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->addLine(*((physx::PxDebugLine*) line));
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxRenderBuffer__1reserveLines(JNIEnv*, jclass, jlong _address, jint nbLines) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jlong) self->reserveLines(nbLines);
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxRenderBuffer__1reservePoints(JNIEnv*, jclass, jlong _address, jint nbLines) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jlong) self->reservePoints(nbLines);
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxRenderBuffer__1getNbTriangles(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jint) self->getNbTriangles();
+}
+JNIEXPORT jlong JNICALL Java_physx_common_PxRenderBuffer__1getTriangles(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jlong) self->getTriangles();
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1addTriangle(JNIEnv*, jclass, jlong _address, jlong triangle) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->addTriangle(*((physx::PxDebugTriangle*) triangle));
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1append(JNIEnv*, jclass, jlong _address, jlong other) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->append(*((physx::PxRenderBuffer*) other));
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1clear(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->clear();
+}
+JNIEXPORT void JNICALL Java_physx_common_PxRenderBuffer__1shift(JNIEnv*, jclass, jlong _address, jlong delta) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    self->shift(*((physx::PxVec3*) delta));
+}
+JNIEXPORT jboolean JNICALL Java_physx_common_PxRenderBuffer__1empty(JNIEnv*, jclass, jlong _address) {
+    physx::PxRenderBuffer* self = (physx::PxRenderBuffer*) _address;
+    return (jboolean) self->empty();
+}
+
 // PxBaseFlagEnum
 JNIEXPORT jint JNICALL Java_physx_common_PxBaseFlagEnum__1geteOWNS_1MEMORY(JNIEnv*, jclass) {
     return PxBaseFlagEnum::eOWNS_MEMORY;
@@ -3004,6 +3216,44 @@ JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getD3D11_1INTER
 }
 JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getOGL_1INTEROP(JNIEnv*, jclass) {
     return PxCudaInteropModeEnum::OGL_INTEROP;
+}
+
+// PxDebugColorEnum
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1BLACK(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_BLACK;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1RED(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_RED;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1GREEN(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_GREEN;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1BLUE(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_BLUE;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1YELLOW(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_YELLOW;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1MAGENTA(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_MAGENTA;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1CYAN(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_CYAN;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1WHITE(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_WHITE;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1GREY(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_GREY;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1DARKRED(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_DARKRED;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1DARKGREEN(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_DARKGREEN;
+}
+JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1DARKBLUE(JNIEnv*, jclass) {
+    return PxDebugColorEnum::eARGB_DARKBLUE;
 }
 
 // PxBVH33MidphaseDesc
@@ -5738,6 +5988,9 @@ JNIEXPORT jint JNICALL Java_physx_geometry_PxGeometryTypeEnum__1geteTRIANGLEMESH
 JNIEXPORT jint JNICALL Java_physx_geometry_PxGeometryTypeEnum__1geteHEIGHTFIELD(JNIEnv*, jclass) {
     return PxGeometryTypeEnum::eHEIGHTFIELD;
 }
+JNIEXPORT jint JNICALL Java_physx_geometry_PxGeometryTypeEnum__1geteCUSTOM(JNIEnv*, jclass) {
+    return PxGeometryTypeEnum::eCUSTOM;
+}
 
 // PxHeightFieldFlagEnum
 JNIEXPORT jint JNICALL Java_physx_geometry_PxHeightFieldFlagEnum__1geteNO_1BOUNDARY_1EDGES(JNIEnv*, jclass) {
@@ -6895,6 +7148,37 @@ JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystem__1removeParticleBuf
 JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSystem__1getGpuParticleSystemIndex(JNIEnv*, jclass, jlong _address) {
     physx::PxParticleSystem* self = (physx::PxParticleSystem*) _address;
     return (jint) self->getGpuParticleSystemIndex();
+}
+
+// PxParticleSystemCallback
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSystemCallback__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxParticleSystemCallback);
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystemCallback__1onBegin(JNIEnv*, jclass, jlong _address, jlong gpuParticleSystem, jlong stream) {
+    physx::PxParticleSystemCallback* self = (physx::PxParticleSystemCallback*) _address;
+    self->onBegin(*((PxGpuMirroredGpuParticleSystemPointer*) gpuParticleSystem), *((CUstream*) stream));
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystemCallback__1onAdvance(JNIEnv*, jclass, jlong _address, jlong gpuParticleSystem, jlong stream) {
+    physx::PxParticleSystemCallback* self = (physx::PxParticleSystemCallback*) _address;
+    self->onAdvance(*((PxGpuMirroredGpuParticleSystemPointer*) gpuParticleSystem), *((CUstream*) stream));
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystemCallback__1onPostSolve(JNIEnv*, jclass, jlong _address, jlong gpuParticleSystem, jlong stream) {
+    physx::PxParticleSystemCallback* self = (physx::PxParticleSystemCallback*) _address;
+    self->onPostSolve(*((PxGpuMirroredGpuParticleSystemPointer*) gpuParticleSystem), *((CUstream*) stream));
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystemCallback__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxParticleSystemCallback*) _address;
+}
+
+// PxParticleSystemCallbackImpl
+JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSystemCallbackImpl__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxParticleSystemCallbackImpl);
+}
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleSystemCallbackImpl__1PxParticleSystemCallbackImpl(JNIEnv* env, jobject obj) {
+    return (jlong) new PxParticleSystemCallbackImpl(env, obj);
+}
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystemCallbackImpl__1delete_1native_1instance(JNIEnv*, jclass, jlong address) {
+    delete (PxParticleSystemCallbackImpl*) address;
 }
 
 // PxParticleVolume
@@ -10405,6 +10689,10 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxScene__1getSolverType(JNIEnv*, jclas
     physx::PxScene* self = (physx::PxScene*) _address;
     return (jint) self->getSolverType();
 }
+JNIEXPORT jlong JNICALL Java_physx_physics_PxScene__1getRenderBuffer(JNIEnv*, jclass, jlong _address) {
+    physx::PxScene* self = (physx::PxScene*) _address;
+    return (jlong) &self->getRenderBuffer();
+}
 JNIEXPORT jboolean JNICALL Java_physx_physics_PxScene__1setVisualizationParameter(JNIEnv*, jclass, jlong _address, jint param, jfloat value) {
     physx::PxScene* self = (physx::PxScene*) _address;
     return (jboolean) self->setVisualizationParameter((PxVisualizationParameterEnum) param, value);
@@ -12814,6 +13102,15 @@ JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getControllersHi
 }
 JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getControllerObstacleHitAt(JNIEnv*, jclass, jlong base, jint index) {
     return (jlong) NativeArrayHelpers::getControllerObstacleHitAt((physx::PxControllerObstacleHit*) base, index);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getDebugPointAt(JNIEnv*, jclass, jlong base, jint index) {
+    return (jlong) NativeArrayHelpers::getDebugPointAt((physx::PxDebugPoint*) base, index);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getDebugLineAt(JNIEnv*, jclass, jlong base, jint index) {
+    return (jlong) NativeArrayHelpers::getDebugLineAt((physx::PxDebugLine*) base, index);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getDebugTriangleAt(JNIEnv*, jclass, jlong base, jint index) {
+    return (jlong) NativeArrayHelpers::getDebugTriangleAt((physx::PxDebugTriangle*) base, index);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1getObstacleAt(JNIEnv*, jclass, jlong base, jint index) {
     return (jlong) NativeArrayHelpers::getObstacleAt((physx::PxObstacle*) base, index);
