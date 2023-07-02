@@ -206,6 +206,35 @@ class PxParticleSystemCallbackImpl : physx::PxParticleSystemCallback {
         jmethodID onPostSolveMethodId;
 };
 
+class CustomSupportImpl : CustomSupport {
+    public:
+        CustomSupportImpl(JNIEnv* env, jobject javaLocalRef) {
+            javaGlobalRef = env->NewGlobalRef(javaLocalRef);
+            jclass javaClass = env->GetObjectClass(javaLocalRef);
+            getCustomMarginMethodId = env->GetMethodID(javaClass, "_getCustomMargin", "()F");
+            getCustomSupportLocalMethodId = env->GetMethodID(javaClass, "_getCustomSupportLocal", "(JJ)V");
+        }
+        
+        ~CustomSupportImpl() {
+            jniThreadEnv.getEnv()->DeleteGlobalRef(javaGlobalRef);
+        }
+        
+        virtual float getCustomMargin() {
+            JNIEnv* _env = jniThreadEnv.getEnv();
+            return _env->CallFloatMethod(javaGlobalRef, getCustomMarginMethodId);
+        }
+
+        virtual void getCustomSupportLocal(const physx::PxVec3& dir, physx::PxVec3& result) {
+            JNIEnv* _env = jniThreadEnv.getEnv();
+            _env->CallVoidMethod(javaGlobalRef, getCustomSupportLocalMethodId, (jlong) &dir, (jlong) &result);
+        }
+
+    private:
+        jobject javaGlobalRef;
+        jmethodID getCustomMarginMethodId;
+        jmethodID getCustomSupportLocalMethodId;
+};
+
 class SimpleCustomGeometryCallbacksImpl : SimpleCustomGeometryCallbacks {
     public:
         SimpleCustomGeometryCallbacksImpl(JNIEnv* env, jobject javaLocalRef) {
@@ -3931,6 +3960,402 @@ JNIEXPORT jint JNICALL Java_physx_extensions_PxSerializationRegistry__1_1sizeOf(
 JNIEXPORT void JNICALL Java_physx_extensions_PxSerializationRegistry__1release(JNIEnv*, jclass, jlong _address) {
     physx::PxSerializationRegistry* self = (physx::PxSerializationRegistry*) _address;
     self->release();
+}
+
+// PxGjkQueryProximityInfoResult
+JNIEXPORT jint JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxGjkQueryProximityInfoResult);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1_1placement_1new_1PxGjkQueryProximityInfoResult(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxGjkQueryProximityInfoResult();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1PxGjkQueryProximityInfoResult(JNIEnv*, jclass) {
+    return (jlong) new PxGjkQueryProximityInfoResult();
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxGjkQueryProximityInfoResult*) _address;
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1getSuccess(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    return (jboolean) _self->success;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1setSuccess(JNIEnv*, jclass, jlong _address, jboolean value) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    _self->success = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1getPointA(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    return (jlong) &_self->pointA;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1setPointA(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    _self->pointA = *((physx::PxVec3*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1getPointB(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    return (jlong) &_self->pointB;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1setPointB(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    _self->pointB = *((physx::PxVec3*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1getSeparatingAxis(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    return (jlong) &_self->separatingAxis;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1setSeparatingAxis(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    _self->separatingAxis = *((physx::PxVec3*) value);
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1getSeparation(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    return (jfloat) _self->separation;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryProximityInfoResult__1setSeparation(JNIEnv*, jclass, jlong _address, jfloat value) {
+    PxGjkQueryProximityInfoResult* _self = (PxGjkQueryProximityInfoResult*) _address;
+    _self->separation = value;
+}
+
+// PxGjkQueryRaycastResult
+JNIEXPORT jint JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxGjkQueryRaycastResult);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1_1placement_1new_1PxGjkQueryRaycastResult(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxGjkQueryRaycastResult();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1PxGjkQueryRaycastResult(JNIEnv*, jclass) {
+    return (jlong) new PxGjkQueryRaycastResult();
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxGjkQueryRaycastResult*) _address;
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1getSuccess(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    return (jboolean) _self->success;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1setSuccess(JNIEnv*, jclass, jlong _address, jboolean value) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    _self->success = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1getT(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    return (jfloat) _self->t;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1setT(JNIEnv*, jclass, jlong _address, jfloat value) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    _self->t = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1getN(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    return (jlong) &_self->n;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1setN(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    _self->n = *((physx::PxVec3*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1getP(JNIEnv*, jclass, jlong _address) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    return (jlong) &_self->p;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryRaycastResult__1setP(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQueryRaycastResult* _self = (PxGjkQueryRaycastResult*) _address;
+    _self->p = *((physx::PxVec3*) value);
+}
+
+// PxGjkQuerySweepResult
+JNIEXPORT jint JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxGjkQuerySweepResult);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1_1placement_1new_1PxGjkQuerySweepResult(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxGjkQuerySweepResult();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1PxGjkQuerySweepResult(JNIEnv*, jclass) {
+    return (jlong) new PxGjkQuerySweepResult();
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxGjkQuerySweepResult*) _address;
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1getSuccess(JNIEnv*, jclass, jlong _address) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    return (jboolean) _self->success;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1setSuccess(JNIEnv*, jclass, jlong _address, jboolean value) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    _self->success = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1getT(JNIEnv*, jclass, jlong _address) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    return (jfloat) _self->t;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1setT(JNIEnv*, jclass, jlong _address, jfloat value) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    _self->t = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1getN(JNIEnv*, jclass, jlong _address) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    return (jlong) &_self->n;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1setN(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    _self->n = *((physx::PxVec3*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1getP(JNIEnv*, jclass, jlong _address) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    return (jlong) &_self->p;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuerySweepResult__1setP(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxGjkQuerySweepResult* _self = (PxGjkQuerySweepResult*) _address;
+    _self->p = *((physx::PxVec3*) value);
+}
+
+// PxGjkQuery
+JNIEXPORT jint JNICALL Java_physx_extensions_PxGjkQuery__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxGjkQuery);
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQuery__1proximityInfo(JNIEnv*, jclass, jlong a, jlong b, jlong poseA, jlong poseB, jfloat contactDistance, jfloat toleranceLength, jlong result) {
+    return (jboolean) PxGjkQuery::proximityInfo(*((physx::PxGjkQuery::Support*) a), *((physx::PxGjkQuery::Support*) b), *((physx::PxTransform*) poseA), *((physx::PxTransform*) poseB), contactDistance, toleranceLength, *((PxGjkQueryProximityInfoResult*) result));
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQuery__1raycast(JNIEnv*, jclass, jlong shape, jlong pose, jlong rayStart, jlong unitDir, jfloat maxDist, jlong result) {
+    return (jboolean) PxGjkQuery::raycast(*((physx::PxGjkQuery::Support*) shape), *((physx::PxTransform*) pose), *((physx::PxVec3*) rayStart), *((physx::PxVec3*) unitDir), maxDist, *((PxGjkQueryRaycastResult*) result));
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQuery__1overlap(JNIEnv*, jclass, jlong a, jlong b, jlong poseA, jlong poseB) {
+    return (jboolean) PxGjkQuery::overlap(*((physx::PxGjkQuery::Support*) a), *((physx::PxGjkQuery::Support*) b), *((physx::PxTransform*) poseA), *((physx::PxTransform*) poseB));
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQuery__1sweep(JNIEnv*, jclass, jlong a, jlong b, jlong poseA, jlong poseB, jlong unitDir, jfloat maxDist, jlong result) {
+    return (jboolean) PxGjkQuery::sweep(*((physx::PxGjkQuery::Support*) a), *((physx::PxGjkQuery::Support*) b), *((physx::PxTransform*) poseA), *((physx::PxTransform*) poseB), *((physx::PxVec3*) unitDir), maxDist, *((PxGjkQuerySweepResult*) result));
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQuery__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxGjkQuery*) _address;
+}
+
+// PxGjkQueryExt
+JNIEXPORT jint JNICALL Java_physx_extensions_PxGjkQueryExt__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt);
+}
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxGjkQueryExt__1generateContacts(JNIEnv*, jclass, jlong a, jlong b, jlong poseA, jlong poseB, jfloat contactDistance, jfloat toleranceLength, jlong contactBuffer) {
+    return (jboolean) physx::PxGjkQueryExt::generateContacts(*((physx::PxGjkQuery::Support*) a), *((physx::PxGjkQuery::Support*) b), *((physx::PxTransform*) poseA), *((physx::PxTransform*) poseB), contactDistance, toleranceLength, *((physx::PxContactBuffer*) contactBuffer));
+}
+JNIEXPORT void JNICALL Java_physx_extensions_PxGjkQueryExt__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt*) _address;
+}
+
+// Support
+JNIEXPORT jint JNICALL Java_physx_extensions_Support__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQuery::Support);
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_Support__1getMargin(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQuery::Support* self = (physx::PxGjkQuery::Support*) _address;
+    return (jfloat) self->getMargin();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_Support__1supportLocal(JNIEnv*, jclass, jlong _address, jlong dir) {
+    physx::PxGjkQuery::Support* self = (physx::PxGjkQuery::Support*) _address;
+    static thread_local physx::PxVec3 _cache = self->supportLocal(*((physx::PxVec3*) dir));
+    _cache = self->supportLocal(*((physx::PxVec3*) dir));
+    return (jlong) &_cache;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_Support__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQuery::Support*) _address;
+}
+
+// BoxSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_BoxSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt::BoxSupport);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_BoxSupport__1_1placement_1new_1BoxSupport__JJ(JNIEnv*, jclass, jlong _placement_address, jlong halfExtents) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::BoxSupport(*((physx::PxVec3*) halfExtents));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_BoxSupport__1_1placement_1new_1BoxSupport__JJF(JNIEnv*, jclass, jlong _placement_address, jlong halfExtents, jfloat margin) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::BoxSupport(*((physx::PxVec3*) halfExtents), margin);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_BoxSupport__1BoxSupport__J(JNIEnv*, jclass, jlong halfExtents) {
+    return (jlong) new physx::PxGjkQueryExt::BoxSupport(*((physx::PxVec3*) halfExtents));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_BoxSupport__1BoxSupport__JF(JNIEnv*, jclass, jlong halfExtents, jfloat margin) {
+    return (jlong) new physx::PxGjkQueryExt::BoxSupport(*((physx::PxVec3*) halfExtents), margin);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_BoxSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt::BoxSupport*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_BoxSupport__1getHalfExtents(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::BoxSupport* _self = (physx::PxGjkQueryExt::BoxSupport*) _address;
+    return (jlong) &_self->halfExtents;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_BoxSupport__1setHalfExtents(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxGjkQueryExt::BoxSupport* _self = (physx::PxGjkQueryExt::BoxSupport*) _address;
+    _self->halfExtents = *((physx::PxVec3*) value);
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_BoxSupport__1getMargin(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::BoxSupport* _self = (physx::PxGjkQueryExt::BoxSupport*) _address;
+    return (jfloat) _self->margin;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_BoxSupport__1setMargin(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxGjkQueryExt::BoxSupport* _self = (physx::PxGjkQueryExt::BoxSupport*) _address;
+    _self->margin = value;
+}
+
+// CapsuleSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_CapsuleSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt::CapsuleSupport);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_CapsuleSupport__1_1placement_1new_1CapsuleSupport(JNIEnv*, jclass, jlong _placement_address, jfloat radius, jfloat halfHeight) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::CapsuleSupport(radius, halfHeight);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_CapsuleSupport__1CapsuleSupport(JNIEnv*, jclass, jfloat radius, jfloat halfHeight) {
+    return (jlong) new physx::PxGjkQueryExt::CapsuleSupport(radius, halfHeight);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CapsuleSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt::CapsuleSupport*) _address;
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_CapsuleSupport__1getRadius(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::CapsuleSupport* _self = (physx::PxGjkQueryExt::CapsuleSupport*) _address;
+    return (jfloat) _self->radius;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CapsuleSupport__1setRadius(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxGjkQueryExt::CapsuleSupport* _self = (physx::PxGjkQueryExt::CapsuleSupport*) _address;
+    _self->radius = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_CapsuleSupport__1getHalfHeight(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::CapsuleSupport* _self = (physx::PxGjkQueryExt::CapsuleSupport*) _address;
+    return (jfloat) _self->halfHeight;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CapsuleSupport__1setHalfHeight(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxGjkQueryExt::CapsuleSupport* _self = (physx::PxGjkQueryExt::CapsuleSupport*) _address;
+    _self->halfHeight = value;
+}
+
+// ConvexGeomSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_ConvexGeomSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt::ConvexGeomSupport);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1_1placement_1new_1ConvexGeomSupport__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexGeomSupport();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1_1placement_1new_1ConvexGeomSupport__JJ(JNIEnv*, jclass, jlong _placement_address, jlong geom) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexGeomSupport(*((physx::PxGeometry*) geom));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1_1placement_1new_1ConvexGeomSupport__JJF(JNIEnv*, jclass, jlong _placement_address, jlong geom, jfloat margin) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexGeomSupport(*((physx::PxGeometry*) geom), margin);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1ConvexGeomSupport__(JNIEnv*, jclass) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexGeomSupport();
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1ConvexGeomSupport__J(JNIEnv*, jclass, jlong geom) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexGeomSupport(*((physx::PxGeometry*) geom));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexGeomSupport__1ConvexGeomSupport__JF(JNIEnv*, jclass, jlong geom, jfloat margin) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexGeomSupport(*((physx::PxGeometry*) geom), margin);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_ConvexGeomSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt::ConvexGeomSupport*) _address;
+}
+
+// ConvexMeshSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_ConvexMeshSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt::ConvexMeshSupport);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1_1placement_1new_1ConvexMeshSupport__JJ(JNIEnv*, jclass, jlong _placement_address, jlong convexMesh) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1_1placement_1new_1ConvexMeshSupport__JJJ(JNIEnv*, jclass, jlong _placement_address, jlong convexMesh, jlong scale) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1_1placement_1new_1ConvexMeshSupport__JJJJ(JNIEnv*, jclass, jlong _placement_address, jlong convexMesh, jlong scale, jlong scaleRotation) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale), *((physx::PxQuat*) scaleRotation));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1_1placement_1new_1ConvexMeshSupport__JJJJF(JNIEnv*, jclass, jlong _placement_address, jlong convexMesh, jlong scale, jlong scaleRotation, jfloat margin) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale), *((physx::PxQuat*) scaleRotation), margin);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1ConvexMeshSupport__J(JNIEnv*, jclass, jlong convexMesh) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1ConvexMeshSupport__JJ(JNIEnv*, jclass, jlong convexMesh, jlong scale) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1ConvexMeshSupport__JJJ(JNIEnv*, jclass, jlong convexMesh, jlong scale, jlong scaleRotation) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale), *((physx::PxQuat*) scaleRotation));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1ConvexMeshSupport__JJJF(JNIEnv*, jclass, jlong convexMesh, jlong scale, jlong scaleRotation, jfloat margin) {
+    return (jlong) new physx::PxGjkQueryExt::ConvexMeshSupport(*((physx::PxConvexMesh*) convexMesh), *((physx::PxVec3*) scale), *((physx::PxQuat*) scaleRotation), margin);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_ConvexMeshSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1getConvexMesh(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    return (jlong) _self->convexMesh;
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1getScale(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    return (jlong) &_self->scale;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_ConvexMeshSupport__1setScale(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    _self->scale = *((physx::PxVec3*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_ConvexMeshSupport__1getScaleRotation(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    return (jlong) &_self->scaleRotation;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_ConvexMeshSupport__1setScaleRotation(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    _self->scaleRotation = *((physx::PxQuat*) value);
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_ConvexMeshSupport__1getMargin(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    return (jfloat) _self->margin;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_ConvexMeshSupport__1setMargin(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxGjkQueryExt::ConvexMeshSupport* _self = (physx::PxGjkQueryExt::ConvexMeshSupport*) _address;
+    _self->margin = value;
+}
+
+// SphereSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_SphereSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxGjkQueryExt::SphereSupport);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_SphereSupport__1_1placement_1new_1SphereSupport(JNIEnv*, jclass, jlong _placement_address, jfloat radius) {
+    return (jlong) new((void*)_placement_address) physx::PxGjkQueryExt::SphereSupport(radius);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_SphereSupport__1SphereSupport(JNIEnv*, jclass, jfloat radius) {
+    return (jlong) new physx::PxGjkQueryExt::SphereSupport(radius);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_SphereSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxGjkQueryExt::SphereSupport*) _address;
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_SphereSupport__1getRadius(JNIEnv*, jclass, jlong _address) {
+    physx::PxGjkQueryExt::SphereSupport* _self = (physx::PxGjkQueryExt::SphereSupport*) _address;
+    return (jfloat) _self->radius;
+}
+JNIEXPORT void JNICALL Java_physx_extensions_SphereSupport__1setRadius(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxGjkQueryExt::SphereSupport* _self = (physx::PxGjkQueryExt::SphereSupport*) _address;
+    _self->radius = value;
+}
+
+// CustomSupport
+JNIEXPORT jint JNICALL Java_physx_extensions_CustomSupport__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(CustomSupport);
+}
+JNIEXPORT jfloat JNICALL Java_physx_extensions_CustomSupport__1getCustomMargin(JNIEnv*, jclass, jlong _address) {
+    CustomSupport* self = (CustomSupport*) _address;
+    return (jfloat) self->getCustomMargin();
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CustomSupport__1getCustomSupportLocal(JNIEnv*, jclass, jlong _address, jlong dir, jlong result) {
+    CustomSupport* self = (CustomSupport*) _address;
+    self->getCustomSupportLocal(*((physx::PxVec3*) dir), *((physx::PxVec3*) result));
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CustomSupport__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (CustomSupport*) _address;
+}
+
+// CustomSupportImpl
+JNIEXPORT jint JNICALL Java_physx_extensions_CustomSupportImpl__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(CustomSupportImpl);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_CustomSupportImpl__1CustomSupportImpl(JNIEnv* env, jobject obj) {
+    return (jlong) new CustomSupportImpl(env, obj);
+}
+JNIEXPORT void JNICALL Java_physx_extensions_CustomSupportImpl__1delete_1native_1instance(JNIEnv*, jclass, jlong address) {
+    delete (CustomSupportImpl*) address;
 }
 
 // PxD6Joint

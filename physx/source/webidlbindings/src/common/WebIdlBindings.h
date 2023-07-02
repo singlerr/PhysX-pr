@@ -8,6 +8,7 @@
 #include "PxPhysicsAPI.h"
 #include "common/PxRenderOutput.h"
 #include "extensions/PxCollectionExt.h"
+#include "extensions/PxGjkQueryExt.h"
 #include "geomutils/PxContactBuffer.h"
 
 #include "omnipvd/PxOmniPvd.h"
@@ -655,6 +656,74 @@ struct SupportFunctions {
         articulation->getSolverIterationCounts(minPosIters, minVelIters);
         return minVelIters;
     }
+};
+
+struct PxGjkQueryProximityInfoResult {
+    bool success;
+    physx::PxVec3 pointA;
+    physx::PxVec3 pointB;
+    physx::PxVec3 separatingAxis;
+    physx::PxReal separation;
+};
+
+struct PxGjkQueryRaycastResult {
+    bool success;
+    physx::PxReal t;
+    physx::PxVec3 n;
+    physx::PxVec3 p;
+};
+
+struct PxGjkQuerySweepResult {
+    bool success;
+    physx::PxReal t;
+    physx::PxVec3 n;
+    physx::PxVec3 p;
+};
+
+// physx::PxGjkQuery wrapper using result objects instead of output primitive-references
+struct PxGjkQuery {
+    static bool proximityInfo(const physx::PxGjkQuery::Support& a, const physx::PxGjkQuery::Support& b, const physx::PxTransform& poseA, const physx::PxTransform& poseB,
+        physx::PxReal contactDistance, physx::PxReal toleranceLength, PxGjkQueryProximityInfoResult& result) {
+        result.success = physx::PxGjkQuery::proximityInfo(a, b, poseA, poseB, contactDistance, toleranceLength, result.pointA, result.pointB, result.separatingAxis, result.separation);
+        return result.success;
+    }
+
+    static bool raycast(const physx::PxGjkQuery::Support &shape, const physx::PxTransform &pose, const physx::PxVec3 &rayStart, const physx::PxVec3 &unitDir, physx::PxReal maxDist, PxGjkQueryRaycastResult& result) {
+        result.success = physx::PxGjkQuery::raycast(shape, pose, rayStart, unitDir, maxDist, result.t, result.n, result.p);
+        return result.success;
+    }
+
+    static bool overlap(const physx::PxGjkQuery::Support &a, const physx::PxGjkQuery::Support &b, const physx::PxTransform &poseA, const physx::PxTransform &poseB) {
+        return physx::PxGjkQuery::overlap(a, b, poseA, poseB);
+    }
+
+    static bool sweep(const physx::PxGjkQuery::Support &a, const physx::PxGjkQuery::Support &b, const physx::PxTransform &poseA, const physx::PxTransform &poseB,
+        const physx::PxVec3 &unitDir, physx::PxReal maxDist, PxGjkQuerySweepResult& result) {
+        result.success = physx::PxGjkQuery::sweep(a, b, poseA, poseB, unitDir, maxDist, result.t, result.n, result.p);
+        return result.success;
+    }
+};
+
+struct CustomSupport : physx::PxGjkQuery::Support {
+    public:
+        ~CustomSupport() { }
+
+        virtual float getCustomMargin() = 0;
+        virtual void getCustomSupportLocal(const physx::PxVec3& dir, physx::PxVec3& result) = 0;
+
+        virtual physx::PxReal getMargin() const {
+            CustomSupport* nonConst = (CustomSupport*) this;
+            return nonConst->getCustomMargin();
+        }
+
+        virtual physx::PxVec3 supportLocal(const physx::PxVec3& dir) const {
+            CustomSupport* nonConst = (CustomSupport*) this;
+            nonConst->getCustomSupportLocal(dir, nonConst->supportBuffer);
+            return nonConst->supportBuffer;
+        }
+
+    private:
+        physx::PxVec3 supportBuffer;
 };
 
 #endif
