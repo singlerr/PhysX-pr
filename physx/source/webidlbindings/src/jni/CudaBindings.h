@@ -10,8 +10,6 @@
 #include "PxParticleGpu.h"
 #include "PxAttachment.h"
 
-typedef physx::PxCudaInteropMode::Enum PxCudaInteropModeEnum;
-
 struct PxCudaTopLevelFunctions {
 
     static int GetSuggestedCudaDeviceOrdinal(physx::PxFoundation& foundation) {

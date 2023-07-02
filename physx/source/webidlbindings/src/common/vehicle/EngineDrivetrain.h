@@ -164,6 +164,7 @@ public:
 		PxVehicleArrayData<const PxVehicleWheelRigidBody1dState>& wheelRigidBody1dStates,
 		PxVehicleArrayData<const PxVehicleWheelLocalPose>& wheelLocalPoses,
 		const PxVehicleGearboxState*& gearState,
+		const PxReal*& throttle,
 		PxVehiclePhysXActor*& physxActor)
 	{
 		axleDescription = &baseParams.axleDescription;
@@ -175,6 +176,7 @@ public:
 		physxActor = &physXState.physxActor;
 
 		gearState = &engineDriveState.gearboxState;
+		throttle = &commandState.throttle;
 	}
 
 	virtual void getDataForEngineDriveCommandResponseComponent(

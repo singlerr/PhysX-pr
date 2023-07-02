@@ -33,15 +33,16 @@ namespace snippetvehicle2
 
 void PhysXIntegrationParams::create
 (const PxVehicleAxleDescription& axleDescription,
- const PxQueryFilterData& roadQueryFilterData, PxQueryFilterCallback* roadQueryFilterCallback,
+ const PxQueryFilterData& queryFilterData, PxQueryFilterCallback* queryFilterCallback,
  PxVehiclePhysXMaterialFriction* materialFrictions, const PxU32 nbMaterialFrictions, const PxReal defaultFriction,
  const PxTransform& actorCMassLocalPose,
  PxGeometry& actorGeometry, const PxTransform& actorBoxShapeLocalPose,
  PxVehiclePhysXRoadGeometryQueryType::Enum roadGeometryQueryType)
 {
 	physxRoadGeometryQueryParams.roadGeometryQueryType = roadGeometryQueryType;
-	physxRoadGeometryQueryParams.filterData = roadQueryFilterData;
-	physxRoadGeometryQueryParams.filterCallback = roadQueryFilterCallback;
+	physxRoadGeometryQueryParams.defaultFilterData = queryFilterData;
+	physxRoadGeometryQueryParams.filterCallback = queryFilterCallback;
+	physxRoadGeometryQueryParams.filterDataEntries = NULL;
 
 	for(PxU32 i = 0; i < axleDescription.nbWheels; i++)
 	{

@@ -13,14 +13,13 @@
 # limitations under the License.
 
 import logging
-import zipfile
-import tempfile
-import sys
 import os
 import stat
+import sys
+import tempfile
 import time
+import zipfile
 from typing import Any, Callable
-
 
 RENAME_RETRY_COUNT = 100
 RENAME_RETRY_DELAY = 0.1
@@ -144,4 +143,11 @@ def install_package(package_path, install_path):
 
 
 if __name__ == "__main__":
-    install_package(sys.argv[1], sys.argv[2])
+    executable_paths = os.getenv("PATH")
+    paths_list = executable_paths.split(os.path.pathsep) if executable_paths else []
+    target_path_np = os.path.normpath(sys.argv[2])
+    target_path_np_nc = os.path.normcase(target_path_np)
+    for exec_path in paths_list:
+        if os.path.normcase(os.path.normpath(exec_path)) == target_path_np_nc:
+            raise RuntimeError(f"packman will not install to executable path '{exec_path}'")
+    install_package(sys.argv[1], target_path_np)

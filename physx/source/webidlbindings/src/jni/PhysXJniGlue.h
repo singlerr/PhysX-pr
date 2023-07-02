@@ -326,7 +326,7 @@ class PxQueryFilterCallbackImpl : SimpleQueryFilterCallback {
             javaGlobalRef = env->NewGlobalRef(javaLocalRef);
             jclass javaClass = env->GetObjectClass(javaLocalRef);
             simplePreFilterMethodId = env->GetMethodID(javaClass, "_simplePreFilter", "(JJJJ)I");
-            simplePostFilterMethodId = env->GetMethodID(javaClass, "_simplePostFilter", "(JJ)I");
+            simplePostFilterMethodId = env->GetMethodID(javaClass, "_simplePostFilter", "(JJJJ)I");
         }
         
         ~PxQueryFilterCallbackImpl() {
@@ -338,9 +338,9 @@ class PxQueryFilterCallbackImpl : SimpleQueryFilterCallback {
             return _env->CallIntMethod(javaGlobalRef, simplePreFilterMethodId, (jlong) &filterData, (jlong) shape, (jlong) actor, (jlong) &queryFlags);
         }
 
-        virtual unsigned int simplePostFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit) {
+        virtual unsigned int simplePostFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit, const physx::PxShape* shape, const physx::PxRigidActor* actor) {
             JNIEnv* _env = jniThreadEnv.getEnv();
-            return _env->CallIntMethod(javaGlobalRef, simplePostFilterMethodId, (jlong) &filterData, (jlong) &hit);
+            return _env->CallIntMethod(javaGlobalRef, simplePostFilterMethodId, (jlong) &filterData, (jlong) &hit, (jlong) shape, (jlong) actor);
         }
 
     private:
@@ -518,9 +518,6 @@ JNIEXPORT jlong JNICALL Java_physx_PxTopLevelFunctions__1CreateTriangleMesh(JNIE
 }
 JNIEXPORT jlong JNICALL Java_physx_PxTopLevelFunctions__1CreateHeightField(JNIEnv*, jclass, jlong desc) {
     return (jlong) PxTopLevelFunctions::CreateHeightField(*((physx::PxHeightFieldDesc*) desc));
-}
-JNIEXPORT jlong JNICALL Java_physx_PxTopLevelFunctions__1CreateCooking(JNIEnv*, jclass, jint version, jlong foundation, jlong scale) {
-    return (jlong) PxTopLevelFunctions::CreateCooking(version, *((physx::PxFoundation*) foundation), *((physx::PxCookingParams*) scale));
 }
 JNIEXPORT jint JNICALL Java_physx_PxTopLevelFunctions__1getPHYSICS_1VERSION(JNIEnv*, jclass) {
     return (jint) PxTopLevelFunctions::PHYSICS_VERSION;
@@ -2801,10 +2798,6 @@ JNIEXPORT jlong JNICALL Java_physx_common_PxCudaContextManager__1getDevice(JNIEn
     physx::PxCudaContextManager* self = (physx::PxCudaContextManager*) _address;
     return (jlong) self->getDevice();
 }
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaContextManager__1getInteropMode(JNIEnv*, jclass, jlong _address) {
-    physx::PxCudaContextManager* self = (physx::PxCudaContextManager*) _address;
-    return (jint) self->getInteropMode();
-}
 JNIEXPORT void JNICALL Java_physx_common_PxCudaContextManager__1setUsingConcurrentStreams(JNIEnv*, jclass, jlong _address, jboolean flag) {
     physx::PxCudaContextManager* self = (physx::PxCudaContextManager*) _address;
     self->setUsingConcurrentStreams(flag);
@@ -2862,14 +2855,6 @@ JNIEXPORT jstring JNICALL Java_physx_common_PxCudaContextManagerDesc__1getAppGUI
 JNIEXPORT void JNICALL Java_physx_common_PxCudaContextManagerDesc__1setAppGUID(JNIEnv* _env, jclass, jlong _address, jstring value) {
     physx::PxCudaContextManagerDesc* _self = (physx::PxCudaContextManagerDesc*) _address;
     _self->appGUID = _env->GetStringUTFChars(value, 0);
-}
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaContextManagerDesc__1getInteropMode(JNIEnv*, jclass, jlong _address) {
-    physx::PxCudaContextManagerDesc* _self = (physx::PxCudaContextManagerDesc*) _address;
-    return (jint) _self->interopMode;
-}
-JNIEXPORT void JNICALL Java_physx_common_PxCudaContextManagerDesc__1setInteropMode(JNIEnv*, jclass, jlong _address, jint value) {
-    physx::PxCudaContextManagerDesc* _self = (physx::PxCudaContextManagerDesc*) _address;
-    _self->interopMode = (PxCudaInteropModeEnum) value;
 }
 
 // PxgDynamicsMemoryConfig
@@ -3204,20 +3189,6 @@ JNIEXPORT jint JNICALL Java_physx_common_PxIDENTITYEnum__1getPxIdentity(JNIEnv*,
     return PxIDENTITYEnum::PxIdentity;
 }
 
-// PxCudaInteropModeEnum
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getNO_1INTEROP(JNIEnv*, jclass) {
-    return PxCudaInteropModeEnum::NO_INTEROP;
-}
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getD3D10_1INTEROP(JNIEnv*, jclass) {
-    return PxCudaInteropModeEnum::D3D10_INTEROP;
-}
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getD3D11_1INTEROP(JNIEnv*, jclass) {
-    return PxCudaInteropModeEnum::D3D11_INTEROP;
-}
-JNIEXPORT jint JNICALL Java_physx_common_PxCudaInteropModeEnum__1getOGL_1INTEROP(JNIEnv*, jclass) {
-    return PxCudaInteropModeEnum::OGL_INTEROP;
-}
-
 // PxDebugColorEnum
 JNIEXPORT jint JNICALL Java_physx_common_PxDebugColorEnum__1geteARGB_1BLACK(JNIEnv*, jclass) {
     return PxDebugColorEnum::eARGB_BLACK;
@@ -3366,27 +3337,6 @@ JNIEXPORT jlong JNICALL Java_physx_cooking_PxConvexMeshDesc__1getFlags(JNIEnv*, 
 JNIEXPORT void JNICALL Java_physx_cooking_PxConvexMeshDesc__1setFlags(JNIEnv*, jclass, jlong _address, jlong value) {
     physx::PxConvexMeshDesc* _self = (physx::PxConvexMeshDesc*) _address;
     _self->flags = *((physx::PxConvexFlags*) value);
-}
-
-// PxCooking
-JNIEXPORT jint JNICALL Java_physx_cooking_PxCooking__1_1sizeOf(JNIEnv*, jclass) {
-    return sizeof(physx::PxCooking);
-}
-JNIEXPORT void JNICALL Java_physx_cooking_PxCooking__1release(JNIEnv*, jclass, jlong _address) {
-    physx::PxCooking* self = (physx::PxCooking*) _address;
-    self->release();
-}
-JNIEXPORT jlong JNICALL Java_physx_cooking_PxCooking__1createConvexMesh(JNIEnv*, jclass, jlong _address, jlong desc, jlong insertionCallback) {
-    physx::PxCooking* self = (physx::PxCooking*) _address;
-    return (jlong) self->createConvexMesh(*((physx::PxConvexMeshDesc*) desc), *((physx::PxInsertionCallback*) insertionCallback));
-}
-JNIEXPORT jlong JNICALL Java_physx_cooking_PxCooking__1createTriangleMesh(JNIEnv*, jclass, jlong _address, jlong desc, jlong insertionCallback) {
-    physx::PxCooking* self = (physx::PxCooking*) _address;
-    return (jlong) self->createTriangleMesh(*((physx::PxTriangleMeshDesc*) desc), *((physx::PxInsertionCallback*) insertionCallback));
-}
-JNIEXPORT jlong JNICALL Java_physx_cooking_PxCooking__1createHeightField(JNIEnv*, jclass, jlong _address, jlong desc, jlong insertionCallback) {
-    physx::PxCooking* self = (physx::PxCooking*) _address;
-    return (jlong) self->createHeightField(*((physx::PxHeightFieldDesc*) desc), *((physx::PxInsertionCallback*) insertionCallback));
 }
 
 // PxCookingParams
@@ -3937,11 +3887,11 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxSerialization__1complete__JJJZ(JN
 JNIEXPORT void JNICALL Java_physx_extensions_PxSerialization__1createSerialObjectIds(JNIEnv*, jclass, jlong collection, jlong base) {
     physx::PxSerialization::createSerialObjectIds(*((physx::PxCollection*) collection), base);
 }
-JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollectionFromXml__JJJ(JNIEnv*, jclass, jlong inputData, jlong cooking, jlong sr) {
-    return (jlong) physx::PxSerialization::createCollectionFromXml(*((physx::PxInputData*) inputData), *((physx::PxCooking*) cooking), *((physx::PxSerializationRegistry*) sr));
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollectionFromXml__JJJ(JNIEnv*, jclass, jlong inputData, jlong params, jlong sr) {
+    return (jlong) physx::PxSerialization::createCollectionFromXml(*((physx::PxInputData*) inputData), *((physx::PxCookingParams*) params), *((physx::PxSerializationRegistry*) sr));
 }
-JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollectionFromXml__JJJJ(JNIEnv*, jclass, jlong inputData, jlong cooking, jlong sr, jlong externalRefs) {
-    return (jlong) physx::PxSerialization::createCollectionFromXml(*((physx::PxInputData*) inputData), *((physx::PxCooking*) cooking), *((physx::PxSerializationRegistry*) sr), (physx::PxCollection*) externalRefs);
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollectionFromXml__JJJJ(JNIEnv*, jclass, jlong inputData, jlong params, jlong sr, jlong externalRefs) {
+    return (jlong) physx::PxSerialization::createCollectionFromXml(*((physx::PxInputData*) inputData), *((physx::PxCookingParams*) params), *((physx::PxSerializationRegistry*) sr), (physx::PxCollection*) externalRefs);
 }
 JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollectionFromBinary__JJ(JNIEnv*, jclass, jlong memBlock, jlong sr) {
     return (jlong) physx::PxSerialization::createCollectionFromBinary((void*) memBlock, *((physx::PxSerializationRegistry*) sr));
@@ -3952,11 +3902,11 @@ JNIEXPORT jlong JNICALL Java_physx_extensions_PxSerialization__1createCollection
 JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToXml__JJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr) {
     return (jboolean) physx::PxSerialization::serializeCollectionToXml(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr));
 }
-JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToXml__JJJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr, jlong cooking) {
-    return (jboolean) physx::PxSerialization::serializeCollectionToXml(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr), (physx::PxCooking*) cooking);
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToXml__JJJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr, jlong params) {
+    return (jboolean) physx::PxSerialization::serializeCollectionToXml(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr), (physx::PxCookingParams*) params);
 }
-JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToXml__JJJJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr, jlong cooking, jlong externalRefs) {
-    return (jboolean) physx::PxSerialization::serializeCollectionToXml(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr), (physx::PxCooking*) cooking, (physx::PxCollection*) externalRefs);
+JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToXml__JJJJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr, jlong params, jlong externalRefs) {
+    return (jboolean) physx::PxSerialization::serializeCollectionToXml(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr), (physx::PxCookingParams*) params, (physx::PxCollection*) externalRefs);
 }
 JNIEXPORT jboolean JNICALL Java_physx_extensions_PxSerialization__1serializeCollectionToBinary__JJJ(JNIEnv*, jclass, jlong outputStream, jlong collection, jlong sr) {
     return (jboolean) physx::PxSerialization::serializeCollectionToBinary(*((physx::PxOutputStream*) outputStream), *((physx::PxCollection*) collection), *((physx::PxSerializationRegistry*) sr));
@@ -4058,22 +4008,6 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxD6Joint__1setDriveVelocity(JNIEnv
 JNIEXPORT void JNICALL Java_physx_extensions_PxD6Joint__1getDriveVelocity(JNIEnv*, jclass, jlong _address, jlong linear, jlong angular) {
     physx::PxD6Joint* self = (physx::PxD6Joint*) _address;
     self->getDriveVelocity(*((physx::PxVec3*) linear), *((physx::PxVec3*) angular));
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxD6Joint__1setProjectionLinearTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxD6Joint* self = (physx::PxD6Joint*) _address;
-    self->setProjectionLinearTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxD6Joint__1getProjectionLinearTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxD6Joint* self = (physx::PxD6Joint*) _address;
-    return (jfloat) self->getProjectionLinearTolerance();
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxD6Joint__1setProjectionAngularTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxD6Joint* self = (physx::PxD6Joint*) _address;
-    self->setProjectionAngularTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxD6Joint__1getProjectionAngularTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxD6Joint* self = (physx::PxD6Joint*) _address;
-    return (jfloat) self->getProjectionAngularTolerance();
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxD6Joint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxD6Joint*) _address;
@@ -4233,22 +4167,6 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxDistanceJointFlags__1delete_1nati
 // PxFixedJoint
 JNIEXPORT jint JNICALL Java_physx_extensions_PxFixedJoint__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxFixedJoint);
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxFixedJoint__1setProjectionLinearTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxFixedJoint* self = (physx::PxFixedJoint*) _address;
-    self->setProjectionLinearTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxFixedJoint__1getProjectionLinearTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxFixedJoint* self = (physx::PxFixedJoint*) _address;
-    return (jfloat) self->getProjectionLinearTolerance();
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxFixedJoint__1setProjectionAngularTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxFixedJoint* self = (physx::PxFixedJoint*) _address;
-    self->setProjectionAngularTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxFixedJoint__1getProjectionAngularTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxFixedJoint* self = (physx::PxFixedJoint*) _address;
-    return (jfloat) self->getProjectionAngularTolerance();
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxFixedJoint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxFixedJoint*) _address;
@@ -4567,22 +4485,6 @@ JNIEXPORT jlong JNICALL Java_physx_extensions_PxPrismaticJoint__1getPrismaticJoi
     _cache = self->getPrismaticJointFlags();
     return (jlong) &_cache;
 }
-JNIEXPORT void JNICALL Java_physx_extensions_PxPrismaticJoint__1setProjectionLinearTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxPrismaticJoint* self = (physx::PxPrismaticJoint*) _address;
-    self->setProjectionLinearTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxPrismaticJoint__1getProjectionLinearTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxPrismaticJoint* self = (physx::PxPrismaticJoint*) _address;
-    return (jfloat) self->getProjectionLinearTolerance();
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxPrismaticJoint__1setProjectionAngularTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxPrismaticJoint* self = (physx::PxPrismaticJoint*) _address;
-    self->setProjectionAngularTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxPrismaticJoint__1getProjectionAngularTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxPrismaticJoint* self = (physx::PxPrismaticJoint*) _address;
-    return (jfloat) self->getProjectionAngularTolerance();
-}
 JNIEXPORT void JNICALL Java_physx_extensions_PxPrismaticJoint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxPrismaticJoint*) _address;
 }
@@ -4671,22 +4573,6 @@ JNIEXPORT jlong JNICALL Java_physx_extensions_PxRevoluteJoint__1getRevoluteJoint
     _cache = self->getRevoluteJointFlags();
     return (jlong) &_cache;
 }
-JNIEXPORT void JNICALL Java_physx_extensions_PxRevoluteJoint__1setProjectionLinearTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxRevoluteJoint* self = (physx::PxRevoluteJoint*) _address;
-    self->setProjectionLinearTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxRevoluteJoint__1getProjectionLinearTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxRevoluteJoint* self = (physx::PxRevoluteJoint*) _address;
-    return (jfloat) self->getProjectionLinearTolerance();
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxRevoluteJoint__1setProjectionAngularTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxRevoluteJoint* self = (physx::PxRevoluteJoint*) _address;
-    self->setProjectionAngularTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxRevoluteJoint__1getProjectionAngularTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxRevoluteJoint* self = (physx::PxRevoluteJoint*) _address;
-    return (jfloat) self->getProjectionAngularTolerance();
-}
 JNIEXPORT void JNICALL Java_physx_extensions_PxRevoluteJoint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxRevoluteJoint*) _address;
 }
@@ -4746,14 +4632,6 @@ JNIEXPORT jlong JNICALL Java_physx_extensions_PxSphericalJoint__1getSphericalJoi
     static thread_local physx::PxSphericalJointFlags _cache = self->getSphericalJointFlags();
     _cache = self->getSphericalJointFlags();
     return (jlong) &_cache;
-}
-JNIEXPORT void JNICALL Java_physx_extensions_PxSphericalJoint__1setProjectionLinearTolerance(JNIEnv*, jclass, jlong _address, jfloat tolerance) {
-    physx::PxSphericalJoint* self = (physx::PxSphericalJoint*) _address;
-    self->setProjectionLinearTolerance(tolerance);
-}
-JNIEXPORT jfloat JNICALL Java_physx_extensions_PxSphericalJoint__1getProjectionLinearTolerance(JNIEnv*, jclass, jlong _address) {
-    physx::PxSphericalJoint* self = (physx::PxSphericalJoint*) _address;
-    return (jfloat) self->getProjectionLinearTolerance();
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxSphericalJoint__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxSphericalJoint*) _address;
@@ -4922,9 +4800,9 @@ JNIEXPORT void JNICALL Java_physx_geometry_PxBoxGeometry__1delete_1native_1insta
     delete (physx::PxBoxGeometry*) _address;
 }
 
-// PxBVHStructure
-JNIEXPORT jint JNICALL Java_physx_geometry_PxBVHStructure__1_1sizeOf(JNIEnv*, jclass) {
-    return sizeof(physx::PxBVHStructure);
+// PxBVH
+JNIEXPORT jint JNICALL Java_physx_geometry_PxBVH__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxBVH);
 }
 
 // PxCapsuleGeometry
@@ -5341,15 +5219,11 @@ JNIEXPORT jfloat JNICALL Java_physx_geometry_PxGeometryQuery__1pointDistance__JJ
 JNIEXPORT jfloat JNICALL Java_physx_geometry_PxGeometryQuery__1pointDistance__JJJJ(JNIEnv*, jclass, jlong point, jlong geom, jlong pose, jlong closestPoint) {
     return (jfloat) physx::PxGeometryQuery::pointDistance(*((physx::PxVec3*) point), *((physx::PxGeometry*) geom), *((physx::PxTransform*) pose), (physx::PxVec3*) closestPoint);
 }
-JNIEXPORT jlong JNICALL Java_physx_geometry_PxGeometryQuery__1getWorldBounds__JJ(JNIEnv*, jclass, jlong geom, jlong pose) {
-    static thread_local physx::PxBounds3 _cache = physx::PxGeometryQuery::getWorldBounds(*((physx::PxGeometry*) geom), *((physx::PxTransform*) pose));
-    _cache = physx::PxGeometryQuery::getWorldBounds(*((physx::PxGeometry*) geom), *((physx::PxTransform*) pose));
-    return (jlong) &_cache;
+JNIEXPORT void JNICALL Java_physx_geometry_PxGeometryQuery__1computeGeomBounds__JJJ(JNIEnv*, jclass, jlong bounds, jlong geom, jlong pose) {
+    physx::PxGeometryQuery::computeGeomBounds(*((physx::PxBounds3*) bounds), *((physx::PxGeometry*) geom), *((physx::PxTransform*) pose));
 }
-JNIEXPORT jlong JNICALL Java_physx_geometry_PxGeometryQuery__1getWorldBounds__JJF(JNIEnv*, jclass, jlong geom, jlong pose, jfloat inflation) {
-    static thread_local physx::PxBounds3 _cache = physx::PxGeometryQuery::getWorldBounds(*((physx::PxGeometry*) geom), *((physx::PxTransform*) pose), inflation);
-    _cache = physx::PxGeometryQuery::getWorldBounds(*((physx::PxGeometry*) geom), *((physx::PxTransform*) pose), inflation);
-    return (jlong) &_cache;
+JNIEXPORT void JNICALL Java_physx_geometry_PxGeometryQuery__1computeGeomBounds__JJJF(JNIEnv*, jclass, jlong bounds, jlong geom, jlong pose, jfloat inflation) {
+    physx::PxGeometryQuery::computeGeomBounds(*((physx::PxBounds3*) bounds), *((physx::PxGeometry*) geom), *((physx::PxTransform*) pose), inflation);
 }
 JNIEXPORT jboolean JNICALL Java_physx_geometry_PxGeometryQuery__1isValid(JNIEnv*, jclass, jlong geom) {
     return (jboolean) physx::PxGeometryQuery::isValid(*((physx::PxGeometry*) geom));
@@ -6925,13 +6799,13 @@ JNIEXPORT void JNICALL Java_physx_particles_PxParticleRigidAttachment__1setMLoca
     physx::PxParticleRigidAttachment* _self = (physx::PxParticleRigidAttachment*) _address;
     _self->mLocalPose0 = *((physx::PxVec4*) value);
 }
-JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleRigidAttachment__1getMParams(JNIEnv*, jclass, jlong _address) {
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleRigidAttachment__1getMConeLimitParams(JNIEnv*, jclass, jlong _address) {
     physx::PxParticleRigidAttachment* _self = (physx::PxParticleRigidAttachment*) _address;
-    return (jlong) &_self->mParams;
+    return (jlong) &_self->mConeLimitParams;
 }
-JNIEXPORT void JNICALL Java_physx_particles_PxParticleRigidAttachment__1setMParams(JNIEnv*, jclass, jlong _address, jlong value) {
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleRigidAttachment__1setMConeLimitParams(JNIEnv*, jclass, jlong _address, jlong value) {
     physx::PxParticleRigidAttachment* _self = (physx::PxParticleRigidAttachment*) _address;
-    _self->mParams = *((physx::PxConeLimitParams*) value);
+    _self->mConeLimitParams = *((physx::PxConeLimitParams*) value);
 }
 
 // PxParticleRigidFilterPair
@@ -7127,15 +7001,13 @@ JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSystem__1getNbParticleMate
     physx::PxParticleSystem* self = (physx::PxParticleSystem*) _address;
     return (jint) self->getNbParticleMaterials();
 }
-JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystem__1setPeriodicBoundary(JNIEnv*, jclass, jlong _address, jlong boundary) {
+JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystem__1setParticleSystemCallback(JNIEnv*, jclass, jlong _address, jlong callback) {
     physx::PxParticleSystem* self = (physx::PxParticleSystem*) _address;
-    self->setPeriodicBoundary(*((physx::PxVec3*) boundary));
+    self->setParticleSystemCallback((physx::PxParticleSystemCallback*) callback);
 }
-JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleSystem__1getPeriodicBoundary(JNIEnv*, jclass, jlong _address) {
+JNIEXPORT jlong JNICALL Java_physx_particles_PxParticleSystem__1getParticleSystemCallback(JNIEnv*, jclass, jlong _address) {
     physx::PxParticleSystem* self = (physx::PxParticleSystem*) _address;
-    static thread_local physx::PxVec3 _cache = self->getPeriodicBoundary();
-    _cache = self->getPeriodicBoundary();
-    return (jlong) &_cache;
+    return (jlong) self->getParticleSystemCallback();
 }
 JNIEXPORT void JNICALL Java_physx_particles_PxParticleSystem__1addParticleBuffer(JNIEnv*, jclass, jlong _address, jlong particleBuffer) {
     physx::PxParticleSystem* self = (physx::PxParticleSystem*) _address;
@@ -7615,9 +7487,6 @@ JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSolverTypeEnum__1geteFLIP(
 }
 JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSolverTypeEnum__1geteMPM(JNIEnv*, jclass) {
     return PxParticleSolverTypeEnum::eMPM;
-}
-JNIEXPORT jint JNICALL Java_physx_particles_PxParticleSolverTypeEnum__1geteCUSTOM(JNIEnv*, jclass) {
-    return PxParticleSolverTypeEnum::eCUSTOM;
 }
 
 // PxActor
@@ -9271,13 +9140,21 @@ JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1addActor__JJ(JNIEnv*
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
     return (jboolean) self->addActor(*((physx::PxActor*) actor));
 }
-JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1addActor__JJJ(JNIEnv*, jclass, jlong _address, jlong actor, jlong bvhStructure) {
+JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1addActor__JJJ(JNIEnv*, jclass, jlong _address, jlong actor, jlong bvh) {
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
-    return (jboolean) self->addActor(*((physx::PxActor*) actor), (physx::PxBVHStructure*) bvhStructure);
+    return (jboolean) self->addActor(*((physx::PxActor*) actor), (physx::PxBVH*) bvh);
 }
 JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1removeActor(JNIEnv*, jclass, jlong _address, jlong actor) {
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
     return (jboolean) self->removeActor(*((physx::PxActor*) actor));
+}
+JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1addArticulation(JNIEnv*, jclass, jlong _address, jlong articulation) {
+    physx::PxAggregate* self = (physx::PxAggregate*) _address;
+    return (jboolean) self->addArticulation(*((physx::PxArticulationReducedCoordinate*) articulation));
+}
+JNIEXPORT jboolean JNICALL Java_physx_physics_PxAggregate__1removeArticulation(JNIEnv*, jclass, jlong _address, jlong articulation) {
+    physx::PxAggregate* self = (physx::PxAggregate*) _address;
+    return (jboolean) self->removeArticulation(*((physx::PxArticulationReducedCoordinate*) articulation));
 }
 JNIEXPORT jint JNICALL Java_physx_physics_PxAggregate__1getNbActors(JNIEnv*, jclass, jlong _address) {
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
@@ -9286,6 +9163,10 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxAggregate__1getNbActors(JNIEnv*, jcl
 JNIEXPORT jint JNICALL Java_physx_physics_PxAggregate__1getMaxNbActors(JNIEnv*, jclass, jlong _address) {
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
     return (jint) self->getMaxNbActors();
+}
+JNIEXPORT jint JNICALL Java_physx_physics_PxAggregate__1getMaxNbShapes(JNIEnv*, jclass, jlong _address) {
+    physx::PxAggregate* self = (physx::PxAggregate*) _address;
+    return (jint) self->getMaxNbShapes();
 }
 JNIEXPORT jlong JNICALL Java_physx_physics_PxAggregate__1getScene(JNIEnv*, jclass, jlong _address) {
     physx::PxAggregate* self = (physx::PxAggregate*) _address;
@@ -10391,9 +10272,9 @@ JNIEXPORT jboolean JNICALL Java_physx_physics_PxScene__1addActor__JJ(JNIEnv*, jc
     physx::PxScene* self = (physx::PxScene*) _address;
     return (jboolean) self->addActor(*((physx::PxActor*) actor));
 }
-JNIEXPORT jboolean JNICALL Java_physx_physics_PxScene__1addActor__JJJ(JNIEnv*, jclass, jlong _address, jlong actor, jlong bvhStructure) {
+JNIEXPORT jboolean JNICALL Java_physx_physics_PxScene__1addActor__JJJ(JNIEnv*, jclass, jlong _address, jlong actor, jlong bvh) {
     physx::PxScene* self = (physx::PxScene*) _address;
-    return (jboolean) self->addActor(*((physx::PxActor*) actor), (physx::PxBVHStructure*) bvhStructure);
+    return (jboolean) self->addActor(*((physx::PxActor*) actor), (physx::PxBVH*) bvh);
 }
 JNIEXPORT void JNICALL Java_physx_physics_PxScene__1removeActor__JJ(JNIEnv*, jclass, jlong _address, jlong actor) {
     physx::PxScene* self = (physx::PxScene*) _address;
@@ -11582,9 +11463,9 @@ JNIEXPORT jint JNICALL Java_physx_physics_SimpleQueryFilterCallback__1simplePreF
     SimpleQueryFilterCallback* self = (SimpleQueryFilterCallback*) _address;
     return (jint) self->simplePreFilter(*((physx::PxFilterData*) filterData), (physx::PxShape*) shape, (physx::PxRigidActor*) actor, *((physx::PxHitFlags*) queryFlags));
 }
-JNIEXPORT jint JNICALL Java_physx_physics_SimpleQueryFilterCallback__1simplePostFilter(JNIEnv*, jclass, jlong _address, jlong filterData, jlong hit) {
+JNIEXPORT jint JNICALL Java_physx_physics_SimpleQueryFilterCallback__1simplePostFilter(JNIEnv*, jclass, jlong _address, jlong filterData, jlong hit, jlong shape, jlong actor) {
     SimpleQueryFilterCallback* self = (SimpleQueryFilterCallback*) _address;
-    return (jint) self->simplePostFilter(*((physx::PxFilterData*) filterData), *((physx::PxQueryHit*) hit));
+    return (jint) self->simplePostFilter(*((physx::PxFilterData*) filterData), *((physx::PxQueryHit*) hit), (physx::PxShape*) shape, (physx::PxRigidActor*) actor);
 }
 JNIEXPORT void JNICALL Java_physx_physics_SimpleQueryFilterCallback__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (SimpleQueryFilterCallback*) _address;
@@ -12087,10 +11968,6 @@ JNIEXPORT void JNICALL Java_physx_physics_PxSweepHit__1setShape(JNIEnv*, jclass,
 JNIEXPORT jint JNICALL Java_physx_physics_PxShape__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxShape);
 }
-JNIEXPORT jint JNICALL Java_physx_physics_PxShape__1getGeometryType(JNIEnv*, jclass, jlong _address) {
-    physx::PxShape* self = (physx::PxShape*) _address;
-    return (jint) self->getGeometryType();
-}
 JNIEXPORT void JNICALL Java_physx_physics_PxShape__1setGeometry(JNIEnv*, jclass, jlong _address, jlong geometry) {
     physx::PxShape* self = (physx::PxShape*) _address;
     self->setGeometry(*((physx::PxGeometry*) geometry));
@@ -12312,9 +12189,6 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxActorTypeEnum__1geteFLIP_1PARTICLESY
 }
 JNIEXPORT jint JNICALL Java_physx_physics_PxActorTypeEnum__1geteMPM_1PARTICLESYSTEM(JNIEnv*, jclass) {
     return PxActorTypeEnum::eMPM_PARTICLESYSTEM;
-}
-JNIEXPORT jint JNICALL Java_physx_physics_PxActorTypeEnum__1geteCUSTOM_1PARTICLESYSTEM(JNIEnv*, jclass) {
-    return PxActorTypeEnum::eCUSTOM_PARTICLESYSTEM;
 }
 JNIEXPORT jint JNICALL Java_physx_physics_PxActorTypeEnum__1geteHAIRSYSTEM(JNIEnv*, jclass) {
     return PxActorTypeEnum::eHAIRSYSTEM;
@@ -12553,15 +12427,6 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxCombineModeEnum__1geteMAX(JNIEnv*, j
 JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteBROKEN(JNIEnv*, jclass) {
     return PxConstraintFlagEnum::eBROKEN;
 }
-JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1getePROJECT_1TO_1ACTOR0(JNIEnv*, jclass) {
-    return PxConstraintFlagEnum::ePROJECT_TO_ACTOR0;
-}
-JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1getePROJECT_1TO_1ACTOR1(JNIEnv*, jclass) {
-    return PxConstraintFlagEnum::ePROJECT_TO_ACTOR1;
-}
-JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1getePROJECTION(JNIEnv*, jclass) {
-    return PxConstraintFlagEnum::ePROJECTION;
-}
 JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteCOLLISION_1ENABLED(JNIEnv*, jclass) {
     return PxConstraintFlagEnum::eCOLLISION_ENABLED;
 }
@@ -12582,6 +12447,12 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteENABLE_1EXT
 }
 JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteGPU_1COMPATIBLE(JNIEnv*, jclass) {
     return PxConstraintFlagEnum::eGPU_COMPATIBLE;
+}
+JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteALWAYS_1UPDATE(JNIEnv*, jclass) {
+    return PxConstraintFlagEnum::eALWAYS_UPDATE;
+}
+JNIEXPORT jint JNICALL Java_physx_physics_PxConstraintFlagEnum__1geteDISABLE_1CONSTRAINT(JNIEnv*, jclass) {
+    return PxConstraintFlagEnum::eDISABLE_CONSTRAINT;
 }
 
 // PxContactPairHeaderFlagEnum
@@ -13681,7 +13552,7 @@ JNIEXPORT jint JNICALL Java_physx_support_OmniPvdWriter__1_1sizeOf(JNIEnv*, jcla
 }
 JNIEXPORT void JNICALL Java_physx_support_OmniPvdWriter__1setWriteStream(JNIEnv*, jclass, jlong _address, jlong writeStream) {
     OmniPvdWriter* self = (OmniPvdWriter*) _address;
-    self->setWriteStream((OmniPvdFileWriteStream*) writeStream);
+    self->setWriteStream(*((OmniPvdWriteStream*) writeStream));
 }
 JNIEXPORT void JNICALL Java_physx_support_OmniPvdWriter__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (OmniPvdWriter*) _address;
@@ -13694,6 +13565,11 @@ JNIEXPORT jint JNICALL Java_physx_support_OmniPvdFileWriteStream__1_1sizeOf(JNIE
 JNIEXPORT void JNICALL Java_physx_support_OmniPvdFileWriteStream__1setFileName(JNIEnv* _env, jclass, jlong _address, jstring fileName) {
     OmniPvdFileWriteStream* self = (OmniPvdFileWriteStream*) _address;
     self->setFileName(_env->GetStringUTFChars(fileName, 0));
+}
+
+// OmniPvdWriteStream
+JNIEXPORT jint JNICALL Java_physx_support_OmniPvdWriteStream__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(OmniPvdWriteStream);
 }
 
 // PxVisualizationParameterEnum
@@ -15314,13 +15190,21 @@ JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams
     physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;
     _self->roadGeometryQueryType = (PxVehiclePhysXRoadGeometryQueryTypeEnum) value;
 }
-JNIEXPORT jlong JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1getFilterData(JNIEnv*, jclass, jlong _address) {
+JNIEXPORT jlong JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1getDefaultFilterData(JNIEnv*, jclass, jlong _address) {
     physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;
-    return (jlong) &_self->filterData;
+    return (jlong) &_self->defaultFilterData;
 }
-JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1setFilterData(JNIEnv*, jclass, jlong _address, jlong value) {
+JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1setDefaultFilterData(JNIEnv*, jclass, jlong _address, jlong value) {
     physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;
-    _self->filterData = *((physx::PxQueryFilterData*) value);
+    _self->defaultFilterData = *((physx::PxQueryFilterData*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1getFilterDataEntries(JNIEnv*, jclass, jlong _address) {
+    physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;
+    return (jlong) _self->filterDataEntries;
+}
+JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1setFilterDataEntries(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;
+    _self->filterDataEntries = (physx::PxQueryFilterData*) value;
 }
 JNIEXPORT jlong JNICALL Java_physx_vehicle2_PxVehiclePhysXRoadGeometryQueryParams__1getFilterCallback(JNIEnv*, jclass, jlong _address) {
     physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams* _self = (physx::vehicle2::PxVehiclePhysXRoadGeometryQueryParams*) _address;

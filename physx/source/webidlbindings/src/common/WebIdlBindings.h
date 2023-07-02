@@ -315,13 +315,13 @@ class SimpleControllerBehaviorCallback : physx::PxControllerBehaviorCallback {
 class SimpleQueryFilterCallback : physx::PxQueryFilterCallback {
     public:
         virtual physx::PxU32 simplePreFilter(const physx::PxFilterData& filterData, const physx::PxShape* shape, const physx::PxRigidActor* actor, physx::PxHitFlags &queryFlags) = 0;
-        virtual physx::PxU32 simplePostFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit) = 0;
+        virtual physx::PxU32 simplePostFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit, const physx::PxShape* shape, const physx::PxRigidActor* actor) = 0;
 
         virtual physx::PxQueryHitType::Enum preFilter(const physx::PxFilterData& filterData, const physx::PxShape* shape, const physx::PxRigidActor* actor, physx::PxHitFlags &queryFlags) {
             return static_cast<physx::PxQueryHitType::Enum>(simplePreFilter(filterData, shape, actor, queryFlags));
         }
-        virtual physx::PxQueryHitType::Enum postFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit) {
-            return static_cast<physx::PxQueryHitType::Enum>(simplePostFilter(filterData, hit));
+        virtual physx::PxQueryHitType::Enum postFilter(const physx::PxFilterData& filterData, const physx::PxQueryHit& hit, const physx::PxShape* shape, const physx::PxRigidActor* actor) {
+            return static_cast<physx::PxQueryHitType::Enum>(simplePostFilter(filterData, hit, shape, actor));
         }
 
         virtual ~SimpleQueryFilterCallback() { }
@@ -395,10 +395,6 @@ struct PxTopLevelFunctions {
 
     static physx::PxPhysics *CreatePhysics(physx::PxU32 version, physx::PxFoundation &foundation, const physx::PxTolerancesScale &scale, physx::PxPvd* pvd = NULL, physx::PxOmniPvd* omniPvd = NULL) {
         return PxCreatePhysics(version, foundation, scale, false, pvd, omniPvd);
-    }
-
-    static physx::PxCooking* CreateCooking(physx::PxU32 version, physx::PxFoundation& foundation, const physx::PxCookingParams& params) {
-        return PxCreateCooking(version, foundation, params);
     }
 
     static physx::PxControllerManager* CreateControllerManager(physx::PxScene& scene, bool lockingEnabled = false) {

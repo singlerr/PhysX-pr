@@ -22,7 +22,7 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2022 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2023 NVIDIA Corporation. All rights reserved.
 
 #
 # Build PhysXCommon
@@ -41,7 +41,9 @@ SET(PHYSXCOMMON_WINDOWS_SOURCE
 SOURCE_GROUP(common\\src\\windows FILES ${PHYSXCOMMON_WINDOWS_SOURCE})
 
 SET(PHYSXCOMMON_RESOURCE
-	${PHYSX_SOURCE_DIR}/compiler/resource_${RESOURCE_LIBPATH_SUFFIX}/PhysXCommon.rc)
+	${PHYSX_SOURCE_DIR}/compiler/windows/resource/PhysXCommon.rc
+	${PHYSX_SOURCE_DIR}/compiler/windows/resource/resource.h
+)
 SOURCE_GROUP(resource FILES ${PHYSXCOMMON_RESOURCE})
 
 SET(PXCOMMON_PLATFORM_SRC_FILES 
