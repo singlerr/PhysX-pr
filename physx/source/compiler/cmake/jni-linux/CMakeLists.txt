@@ -74,6 +74,8 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Wstrict-aliasing=2 -W
     -Wno-zero-as-null-pointer-constant \
     -Wno-reserved-identifier \
     -Wno-undefined-func-template \
+	-Wno-cast-qual \
+	-Wno-double-promotion \
 ")
 
 
@@ -195,6 +197,7 @@ ELSE()
 	INCLUDE(FastXml.cmake)
 	INCLUDE(PhysXPvdSDK.cmake)
 	INCLUDE(PhysXTask.cmake)
+	INCLUDE(jni-linux/PhysXJniBindings.cmake)
 
 	# Set folder PhysX SDK to all common SDK source projects
 	SET_PROPERTY(TARGET PhysX PROPERTY FOLDER "PhysX SDK")
