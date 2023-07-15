@@ -680,6 +680,7 @@ PxBoxControllerDesc implements PxControllerDesc;
 [Prefix="physx::"]
 interface PxBoxGeometry {
     void PxBoxGeometry(float hx, float hy, float hz);
+    [Value] attribute PxVec3 halfExtents;
 };
 PxBoxGeometry implements PxGeometry;
 
@@ -737,6 +738,8 @@ PxCapsuleControllerDesc implements PxControllerDesc;
 [Prefix="physx::"]
 interface PxCapsuleGeometry {
     void PxCapsuleGeometry(float radius, float halfHeight);
+    attribute float radius;
+    attribute float halfHeight;
 };
 PxCapsuleGeometry implements PxGeometry;
 
@@ -1087,6 +1090,9 @@ interface PxConvexMeshDesc {
 [Prefix="physx::"]
 interface PxConvexMeshGeometry {
     void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
+    [Value] attribute PxMeshScale scale;
+    attribute PxConvexMesh convexMesh;
+    [Value] attribute PxConvexMeshGeometryFlags meshFlags;
 };
 PxConvexMeshGeometry implements PxGeometry;
 
@@ -2403,6 +2409,7 @@ interface PxSpatialVelocity {
 [Prefix="physx::"]
 interface PxSphereGeometry {
     void PxSphereGeometry(float ir);
+    attribute float radius;
 };
 PxSphereGeometry implements PxGeometry;
 
@@ -2556,6 +2563,9 @@ interface PxTriangleMeshFlags {
 interface PxTriangleMeshGeometry {
     void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
     boolean isValid();
+    [Value] attribute PxMeshScale scale;
+    [Value] attribute PxMeshGeometryFlags meshFlags;
+    attribute PxTriangleMesh triangleMesh;
 };
 PxTriangleMeshGeometry implements PxGeometry;
 

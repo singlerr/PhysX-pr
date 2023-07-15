@@ -5224,6 +5224,14 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxBoxGeometry__1PxBoxGeometry(JNIEnv
 JNIEXPORT void JNICALL Java_physx_geometry_PxBoxGeometry__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxBoxGeometry*) _address;
 }
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxBoxGeometry__1getHalfExtents(JNIEnv*, jclass, jlong _address) {
+    physx::PxBoxGeometry* _self = (physx::PxBoxGeometry*) _address;
+    return (jlong) &_self->halfExtents;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxBoxGeometry__1setHalfExtents(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxBoxGeometry* _self = (physx::PxBoxGeometry*) _address;
+    _self->halfExtents = *((physx::PxVec3*) value);
+}
 
 // PxBVH
 JNIEXPORT jint JNICALL Java_physx_geometry_PxBVH__1_1sizeOf(JNIEnv*, jclass) {
@@ -5242,6 +5250,22 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxCapsuleGeometry__1PxCapsuleGeometr
 }
 JNIEXPORT void JNICALL Java_physx_geometry_PxCapsuleGeometry__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxCapsuleGeometry*) _address;
+}
+JNIEXPORT jfloat JNICALL Java_physx_geometry_PxCapsuleGeometry__1getRadius(JNIEnv*, jclass, jlong _address) {
+    physx::PxCapsuleGeometry* _self = (physx::PxCapsuleGeometry*) _address;
+    return (jfloat) _self->radius;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxCapsuleGeometry__1setRadius(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxCapsuleGeometry* _self = (physx::PxCapsuleGeometry*) _address;
+    _self->radius = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_geometry_PxCapsuleGeometry__1getHalfHeight(JNIEnv*, jclass, jlong _address) {
+    physx::PxCapsuleGeometry* _self = (physx::PxCapsuleGeometry*) _address;
+    return (jfloat) _self->halfHeight;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxCapsuleGeometry__1setHalfHeight(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxCapsuleGeometry* _self = (physx::PxCapsuleGeometry*) _address;
+    _self->halfHeight = value;
 }
 
 // PxContactBuffer
@@ -5459,6 +5483,30 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxConvexMeshGeometry__1PxConvexMeshG
 }
 JNIEXPORT void JNICALL Java_physx_geometry_PxConvexMeshGeometry__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxConvexMeshGeometry*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxConvexMeshGeometry__1getScale(JNIEnv*, jclass, jlong _address) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    return (jlong) &_self->scale;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxConvexMeshGeometry__1setScale(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    _self->scale = *((physx::PxMeshScale*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxConvexMeshGeometry__1getConvexMesh(JNIEnv*, jclass, jlong _address) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    return (jlong) _self->convexMesh;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxConvexMeshGeometry__1setConvexMesh(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    _self->convexMesh = (physx::PxConvexMesh*) value;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxConvexMeshGeometry__1getMeshFlags(JNIEnv*, jclass, jlong _address) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    return (jlong) &_self->meshFlags;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxConvexMeshGeometry__1setMeshFlags(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxConvexMeshGeometry* _self = (physx::PxConvexMeshGeometry*) _address;
+    _self->meshFlags = *((physx::PxConvexMeshGeometryFlags*) value);
 }
 
 // PxConvexMeshGeometryFlags
@@ -6118,6 +6166,14 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxSphereGeometry__1PxSphereGeometry(
 JNIEXPORT void JNICALL Java_physx_geometry_PxSphereGeometry__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxSphereGeometry*) _address;
 }
+JNIEXPORT jfloat JNICALL Java_physx_geometry_PxSphereGeometry__1getRadius(JNIEnv*, jclass, jlong _address) {
+    physx::PxSphereGeometry* _self = (physx::PxSphereGeometry*) _address;
+    return (jfloat) _self->radius;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxSphereGeometry__1setRadius(JNIEnv*, jclass, jlong _address, jfloat value) {
+    physx::PxSphereGeometry* _self = (physx::PxSphereGeometry*) _address;
+    _self->radius = value;
+}
 
 // PxTriangle
 JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangle__1_1sizeOf(JNIEnv*, jclass) {
@@ -6258,6 +6314,30 @@ JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1isValid(
 }
 JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxTriangleMeshGeometry*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1getScale(JNIEnv*, jclass, jlong _address) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    return (jlong) &_self->scale;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1setScale(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    _self->scale = *((physx::PxMeshScale*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1getMeshFlags(JNIEnv*, jclass, jlong _address) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    return (jlong) &_self->meshFlags;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1setMeshFlags(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    _self->meshFlags = *((physx::PxMeshGeometryFlags*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1getTriangleMesh(JNIEnv*, jclass, jlong _address) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    return (jlong) _self->triangleMesh;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshGeometry__1setTriangleMesh(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTriangleMeshGeometry* _self = (physx::PxTriangleMeshGeometry*) _address;
+    _self->triangleMesh = (physx::PxTriangleMesh*) value;
 }
 
 // PxConvexMeshGeometryFlagEnum
