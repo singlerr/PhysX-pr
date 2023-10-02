@@ -2785,7 +2785,7 @@ interface PxVehicleCommandNonLinearResponseParams {
     attribute float[] speedResponses;
     attribute short nbSpeedResponses;
     attribute short[] speedResponsesPerCommandValue;
-    attribute short[] nbSpeedRenponsesPerCommandValue;
+    attribute short[] nbSpeedResponsesPerCommandValue;
     attribute float[] commandValues;
     attribute short nbCommandValues;
 };
@@ -3209,7 +3209,8 @@ interface PxVehicleTankDriveDifferentialParams {
     attribute unsigned long[] nbWheelsPerTrack;
     attribute unsigned long[] trackToWheelIds;
     attribute unsigned long[] wheelIdsInTrackOrder;
-    attribute unsigned long nbWheelsInTracks;
+    attribute float[] torqueRatios;
+    attribute float[] aveWheelSpeedRatios;
 };
 PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
@@ -4030,8 +4031,7 @@ enum PxSceneFlagEnum {
     "PxSceneFlagEnum::eENABLE_GPU_DYNAMICS",
     "PxSceneFlagEnum::eENABLE_ENHANCED_DETERMINISM",
     "PxSceneFlagEnum::eENABLE_FRICTION_EVERY_ITERATION",
-    "PxSceneFlagEnum::eSUPPRESS_READBACK",
-    "PxSceneFlagEnum::eFORCE_READBACK",
+    "PxSceneFlagEnum::eENABLE_DIRECT_GPU_API",
     "PxSceneFlagEnum::eMUTABLE_FLAGS"
 };
 

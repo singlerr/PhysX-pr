@@ -4,7 +4,7 @@
  */
 #include <jni.h>
 
-static JavaVM * javaVm = NULL;
+static JavaVM* javaVm = NULL;
 
 class JniThreadEnv {
     public:
@@ -29,17 +29,6 @@ class JniThreadEnv {
 };
 
 static thread_local JniThreadEnv jniThreadEnv;
-
-class JniThreadManager {
-    public:
-        static bool init(JNIEnv *env) {
-            if (env->GetJavaVM(&javaVm) != 0) {
-                return false;
-            }
-            jniThreadEnv = JniThreadEnv(env);
-            return true;
-        }
-};
 
 class JavaNativeRef {
     public:
@@ -455,13 +444,6 @@ JNIEXPORT jint JNICALL Java_physx_NativeObject__1_1sizeOfPointer(JNIEnv*, jclass
     return sizeof(void*);
 }
 
-// JniThreadManager
-JNIEXPORT jboolean JNICALL Java_physx_JniThreadManager__1init(JNIEnv* env, jclass) {
-    return (jboolean) JniThreadManager::init(env);
-}
-JNIEXPORT void JNICALL Java_physx_JniThreadManager__1delete_1native_1instance(JNIEnv*, jclass, jlong address) {
-    delete (JniThreadManager*) address;
-}
 // JavaNativeRef
 JNIEXPORT jlong JNICALL Java_physx_JavaNativeRef__1new_1instance(JNIEnv* env, jclass, jobject javaRef) {
     return (jlong) new JavaNativeRef(env, javaRef);
@@ -13206,11 +13188,8 @@ JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteENABLE_1ENHANCED
 JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteENABLE_1FRICTION_1EVERY_1ITERATION(JNIEnv*, jclass) {
     return PxSceneFlagEnum::eENABLE_FRICTION_EVERY_ITERATION;
 }
-JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteSUPPRESS_1READBACK(JNIEnv*, jclass) {
-    return PxSceneFlagEnum::eSUPPRESS_READBACK;
-}
-JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteFORCE_1READBACK(JNIEnv*, jclass) {
-    return PxSceneFlagEnum::eFORCE_READBACK;
+JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteENABLE_1DIRECT_1GPU_1API(JNIEnv*, jclass) {
+    return PxSceneFlagEnum::eENABLE_DIRECT_GPU_API;
 }
 JNIEXPORT jint JNICALL Java_physx_physics_PxSceneFlagEnum__1geteMUTABLE_1FLAGS(JNIEnv*, jclass) {
     return PxSceneFlagEnum::eMUTABLE_FLAGS;
@@ -14657,13 +14636,13 @@ JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponsePara
     physx::vehicle2::PxVehicleCommandNonLinearResponseParams* _self = (physx::vehicle2::PxVehicleCommandNonLinearResponseParams*) _address;
     _self->speedResponsesPerCommandValue[_index] = value;
 }
-JNIEXPORT jshort JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponseParams__1getNbSpeedRenponsesPerCommandValue(JNIEnv*, jclass, jlong _address, jint _index) {
+JNIEXPORT jshort JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponseParams__1getNbSpeedResponsesPerCommandValue(JNIEnv*, jclass, jlong _address, jint _index) {
     physx::vehicle2::PxVehicleCommandNonLinearResponseParams* _self = (physx::vehicle2::PxVehicleCommandNonLinearResponseParams*) _address;
-    return (jshort) _self->nbSpeedRenponsesPerCommandValue[_index];
+    return (jshort) _self->nbSpeedResponsesPerCommandValue[_index];
 }
-JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponseParams__1setNbSpeedRenponsesPerCommandValue(JNIEnv*, jclass, jlong _address, jint _index, jshort value) {
+JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponseParams__1setNbSpeedResponsesPerCommandValue(JNIEnv*, jclass, jlong _address, jint _index, jshort value) {
     physx::vehicle2::PxVehicleCommandNonLinearResponseParams* _self = (physx::vehicle2::PxVehicleCommandNonLinearResponseParams*) _address;
-    _self->nbSpeedRenponsesPerCommandValue[_index] = value;
+    _self->nbSpeedResponsesPerCommandValue[_index] = value;
 }
 JNIEXPORT jfloat JNICALL Java_physx_vehicle2_PxVehicleCommandNonLinearResponseParams__1getCommandValues(JNIEnv*, jclass, jlong _address, jint _index) {
     physx::vehicle2::PxVehicleCommandNonLinearResponseParams* _self = (physx::vehicle2::PxVehicleCommandNonLinearResponseParams*) _address;
@@ -16523,13 +16502,21 @@ JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams_
     physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
     _self->wheelIdsInTrackOrder[_index] = value;
 }
-JNIEXPORT jint JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1getNbWheelsInTracks(JNIEnv*, jclass, jlong _address) {
+JNIEXPORT jfloat JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1getTorqueRatios(JNIEnv*, jclass, jlong _address, jint _index) {
     physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    return (jint) _self->nbWheelsInTracks;
+    return (jfloat) _self->torqueRatios[_index];
 }
-JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1setNbWheelsInTracks(JNIEnv*, jclass, jlong _address, jint value) {
+JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1setTorqueRatios(JNIEnv*, jclass, jlong _address, jint _index, jfloat value) {
     physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    _self->nbWheelsInTracks = value;
+    _self->torqueRatios[_index] = value;
+}
+JNIEXPORT jfloat JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1getAveWheelSpeedRatios(JNIEnv*, jclass, jlong _address, jint _index) {
+    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
+    return (jfloat) _self->aveWheelSpeedRatios[_index];
+}
+JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1setAveWheelSpeedRatios(JNIEnv*, jclass, jlong _address, jint _index, jfloat value) {
+    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
+    _self->aveWheelSpeedRatios[_index] = value;
 }
 
 // PxVehicleTankDriveTransmissionCommandState
@@ -18261,4 +18248,17 @@ JNIEXPORT jint JNICALL Java_physx_vehicle2_EngineDriveVehicleEnum__1geteDIFFTYPE
     return EngineDriveVehicleEnum::eDIFFTYPE_TANKDRIVE;
 }
 
+
+// on load callback executed by the JVM once the lib is loaded
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
+    javaVm = vm;
+    
+    JNIEnv* env;
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+        return JNI_ERR;
+    }
+    jniThreadEnv = JniThreadEnv(env);
+    
+    return JNI_VERSION_1_6;
+}
 } // /extern "C"
