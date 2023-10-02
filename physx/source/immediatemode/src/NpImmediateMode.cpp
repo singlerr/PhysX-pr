@@ -1219,7 +1219,12 @@ void immArticulation::complete()
 
 	const PxU32 linkSize = mLinks.size();
 	setupLinks(linkSize, const_cast<ArticulationLink*>(mLinks.begin()));
+
+#ifdef __APPLE__
+    jcalcTrue(mArticulationData);
+#else
 	jcalc<true>(mArticulationData);
+#endif
 	mJCalcDirty = false;
 	initPathToRoot();
 
@@ -1358,7 +1363,11 @@ void immediate::PxComputeUnconstrainedVelocities(PxArticulationHandle articulati
 	if(immArt->mJCalcDirty)
 	{
 		immArt->mJCalcDirty = false;
-		immArt->jcalc<true>(immArt->mArticulationData);
+#ifdef __APPLE__
+        immArt->jcalcTrue(immArt->mArticulationData);
+#else
+	    immArt->jcalc<true>(immArt->mArticulationData);
+#endif
 	}
 	immArt->immComputeUnconstrainedVelocities(dt, gravity, invLengthScale);
 }
@@ -1384,7 +1393,11 @@ void immediate::PxComputeUnconstrainedVelocitiesTGS(PxArticulationHandle articul
 	if(immArt->mJCalcDirty)
 	{
 		immArt->mJCalcDirty = false;
-		immArt->jcalc<true>(immArt->mArticulationData);
+#ifdef __APPLE__
+        immArt->jcalcTrue(immArt->mArticulationData);
+#else
+	    immArt->jcalc<true>(immArt->mArticulationData);
+#endif
 	}
 	immArt->immComputeUnconstrainedVelocitiesTGS(dt, totalDt, invDt, invTotalDt, gravity, invLengthScale);
 }

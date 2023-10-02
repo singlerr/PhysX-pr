@@ -297,7 +297,11 @@ void Sc::ArticulationSim::createLLStructure()
 void Sc::ArticulationSim::initializeConfiguration()
 {
 	Dy::ArticulationData& data = mLLArticulation->getArticulationData();
+#ifdef __APPLE__
+	mLLArticulation->jcalcFalse(data);
+#else
 	mLLArticulation->jcalc(data);
+#endif
 	mLLArticulation->mJcalcDirty = false;
 
 	Dy::ArticulationLink* links = data.getLinks();
@@ -346,7 +350,11 @@ void Sc::ArticulationSim::updateKinematic(PxArticulationKinematicFlags flags)
 	Dy::ArticulationData& data = mLLArticulation->getArticulationData();
 	if (mLLArticulation->mJcalcDirty)
 	{
+#ifdef __APPLE__
+		mLLArticulation->jcalcFalse(data);
+#else
 		mLLArticulation->jcalc(data);
+#endif
 		mLLArticulation->mJcalcDirty = false;
 	}
 

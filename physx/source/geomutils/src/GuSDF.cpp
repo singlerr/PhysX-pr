@@ -1344,7 +1344,7 @@ namespace Gu
 					sdfCoarse.pushBack(sdfValue);					
 				}
 
-#if DEBUG
+#if PX_DEBUG
 		for (PxU32 zBlock = 0; zBlock <= d; ++zBlock)
 			for (PxU32 yBlock = 0; yBlock <= h; ++yBlock)
 				for (PxU32 xBlock = 0; xBlock <= w; ++xBlock)

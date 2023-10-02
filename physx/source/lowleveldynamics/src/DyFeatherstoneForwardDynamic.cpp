@@ -1518,7 +1518,11 @@ namespace Dy
 		if (articulation->mJcalcDirty) 
 		{	
 			articulation->mJcalcDirty = false;
+#ifdef __APPLE__
+			articulation->jcalcFalse(data);
+#else
 			articulation->jcalc(data);
+#endif
 		}
 
 		articulation->computeUnconstrainedVelocitiesInternal(gravity, Z, deltaV, invLengthScale);
@@ -1546,7 +1550,11 @@ namespace Dy
 		if (articulation->mJcalcDirty) 
 		{	
 			articulation->mJcalcDirty = false;
+#ifdef __APPLE__
+			articulation->jcalcFalse(data);
+#else
 			articulation->jcalc(data);
+#endif
 		}
 
 		articulation->computeUnconstrainedVelocitiesInternal(gravity, Z, DeltaV, invLengthScale);
