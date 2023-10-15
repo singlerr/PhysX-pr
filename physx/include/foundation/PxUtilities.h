@@ -129,6 +129,8 @@ __attribute__((noreturn))
 {
 #if PX_WINDOWS
 	__debugbreak();
+#elif PX_ANDROID
+    __builtin_trap();
 #elif PX_LINUX
 	__builtin_trap();
 #elif PX_GCC_FAMILY

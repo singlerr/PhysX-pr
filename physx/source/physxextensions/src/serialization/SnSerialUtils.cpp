@@ -38,7 +38,7 @@ using namespace physx;
 namespace
 {
 
-#define SN_NUM_BINARY_PLATFORMS 10
+#define SN_NUM_BINARY_PLATFORMS 11
 const PxU32 sBinaryPlatformTags[SN_NUM_BINARY_PLATFORMS] =
 {
 	PX_MAKE_FOURCC('W','_','3','2'),
@@ -50,7 +50,8 @@ const PxU32 sBinaryPlatformTags[SN_NUM_BINARY_PLATFORMS] =
 	PX_MAKE_FOURCC('N','X','3','2'),
 	PX_MAKE_FOURCC('N','X','6','4'),
 	PX_MAKE_FOURCC('L','A','6','4'),
-	PX_MAKE_FOURCC('M','A','6','4')
+	PX_MAKE_FOURCC('M','A','6','4'),
+    PX_MAKE_FOURCC('A','N','D','R')
 };
 
 const char* sBinaryPlatformNames[SN_NUM_BINARY_PLATFORMS] =
@@ -64,7 +65,8 @@ const char* sBinaryPlatformNames[SN_NUM_BINARY_PLATFORMS] =
 	"switch32",
 	"switch64",
 	"linuxaarch64",
-	"macarm64"
+	"macarm64",
+	"android"
 };
 
 }
@@ -93,6 +95,8 @@ PxU32 getBinaryPlatformTag()
 	return sBinaryPlatformTags[8];
 #elif PX_OSX && PX_A64
 	return sBinaryPlatformTags[9];
+#elif PX_ANDROID
+	return sBinaryPlatformTags[10];
 #else
 	#error Unknown binary platform
 #endif

@@ -65,6 +65,9 @@ class PxScopedPointer : private Alloc
 #elif PX_LINUX
 	#include <malloc.h>
 	#define PxAlloca(x) alloca(x)
+#elif PX_ANDROID
+	#include <malloc.h>
+	#define PxAlloca(x) alloca(x)
 #elif PX_APPLE_FAMILY
 	#include <alloca.h>
 	#define PxAlloca(x) alloca(x)

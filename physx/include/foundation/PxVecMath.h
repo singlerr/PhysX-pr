@@ -49,7 +49,7 @@
 #if !defined(PX_SIMD_DISABLED)
 #if PX_INTEL_FAMILY && (!defined(__EMSCRIPTEN__) || defined(__SSE2__))
 	#define COMPILE_VECTOR_INTRINSICS 1
-#elif PX_OSX && PX_NEON
+#elif PX_NEON && (PX_ANDROID || PX_OSX)
 	#define COMPILE_VECTOR_INTRINSICS 1
 #elif PX_SWITCH
 	#define COMPILE_VECTOR_INTRINSICS 1

@@ -1,7 +1,7 @@
 #ifndef CUDA_BINDINGS_H
 #define CUDA_BINDINGS_H
 
-#if !(defined(__EMSCRIPTEN__) || defined(__APPLE__))
+#if !(defined(__EMSCRIPTEN__) || defined(__APPLE__) || defined(__ANDROID__))
 
 #include "cudamanager/PxCudaContext.h"
 #include "extensions/PxParticleExt.h"
