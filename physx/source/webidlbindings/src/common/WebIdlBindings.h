@@ -1,7 +1,6 @@
 #ifndef WEB_IDL_BINDINGS_H
 #define WEB_IDL_BINDINGS_H
 
-#include <vector>
 #include <cstring>
 #include <iostream>
 
@@ -18,6 +17,8 @@
 #include "vehicle/DirectDrivetrain.h"
 #include "vehicle/EngineDrivetrain.h"
 #include "vehicle/PhysXIntegration.h"
+
+#include "PxTypeMappings.h"
 
 // enums within namespaces are not supported by webidl binder, as a hack we can use typedefs
 typedef physx::PxActorFlag::Enum PxActorFlagEnum;
@@ -103,49 +104,6 @@ typedef physx::vehicle2::PxVehicleSuspensionJounceCalculationType::Enum PxVehicl
 typedef physx::vehicle2::PxVehicleTireDirectionModes::Enum PxVehicleTireDirectionModesEnum;
 typedef physx::PxVisualizationParameter::Enum PxVisualizationParameterEnum;
 typedef physx::PxDebugColor::Enum PxDebugColorEnum;
-
-// typedefs for vehicle lookup tables
-typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxReal,3> PxVehicleFixedSizeLookupTableFloat_3;
-typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxVec3,3> PxVehicleFixedSizeLookupTableVec3_3;
-typedef physx::vehicle2::PxVehicleFixedSizeLookupTable<physx::PxReal,8> PxVehicleTorqueCurveLookupTable;
-
-// typedefs for pointer types
-typedef const physx::PxU8* PxU8ConstPtr;
-typedef const physx::PxU16* PxU16ConstPtr;
-typedef const physx::PxU32* PxU32ConstPtr;
-typedef const physx::PxMaterial* PxMaterialConstPtr;
-typedef physx::PxU8* PxU8Ptr;
-typedef physx::PxU16* PxU16Ptr;
-typedef physx::PxU32* PxU32Ptr;
-typedef physx::PxReal* PxRealPtr;
-typedef physx::PxMaterial* PxMaterialPtr;
-typedef physx::PxActor* PxActorPtr;
-typedef physx::PxVehicleWheels* PxVehicleWheelsPtr;
-
-// template classes are not supported by webidl binder, as a hack we can use typedefs
-typedef physx::PxFixedSizeLookupTable<physx::PxVehicleEngineData::eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES> PxEngineTorqueLookupTable;
-typedef physx::PxTypedStridedData<physx::PxU16> PxU16StridedData;
-
-typedef physx::PxOverlapBufferN<10> PxOverlapBuffer10;
-typedef physx::PxRaycastBufferN<10> PxRaycastBuffer10;
-typedef physx::PxSweepBufferN<10> PxSweepBuffer10;
-
-typedef std::vector<PxMaterialConstPtr> Vector_PxMaterialConst;
-typedef std::vector<PxActorPtr> Vector_PxActorPtr;
-typedef std::vector<physx::PxContactPairPoint> Vector_PxContactPairPoint;
-typedef std::vector<physx::PxHeightFieldSample> Vector_PxHeightFieldSample;
-typedef std::vector<physx::PxRaycastHit> Vector_PxRaycastHit;
-typedef std::vector<physx::PxSweepHit> Vector_PxSweepHit;
-typedef std::vector<physx::PxVehicleDrivableSurfaceType> Vector_PxVehicleDrivableSurfaceType;
-typedef std::vector<physx::PxWheelQueryResult> Vector_PxWheelQueryResult;
-typedef std::vector<PxVehicleWheelsPtr> Vector_PxVehicleWheels;
-
-typedef std::vector<physx::PxReal> Vector_PxReal;
-typedef std::vector<physx::PxU8> Vector_PxU8;
-typedef std::vector<physx::PxU16> Vector_PxU16;
-typedef std::vector<physx::PxU32> Vector_PxU32;
-typedef std::vector<physx::PxVec3> Vector_PxVec3;
-typedef std::vector<physx::PxVec4> Vector_PxVec4;
 
 class PassThroughFilterShader {
     public:
@@ -356,7 +314,7 @@ class PxHitResult : public physx::PxHitCallback<HitType> {
                 isFinalized = false;
             }
             for (physx::PxU32 i = 0; i < nbHits; i++) {
-                hits.push_back(buffer[i]);
+                hits.pushBack(buffer[i]);
             }
             return true;
         }
@@ -367,7 +325,7 @@ class PxHitResult : public physx::PxHitCallback<HitType> {
     private:
         bool isFinalized = true;
         HitType resultBuf[8];
-        std::vector<HitType> hits;
+        physx::PxArray<HitType> hits;
 };
 
 typedef PxHitResult<physx::PxOverlapHit> PxOverlapResult;
@@ -475,7 +433,7 @@ struct PxVehicleTopLevelFunctions {
         physx::vehicle2::PxCloseVehicleExtension();
     }
 
-    static bool VehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, const Vector_PxVec3& sprungMassCoordinates, physx::PxReal totalMass, PxVehicleAxesEnum gravityDirection, Vector_PxReal& sprungMasses) {
+    static bool VehicleComputeSprungMasses(physx::PxU32 nbSprungMasses, Vector_PxVec3& sprungMassCoordinates, physx::PxReal totalMass, PxVehicleAxesEnum gravityDirection, Vector_PxReal& sprungMasses) {
         return physx::vehicle2::PxVehicleComputeSprungMasses(nbSprungMasses, sprungMassCoordinates.data(), totalMass, gravityDirection, sprungMasses.data());
     }
 
@@ -633,13 +591,13 @@ struct SupportFunctions {
         return pairHeader.actors[i];
     }
 
-    static Vector_PxActorPtr& PxScene_getActiveActors(physx::PxScene* scene) {
-        static Vector_PxActorPtr activeActors;
+    static PxArray_PxActorPtr& PxScene_getActiveActors(physx::PxScene* scene) {
+        static PxArray_PxActorPtr activeActors;
         physx::PxU32 nbActors;
         physx::PxActor** actors = scene->getActiveActors(nbActors);
 
         activeActors.resize(static_cast<size_t>(nbActors));
-        std::memcpy(activeActors.data(), actors, static_cast<size_t>(sizeof(physx::PxActor*) * nbActors));
+        std::memcpy(activeActors.begin(), actors, static_cast<size_t>(sizeof(physx::PxActor*) * nbActors));
         return activeActors;
     }
 

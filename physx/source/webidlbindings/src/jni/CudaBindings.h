@@ -96,8 +96,12 @@ typedef physx::ExtGpu::PxParticleClothConstraint PxParticleClothConstraintEnum;
 
 typedef physx::PxGpuMirroredPointer<physx::PxGpuParticleSystem> PxGpuMirroredGpuParticleSystemPointer;
 
-typedef std::vector<physx::PxParticleRigidFilterPair> Vector_PxParticleRigidFilterPair;
-typedef std::vector<physx::PxParticleSpring> Vector_PxParticleSpring;
+typedef PxArrayExt<physx::PxParticleRigidFilterPair> PxArray_PxParticleRigidFilterPair;
+typedef PxArrayExt<physx::PxParticleSpring> PxArray_PxParticleSpring;
+
+// deprecated std::vector style types
+typedef PxArrayExt<physx::PxParticleRigidFilterPair> Vector_PxParticleRigidFilterPair;
+typedef PxArrayExt<physx::PxParticleSpring> Vector_PxParticleSpring;
 
 #endif
 
