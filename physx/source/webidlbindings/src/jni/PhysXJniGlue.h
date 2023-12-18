@@ -6161,6 +6161,281 @@ JNIEXPORT void JNICALL Java_physx_geometry_PxSphereGeometry__1setRadius(JNIEnv*,
     _self->radius = value;
 }
 
+// PxTetMaker
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetMaker__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetMaker);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetMaker__1createConformingTetrahedronMesh(JNIEnv*, jclass, jlong triangleMesh, jlong outVertices, jlong outTetIndices, jboolean validate, jfloat volumeThreshold) {
+    return (jboolean) physx::PxTetMaker::createConformingTetrahedronMesh(*((physx::PxSimpleTriangleMesh*) triangleMesh), *((PxArray_PxVec3*) outVertices), *((PxArray_PxU32*) outTetIndices), validate, volumeThreshold);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetMaker__1createVoxelTetrahedronMesh(JNIEnv*, jclass, jlong tetMesh, jint numVoxelsAlongLongestBoundingBoxAxis, jlong outVertices, jlong outTetIndices) {
+    return (jboolean) physx::PxTetMaker::createVoxelTetrahedronMesh(*((physx::PxTetrahedronMeshDesc*) tetMesh), numVoxelsAlongLongestBoundingBoxAxis, *((PxArray_PxVec3*) outVertices), *((PxArray_PxU32*) outTetIndices));
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetMaker__1createVoxelTetrahedronMeshFromEdgeLength(JNIEnv*, jclass, jlong tetMesh, jfloat voxelEdgeLength, jlong outVertices, jlong outTetIndices) {
+    return (jboolean) physx::PxTetMaker::createVoxelTetrahedronMeshFromEdgeLength(*((physx::PxTetrahedronMeshDesc*) tetMesh), voxelEdgeLength, *((PxArray_PxVec3*) outVertices), *((PxArray_PxU32*) outTetIndices));
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetMaker__1validateTriangleMesh(JNIEnv*, jclass, jlong triangleMesh, jfloat minVolumeThreshold, jfloat minTriangleAngleRadians) {
+    static thread_local physx::PxTriangleMeshAnalysisResults _cache = physx::PxTetMaker::validateTriangleMesh(*((physx::PxSimpleTriangleMesh*) triangleMesh), minVolumeThreshold, minTriangleAngleRadians);
+    _cache = physx::PxTetMaker::validateTriangleMesh(*((physx::PxSimpleTriangleMesh*) triangleMesh), minVolumeThreshold, minTriangleAngleRadians);
+    return (jlong) &_cache;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetMaker__1validateTetrahedronMesh(JNIEnv*, jclass, jlong points, jlong tetrahedra, jfloat minTetVolumeThreshold) {
+    static thread_local physx::PxTetrahedronMeshAnalysisResults _cache = physx::PxTetMaker::validateTetrahedronMesh(*((physx::PxBoundedData*) points), *((physx::PxBoundedData*) tetrahedra), minTetVolumeThreshold);
+    _cache = physx::PxTetMaker::validateTetrahedronMesh(*((physx::PxBoundedData*) points), *((physx::PxBoundedData*) tetrahedra), minTetVolumeThreshold);
+    return (jlong) &_cache;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJF(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap, jfloat edgeLengthCostWeight) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap, edgeLengthCostWeight);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJFF(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap, jfloat edgeLengthCostWeight, jfloat flatnessDetectionThreshold) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap, edgeLengthCostWeight, flatnessDetectionThreshold);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJFFZ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap, jfloat edgeLengthCostWeight, jfloat flatnessDetectionThreshold, jboolean projectSimplifiedPointsOnInputMeshSurface) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap, edgeLengthCostWeight, flatnessDetectionThreshold, projectSimplifiedPointsOnInputMeshSurface);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJFFZJ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap, jfloat edgeLengthCostWeight, jfloat flatnessDetectionThreshold, jboolean projectSimplifiedPointsOnInputMeshSurface, jlong outputVertexToInputTriangle) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap, edgeLengthCostWeight, flatnessDetectionThreshold, projectSimplifiedPointsOnInputMeshSurface, (PxArray_PxU32*) outputVertexToInputTriangle);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1simplifyTriangleMesh__JJIFJJJFFZJZ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint targetTriangleCount, jfloat maximalEdgeLength, jlong outputVertices, jlong outputIndices, jlong vertexMap, jfloat edgeLengthCostWeight, jfloat flatnessDetectionThreshold, jboolean projectSimplifiedPointsOnInputMeshSurface, jlong outputVertexToInputTriangle, jboolean removeDisconnectedPatches) {
+    physx::PxTetMaker::simplifyTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), targetTriangleCount, maximalEdgeLength, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap, edgeLengthCostWeight, flatnessDetectionThreshold, projectSimplifiedPointsOnInputMeshSurface, (PxArray_PxU32*) outputVertexToInputTriangle, removeDisconnectedPatches);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1remeshTriangleMesh__JJIJJ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint gridResolution, jlong outputVertices, jlong outputIndices) {
+    physx::PxTetMaker::remeshTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), gridResolution, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1remeshTriangleMesh__JJIJJJ(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jint gridResolution, jlong outputVertices, jlong outputIndices, jlong vertexMap) {
+    physx::PxTetMaker::remeshTriangleMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), gridResolution, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), (PxArray_PxU32*) vertexMap);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1createTreeBasedTetrahedralMesh(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jboolean useTreeNodes, jlong outputVertices, jlong outputIndices, jfloat volumeThreshold) {
+    physx::PxTetMaker::createTreeBasedTetrahedralMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), useTreeNodes, *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), volumeThreshold);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1createRelaxedVoxelTetrahedralMesh__JJJJI(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jlong outputVertices, jlong outputIndices, jint resolution) {
+    physx::PxTetMaker::createRelaxedVoxelTetrahedralMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), resolution);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1createRelaxedVoxelTetrahedralMesh__JJJJII(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jlong outputVertices, jlong outputIndices, jint resolution, jint numRelaxationIterations) {
+    physx::PxTetMaker::createRelaxedVoxelTetrahedralMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), resolution, numRelaxationIterations);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1createRelaxedVoxelTetrahedralMesh__JJJJIIF(JNIEnv*, jclass, jlong inputVertices, jlong inputIndices, jlong outputVertices, jlong outputIndices, jint resolution, jint numRelaxationIterations, jfloat relMinTetVolume) {
+    physx::PxTetMaker::createRelaxedVoxelTetrahedralMesh(*((PxArray_PxVec3*) inputVertices), *((PxArray_PxU32*) inputIndices), *((PxArray_PxVec3*) outputVertices), *((PxArray_PxU32*) outputIndices), resolution, numRelaxationIterations, relMinTetVolume);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetMaker__1detectTriangleIslands(JNIEnv*, jclass, jlong triangles, jint numTriangles, jlong islandIndexPerTriangle) {
+    physx::PxTetMaker::detectTriangleIslands(*((PxI32ConstPtr*) triangles), numTriangles, *((PxArray_PxU32*) islandIndexPerTriangle));
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetMaker__1findLargestIslandId(JNIEnv*, jclass, jlong islandIndexPerTriangle, jint numTriangles) {
+    return (jint) physx::PxTetMaker::findLargestIslandId(*((PxU32ConstPtr*) islandIndexPerTriangle), numTriangles);
+}
+
+// PxTetrahedronMeshAnalysisResults
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMeshAnalysisResults);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1_1placement_1new_1PxTetrahedronMeshAnalysisResults(JNIEnv*, jclass, jlong _placement_address, jint flags) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshAnalysisResults(flags);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1PxTetrahedronMeshAnalysisResults(JNIEnv*, jclass, jint flags) {
+    return (jlong) new physx::PxTetrahedronMeshAnalysisResults(flags);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1isSet(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshAnalysisResults* self = (physx::PxTetrahedronMeshAnalysisResults*) _address;
+    return (jboolean) self->isSet((PxTetrahedronMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1raise(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshAnalysisResults* self = (physx::PxTetrahedronMeshAnalysisResults*) _address;
+    self->raise((PxTetrahedronMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1clear(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshAnalysisResults* self = (physx::PxTetrahedronMeshAnalysisResults*) _address;
+    self->clear((PxTetrahedronMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResults__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxTetrahedronMeshAnalysisResults*) _address;
+}
+
+// PxTetrahedronMeshDesc
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMeshDesc);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1_1placement_1new_1PxTetrahedronMeshDesc__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshDesc();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1_1placement_1new_1PxTetrahedronMeshDesc__JJJ(JNIEnv*, jclass, jlong _placement_address, jlong meshVertices, jlong meshTetIndices) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices));
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1_1placement_1new_1PxTetrahedronMeshDesc__JJJI(JNIEnv*, jclass, jlong _placement_address, jlong meshVertices, jlong meshTetIndices, jint meshFormat) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices), (PxTetrahedronMeshFormatEnum) meshFormat);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1_1placement_1new_1PxTetrahedronMeshDesc__JJJIS(JNIEnv*, jclass, jlong _placement_address, jlong meshVertices, jlong meshTetIndices, jint meshFormat, jshort numberOfTetsPerHexElement) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices), (PxTetrahedronMeshFormatEnum) meshFormat, numberOfTetsPerHexElement);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1PxTetrahedronMeshDesc__(JNIEnv*, jclass) {
+    return (jlong) new physx::PxTetrahedronMeshDesc();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1PxTetrahedronMeshDesc__JJ(JNIEnv*, jclass, jlong meshVertices, jlong meshTetIndices) {
+    return (jlong) new physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices));
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1PxTetrahedronMeshDesc__JJI(JNIEnv*, jclass, jlong meshVertices, jlong meshTetIndices, jint meshFormat) {
+    return (jlong) new physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices), (PxTetrahedronMeshFormatEnum) meshFormat);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1PxTetrahedronMeshDesc__JJIS(JNIEnv*, jclass, jlong meshVertices, jlong meshTetIndices, jint meshFormat, jshort numberOfTetsPerHexElement) {
+    return (jlong) new physx::PxTetrahedronMeshDesc(*((PxArray_PxVec3*) meshVertices), *((PxArray_PxU32*) meshTetIndices), (PxTetrahedronMeshFormatEnum) meshFormat, numberOfTetsPerHexElement);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1isValid(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jboolean) self->isValid();
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxTetrahedronMeshDesc*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1getMaterialIndices(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jlong) &_self->materialIndices;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1setMaterialIndices(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    _self->materialIndices = *((PxTypedStridedData_PxU16*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1getPoints(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jlong) &_self->points;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1setPoints(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    _self->points = *((physx::PxBoundedData*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1getTetrahedrons(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jlong) &_self->tetrahedrons;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1setTetrahedrons(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    _self->tetrahedrons = *((physx::PxBoundedData*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1getFlags(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jlong) &_self->flags;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1setFlags(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    _self->flags = *((physx::PxMeshFlags*) value);
+}
+JNIEXPORT jshort JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1getTetsPerElement(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    return (jshort) _self->tetsPerElement;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshDesc__1setTetsPerElement(JNIEnv*, jclass, jlong _address, jshort value) {
+    physx::PxTetrahedronMeshDesc* _self = (physx::PxTetrahedronMeshDesc*) _address;
+    _self->tetsPerElement = value;
+}
+
+// PxTetrahedronMesh
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMesh__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMesh);
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMesh__1getNbVertices(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    return (jint) self->getNbVertices();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getVertices(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    return (jlong) self->getVertices();
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMesh__1getNbTetrahedrons(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    return (jint) self->getNbTetrahedrons();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getTetrahedrons(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    return (jlong) self->getTetrahedrons();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getTetrahedronMeshFlags(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    static thread_local physx::PxTetrahedronMeshFlags _cache = self->getTetrahedronMeshFlags();
+    _cache = self->getTetrahedronMeshFlags();
+    return (jlong) &_cache;
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getTetrahedraRemap(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    return (jlong) self->getTetrahedraRemap();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getLocalBounds(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
+    static thread_local physx::PxBounds3 _cache = self->getLocalBounds();
+    _cache = self->getLocalBounds();
+    return (jlong) &_cache;
+}
+
+// PxTetrahedronMeshExt
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMeshExt);
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronContainingPoint(JNIEnv*, jclass, jlong _address, jlong mesh, jlong point, jlong bary, jfloat tolerance) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    return (jint) self->findTetrahedronContainingPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary), tolerance);
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronClosestToPoint(JNIEnv*, jclass, jlong _address, jlong mesh, jlong point, jlong bary) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    return (jint) self->findTetrahedronClosestToPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1createPointsToTetrahedronMap(JNIEnv*, jclass, jlong _address, jlong tetMeshVertices, jlong tetMeshIndices, jlong pointsToEmbed, jlong barycentricCoordinates, jlong tetLinks) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->createPointsToTetrahedronMap(*((PxArray_PxVec3*) tetMeshVertices), *((PxArray_PxU32*) tetMeshIndices), *((PxArray_PxVec3*) pointsToEmbed), *((PxArray_PxVec4*) barycentricCoordinates), *((PxArray_PxU32*) tetLinks));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJJ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles, jlong surfaceTriangleToTet) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJJZ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles, jlong surfaceTriangleToTet, jboolean flipTriangleOrientation) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet, flipTriangleOrientation);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles));
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJJ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJJZ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet, jboolean flipTriangleOrientation) {
+    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
+    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet, flipTriangleOrientation);
+}
+
+// PxTetrahedronMeshFlags
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMeshFlags);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1_1placement_1new_1PxTetrahedronMeshFlags(JNIEnv*, jclass, jlong _placement_address, jbyte flags) {
+    return (jlong) new((void*)_placement_address) physx::PxTetrahedronMeshFlags(flags);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1PxTetrahedronMeshFlags(JNIEnv*, jclass, jbyte flags) {
+    return (jlong) new physx::PxTetrahedronMeshFlags(flags);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1isSet(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshFlags* self = (physx::PxTetrahedronMeshFlags*) _address;
+    return (jboolean) self->isSet((PxTetrahedronMeshFlagEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1raise(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshFlags* self = (physx::PxTetrahedronMeshFlags*) _address;
+    self->raise((PxTetrahedronMeshFlagEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1clear(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTetrahedronMeshFlags* self = (physx::PxTetrahedronMeshFlags*) _address;
+    self->clear((PxTetrahedronMeshFlagEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxTetrahedronMeshFlags*) _address;
+}
+
 // PxTriangle
 JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangle__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxTriangle);
@@ -6244,6 +6519,32 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMesh__1getLocalBounds(JNIE
     static thread_local physx::PxBounds3 _cache = self->getLocalBounds();
     _cache = self->getLocalBounds();
     return (jlong) &_cache;
+}
+
+// PxTriangleMeshAnalysisResults
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTriangleMeshAnalysisResults);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1_1placement_1new_1PxTriangleMeshAnalysisResults(JNIEnv*, jclass, jlong _placement_address, jint flags) {
+    return (jlong) new((void*)_placement_address) physx::PxTriangleMeshAnalysisResults(flags);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1PxTriangleMeshAnalysisResults(JNIEnv*, jclass, jint flags) {
+    return (jlong) new physx::PxTriangleMeshAnalysisResults(flags);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1isSet(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTriangleMeshAnalysisResults* self = (physx::PxTriangleMeshAnalysisResults*) _address;
+    return (jboolean) self->isSet((PxTriangleMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1raise(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTriangleMeshAnalysisResults* self = (physx::PxTriangleMeshAnalysisResults*) _address;
+    self->raise((PxTriangleMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1clear(JNIEnv*, jclass, jlong _address, jint flag) {
+    physx::PxTriangleMeshAnalysisResults* self = (physx::PxTriangleMeshAnalysisResults*) _address;
+    self->clear((PxTriangleMeshAnalysisResultEnum) flag);
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResults__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (physx::PxTriangleMeshAnalysisResults*) _address;
 }
 
 // PxTriangleMeshFlags
@@ -6378,6 +6679,74 @@ JNIEXPORT jint JNICALL Java_physx_geometry_PxMeshFlagEnum__1gete16_1BIT_1INDICES
 // PxMeshGeometryFlagEnum
 JNIEXPORT jint JNICALL Java_physx_geometry_PxMeshGeometryFlagEnum__1geteDOUBLE_1SIDED(JNIEnv*, jclass) {
     return PxMeshGeometryFlagEnum::eDOUBLE_SIDED;
+}
+
+// PxTetrahedronMeshAnalysisResultEnum
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResultEnum__1geteVALID(JNIEnv*, jclass) {
+    return PxTetrahedronMeshAnalysisResultEnum::eVALID;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResultEnum__1geteDEGENERATE_1TETRAHEDRON(JNIEnv*, jclass) {
+    return PxTetrahedronMeshAnalysisResultEnum::eDEGENERATE_TETRAHEDRON;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResultEnum__1geteMESH_1IS_1PROBLEMATIC(JNIEnv*, jclass) {
+    return PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshAnalysisResultEnum__1geteMESH_1IS_1INVALID(JNIEnv*, jclass) {
+    return PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_INVALID;
+}
+
+// PxTetrahedronMeshFlagEnum
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshFlagEnum__1gete16_1BIT_1INDICES(JNIEnv*, jclass) {
+    return PxTetrahedronMeshFlagEnum::e16_BIT_INDICES;
+}
+
+// PxTetrahedronMeshFormatEnum
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshFormatEnum__1geteTET_1MESH(JNIEnv*, jclass) {
+    return PxTetrahedronMeshFormatEnum::eTET_MESH;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshFormatEnum__1geteHEX_1MESH(JNIEnv*, jclass) {
+    return PxTetrahedronMeshFormatEnum::eHEX_MESH;
+}
+
+// PxTriangleMeshAnalysisResultEnum
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteVALID(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eVALID;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteZERO_1VOLUME(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eZERO_VOLUME;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteOPEN_1BOUNDARIES(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eOPEN_BOUNDARIES;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteSELF_1INTERSECTIONS(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eSELF_INTERSECTIONS;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteINCONSISTENT_1TRIANGLE_1ORIENTATION(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eINCONSISTENT_TRIANGLE_ORIENTATION;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteCONTAINS_1ACUTE_1ANGLED_1TRIANGLES(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eCONTAINS_ACUTE_ANGLED_TRIANGLES;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteEDGE_1SHARED_1BY_1MORE_1THAN_1TWO_1TRIANGLES(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eEDGE_SHARED_BY_MORE_THAN_TWO_TRIANGLES;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteCONTAINS_1DUPLICATE_1POINTS(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eCONTAINS_DUPLICATE_POINTS;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteCONTAINS_1INVALID_1POINTS(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eCONTAINS_INVALID_POINTS;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteREQUIRES_132BIT_1INDEX_1BUFFER(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eREQUIRES_32BIT_INDEX_BUFFER;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteTRIANGLE_1INDEX_1OUT_1OF_1RANGE(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eTRIANGLE_INDEX_OUT_OF_RANGE;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteMESH_1IS_1PROBLEMATIC(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC;
+}
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTriangleMeshAnalysisResultEnum__1geteMESH_1IS_1INVALID(JNIEnv*, jclass) {
+    return PxTriangleMeshAnalysisResultEnum::eMESH_IS_INVALID;
 }
 
 // PxTriangleMeshFlagEnum
@@ -13426,6 +13795,22 @@ JNIEXPORT void JNICALL Java_physx_support_PxU32ConstPtr__1delete_1native_1instan
     delete (PxU32ConstPtr*) _address;
 }
 
+// PxI32Ptr
+JNIEXPORT jint JNICALL Java_physx_support_PxI32Ptr__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxI32Ptr);
+}
+JNIEXPORT void JNICALL Java_physx_support_PxI32Ptr__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxI32Ptr*) _address;
+}
+
+// PxI32ConstPtr
+JNIEXPORT jint JNICALL Java_physx_support_PxI32ConstPtr__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxI32ConstPtr);
+}
+JNIEXPORT void JNICALL Java_physx_support_PxI32ConstPtr__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxI32ConstPtr*) _address;
+}
+
 // PxRealPtr
 JNIEXPORT jint JNICALL Java_physx_support_PxRealPtr__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxRealPtr);
@@ -13509,6 +13894,11 @@ JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1voidToU32Ptr(JNI
     _cache = NativeArrayHelpers::voidToU32Ptr((void*) voidPtr);
     return (jlong) &_cache;
 }
+JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1voidToI32Ptr(JNIEnv*, jclass, jlong voidPtr) {
+    static thread_local PxI32Ptr _cache = NativeArrayHelpers::voidToI32Ptr((void*) voidPtr);
+    _cache = NativeArrayHelpers::voidToI32Ptr((void*) voidPtr);
+    return (jlong) &_cache;
+}
 JNIEXPORT jlong JNICALL Java_physx_support_NativeArrayHelpers__1voidToRealPtr(JNIEnv*, jclass, jlong voidPtr) {
     static thread_local PxRealPtr _cache = NativeArrayHelpers::voidToRealPtr((void*) voidPtr);
     _cache = NativeArrayHelpers::voidToRealPtr((void*) voidPtr);
@@ -13567,6 +13957,12 @@ JNIEXPORT void JNICALL Java_physx_support_NativeArrayHelpers__1delete_1native_1i
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxMaterialConst__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxMaterialConst);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxMaterialConst__1_1placement_1new_1PxArray_1PxMaterialConst__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxMaterialConst();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxMaterialConst__1_1placement_1new_1PxArray_1PxMaterialConst__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxMaterialConst(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxMaterialConst__1PxArray_1PxMaterialConst__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxMaterialConst();
 }
@@ -13604,6 +14000,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxMaterialConst__1delete_1nat
 // PxArray_PxHeightFieldSample
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxHeightFieldSample__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxHeightFieldSample);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxHeightFieldSample__1_1placement_1new_1PxArray_1PxHeightFieldSample__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxHeightFieldSample();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxHeightFieldSample__1_1placement_1new_1PxArray_1PxHeightFieldSample__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxHeightFieldSample(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxHeightFieldSample__1PxArray_1PxHeightFieldSample__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxHeightFieldSample();
@@ -13643,6 +14045,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxHeightFieldSample__1delete_
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxReal__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxReal);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxReal__1_1placement_1new_1PxArray_1PxReal__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxReal();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxReal__1_1placement_1new_1PxArray_1PxReal__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxReal(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxReal__1PxArray_1PxReal__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxReal();
 }
@@ -13680,6 +14088,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxReal__1delete_1native_1inst
 // PxArray_PxU8
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxU8__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxU8);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU8__1_1placement_1new_1PxArray_1PxU8__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU8();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU8__1_1placement_1new_1PxArray_1PxU8__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU8(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU8__1PxArray_1PxU8__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxU8();
@@ -13719,6 +14133,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxU8__1delete_1native_1instan
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxU16__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxU16);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU16__1_1placement_1new_1PxArray_1PxU16__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU16();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU16__1_1placement_1new_1PxArray_1PxU16__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU16(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU16__1PxArray_1PxU16__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxU16();
 }
@@ -13756,6 +14176,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxU16__1delete_1native_1insta
 // PxArray_PxU32
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxU32__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxU32);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU32__1_1placement_1new_1PxArray_1PxU32__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU32();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU32__1_1placement_1new_1PxArray_1PxU32__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxU32(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxU32__1PxArray_1PxU32__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxU32();
@@ -13795,6 +14221,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxU32__1delete_1native_1insta
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxVec3__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxVec3);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec3__1_1placement_1new_1PxArray_1PxVec3__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxVec3();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec3__1_1placement_1new_1PxArray_1PxVec3__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxVec3(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec3__1PxArray_1PxVec3__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxVec3();
 }
@@ -13832,6 +14264,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxVec3__1delete_1native_1inst
 // PxArray_PxVec4
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxVec4__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxVec4);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec4__1_1placement_1new_1PxArray_1PxVec4__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxVec4();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec4__1_1placement_1new_1PxArray_1PxVec4__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxVec4(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxVec4__1PxArray_1PxVec4__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxVec4();
@@ -13871,6 +14309,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxVec4__1delete_1native_1inst
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxActorPtr__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxActorPtr);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxActorPtr__1_1placement_1new_1PxArray_1PxActorPtr__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxActorPtr();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxActorPtr__1_1placement_1new_1PxArray_1PxActorPtr__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxActorPtr(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxActorPtr__1PxArray_1PxActorPtr__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxActorPtr();
 }
@@ -13908,6 +14352,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxActorPtr__1delete_1native_1
 // PxArray_PxContactPairPoint
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxContactPairPoint__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxContactPairPoint);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxContactPairPoint__1_1placement_1new_1PxArray_1PxContactPairPoint__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxContactPairPoint();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxContactPairPoint__1_1placement_1new_1PxArray_1PxContactPairPoint__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxContactPairPoint(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxContactPairPoint__1PxArray_1PxContactPairPoint__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxContactPairPoint();
@@ -13947,6 +14397,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxContactPairPoint__1delete_1
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxRaycastHit__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxRaycastHit);
 }
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxRaycastHit__1_1placement_1new_1PxArray_1PxRaycastHit__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxRaycastHit();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxRaycastHit__1_1placement_1new_1PxArray_1PxRaycastHit__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxRaycastHit(size);
+}
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxRaycastHit__1PxArray_1PxRaycastHit__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxRaycastHit();
 }
@@ -13984,6 +14440,12 @@ JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxRaycastHit__1delete_1native
 // PxArray_PxSweepHit
 JNIEXPORT jint JNICALL Java_physx_support_PxArray_1PxSweepHit__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxArray_PxSweepHit);
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxSweepHit__1_1placement_1new_1PxArray_1PxSweepHit__J(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) PxArray_PxSweepHit();
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxSweepHit__1_1placement_1new_1PxArray_1PxSweepHit__JI(JNIEnv*, jclass, jlong _placement_address, jint size) {
+    return (jlong) new((void*)_placement_address) PxArray_PxSweepHit(size);
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxSweepHit__1PxArray_1PxSweepHit__(JNIEnv*, jclass) {
     return (jlong) new PxArray_PxSweepHit();
@@ -14425,6 +14887,30 @@ JNIEXPORT void JNICALL Java_physx_support_Vector_1PxSweepHit__1clear(JNIEnv*, jc
 }
 JNIEXPORT void JNICALL Java_physx_support_Vector_1PxSweepHit__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (Vector_PxSweepHit*) _address;
+}
+
+// PxTypedStridedData_PxU16
+JNIEXPORT jint JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxTypedStridedData_PxU16);
+}
+JNIEXPORT void JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxTypedStridedData_PxU16*) _address;
+}
+JNIEXPORT jint JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1getStride(JNIEnv*, jclass, jlong _address) {
+    PxTypedStridedData_PxU16* _self = (PxTypedStridedData_PxU16*) _address;
+    return (jint) _self->stride;
+}
+JNIEXPORT void JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1setStride(JNIEnv*, jclass, jlong _address, jint value) {
+    PxTypedStridedData_PxU16* _self = (PxTypedStridedData_PxU16*) _address;
+    _self->stride = value;
+}
+JNIEXPORT jlong JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1getData(JNIEnv*, jclass, jlong _address) {
+    PxTypedStridedData_PxU16* _self = (PxTypedStridedData_PxU16*) _address;
+    return (jlong) &_self->data;
+}
+JNIEXPORT void JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1setData(JNIEnv*, jclass, jlong _address, jlong value) {
+    PxTypedStridedData_PxU16* _self = (PxTypedStridedData_PxU16*) _address;
+    _self->data = *((PxU16Ptr*) value);
 }
 
 // PassThroughFilterShader
@@ -15594,7 +16080,7 @@ JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTopLevelFunctions__1CloseVeh
     PxVehicleTopLevelFunctions::CloseVehicleExtension();
 }
 JNIEXPORT jboolean JNICALL Java_physx_vehicle2_PxVehicleTopLevelFunctions__1VehicleComputeSprungMasses(JNIEnv*, jclass, jint nbSprungMasses, jlong sprungMassCoordinates, jfloat totalMass, jint gravityDirection, jlong sprungMasses) {
-    return (jboolean) PxVehicleTopLevelFunctions::VehicleComputeSprungMasses(nbSprungMasses, *((PxArray_PxVec3*) sprungMassCoordinates), totalMass, (PxVehicleAxesEnum) gravityDirection, *((Vector_PxReal*) sprungMasses));
+    return (jboolean) PxVehicleTopLevelFunctions::VehicleComputeSprungMasses(nbSprungMasses, *((PxArray_PxVec3*) sprungMassCoordinates), totalMass, (PxVehicleAxesEnum) gravityDirection, *((PxArray_PxReal*) sprungMasses));
 }
 JNIEXPORT jlong JNICALL Java_physx_vehicle2_PxVehicleTopLevelFunctions__1VehicleUnitCylinderSweepMeshCreate(JNIEnv*, jclass, jlong vehicleFrame, jlong physics, jlong params) {
     return (jlong) PxVehicleTopLevelFunctions::VehicleUnitCylinderSweepMeshCreate(*((physx::vehicle2::PxVehicleFrame*) vehicleFrame), *((physx::PxPhysics*) physics), *((physx::PxCookingParams*) params));

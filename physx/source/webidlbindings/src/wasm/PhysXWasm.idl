@@ -186,6 +186,7 @@ interface NativeArrayHelpers {
     [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
     [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
     [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxI32Ptr voidToI32Ptr(VoidPtr voidPtr);
     [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
     static PxActor getActorAt(PxActor base, long index);
     static PxBounds3 getBounds3At(PxBounds3 base, long index);
@@ -307,6 +308,138 @@ interface PxAggregate {
     boolean getSelfCollision();
 };
 PxAggregate implements PxBase;
+
+interface PxArray_PxActorPtr {
+    void PxArray_PxActorPtr();
+    void PxArray_PxActorPtr(unsigned long size);
+    PxActor get(unsigned long index);
+    void set(unsigned long index, [Const] PxActor value);
+    PxActorPtr begin();
+    unsigned long size();
+    void pushBack(PxActor value);
+    void clear();
+};
+
+interface PxArray_PxContactPairPoint {
+    void PxArray_PxContactPairPoint();
+    void PxArray_PxContactPairPoint(unsigned long size);
+    [Ref] PxContactPairPoint get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxContactPairPoint value);
+    PxContactPairPoint begin();
+    unsigned long size();
+    void pushBack([Ref] PxContactPairPoint value);
+    void clear();
+};
+
+interface PxArray_PxHeightFieldSample {
+    void PxArray_PxHeightFieldSample();
+    void PxArray_PxHeightFieldSample(unsigned long size);
+    [Ref] PxHeightFieldSample get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxHeightFieldSample value);
+    PxHeightFieldSample begin();
+    unsigned long size();
+    void pushBack([Ref] PxHeightFieldSample value);
+    void clear();
+};
+
+interface PxArray_PxMaterialConst {
+    void PxArray_PxMaterialConst();
+    void PxArray_PxMaterialConst(unsigned long size);
+    [Const] PxMaterial get(unsigned long index);
+    void set(unsigned long index, [Const] PxMaterial value);
+    PxMaterialConstPtr begin();
+    unsigned long size();
+    void pushBack([Const] PxMaterial value);
+    void clear();
+};
+
+interface PxArray_PxRaycastHit {
+    void PxArray_PxRaycastHit();
+    void PxArray_PxRaycastHit(unsigned long size);
+    [Ref] PxRaycastHit get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxRaycastHit value);
+    PxRaycastHit begin();
+    unsigned long size();
+    void pushBack([Ref] PxRaycastHit value);
+    void clear();
+};
+
+interface PxArray_PxReal {
+    void PxArray_PxReal();
+    void PxArray_PxReal(unsigned long size);
+    float get(unsigned long index);
+    void set(unsigned long index, float value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(float value);
+    void clear();
+};
+
+interface PxArray_PxSweepHit {
+    void PxArray_PxSweepHit();
+    void PxArray_PxSweepHit(unsigned long size);
+    [Ref] PxSweepHit get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxSweepHit value);
+    PxSweepHit begin();
+    unsigned long size();
+    void pushBack([Ref] PxSweepHit value);
+    void clear();
+};
+
+interface PxArray_PxU16 {
+    void PxArray_PxU16();
+    void PxArray_PxU16(unsigned long size);
+    unsigned short get(unsigned long index);
+    void set(unsigned long index, unsigned short value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(unsigned short value);
+    void clear();
+};
+
+interface PxArray_PxU32 {
+    void PxArray_PxU32();
+    void PxArray_PxU32(unsigned long size);
+    unsigned long get(unsigned long index);
+    void set(unsigned long index, unsigned long value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(unsigned long value);
+    void clear();
+};
+
+interface PxArray_PxU8 {
+    void PxArray_PxU8();
+    void PxArray_PxU8(unsigned long size);
+    octet get(unsigned long index);
+    void set(unsigned long index, octet value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(octet value);
+    void clear();
+};
+
+interface PxArray_PxVec3 {
+    void PxArray_PxVec3();
+    void PxArray_PxVec3(unsigned long size);
+    [Ref] PxVec3 get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxVec3 value);
+    PxVec3 begin();
+    unsigned long size();
+    void pushBack([Ref] PxVec3 value);
+    void clear();
+};
+
+interface PxArray_PxVec4 {
+    void PxArray_PxVec4();
+    void PxArray_PxVec4(unsigned long size);
+    [Ref] PxVec4 get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxVec4 value);
+    PxVec4 begin();
+    unsigned long size();
+    void pushBack([Ref] PxVec4 value);
+    void clear();
+};
 
 [Prefix="physx::"]
 interface PxArticulationAttachment {
@@ -1460,6 +1593,13 @@ interface PxHullPolygon {
     attribute short mIndexBase;
 };
 
+interface PxI32ConstPtr {
+};
+
+interface PxI32Ptr {
+};
+PxI32Ptr implements PxI32ConstPtr;
+
 [Prefix="physx::"]
 interface PxInputData {
 };
@@ -2482,6 +2622,70 @@ interface PxSweepResult {
 };
 PxSweepResult implements PxSweepCallback;
 
+[Prefix="physx::", NoDelete]
+interface PxTetMaker {
+    static boolean createConformingTetrahedronMesh([Const, Ref] PxSimpleTriangleMesh triangleMesh, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices, boolean validate, float volumeThreshold);
+    static boolean createVoxelTetrahedronMesh([Const, Ref] PxTetrahedronMeshDesc tetMesh, unsigned long numVoxelsAlongLongestBoundingBoxAxis, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices);
+    static boolean createVoxelTetrahedronMeshFromEdgeLength([Const, Ref] PxTetrahedronMeshDesc tetMesh, float voxelEdgeLength, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices);
+    [Value] static PxTriangleMeshAnalysisResults validateTriangleMesh([Const, Ref] PxSimpleTriangleMesh triangleMesh, float minVolumeThreshold, float minTriangleAngleRadians);
+    [Value] static PxTetrahedronMeshAnalysisResults validateTetrahedronMesh([Const, Ref] PxBoundedData points, [Const, Ref] PxBoundedData tetrahedra, float minTetVolumeThreshold);
+    static void simplifyTriangleMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, long targetTriangleCount, float maximalEdgeLength, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, optional PxArray_PxU32 vertexMap, optional float edgeLengthCostWeight, optional float flatnessDetectionThreshold, optional boolean projectSimplifiedPointsOnInputMeshSurface, optional PxArray_PxU32 outputVertexToInputTriangle, optional boolean removeDisconnectedPatches);
+    static void remeshTriangleMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, unsigned long gridResolution, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, optional PxArray_PxU32 vertexMap);
+    static void createTreeBasedTetrahedralMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, boolean useTreeNodes, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, float volumeThreshold);
+    static void createRelaxedVoxelTetrahedralMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, long resolution, optional long numRelaxationIterations, optional float relMinTetVolume);
+    static void detectTriangleIslands([Ref] PxI32ConstPtr triangles, unsigned long numTriangles, [Ref] PxArray_PxU32 islandIndexPerTriangle);
+    static unsigned long findLargestIslandId([Ref] PxU32ConstPtr islandIndexPerTriangle, unsigned long numTriangles);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMesh {
+    unsigned long getNbVertices();
+    PxVec3 getVertices();
+    unsigned long getNbTetrahedrons();
+    VoidPtr getTetrahedrons();
+    [Value] PxTetrahedronMeshFlags getTetrahedronMeshFlags();
+    PxU32ConstPtr getTetrahedraRemap();
+    [Value] PxBounds3 getLocalBounds();
+};
+PxTetrahedronMesh implements PxRefCounted;
+
+[Prefix="physx::"]
+interface PxTetrahedronMeshAnalysisResults {
+    void PxTetrahedronMeshAnalysisResults(unsigned long flags);
+    boolean isSet(PxTetrahedronMeshAnalysisResultEnum flag);
+    void raise(PxTetrahedronMeshAnalysisResultEnum flag);
+    void clear(PxTetrahedronMeshAnalysisResultEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxTetrahedronMeshDesc {
+    void PxTetrahedronMeshDesc();
+    void PxTetrahedronMeshDesc([Ref] PxArray_PxVec3 meshVertices, [Ref] PxArray_PxU32 meshTetIndices, optional PxTetrahedronMeshFormatEnum meshFormat, optional unsigned short numberOfTetsPerHexElement);
+    boolean isValid();
+    [Value] attribute PxTypedStridedData_PxU16 materialIndices;
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxBoundedData tetrahedrons;
+    [Value] attribute PxMeshFlags flags;
+    attribute short tetsPerElement;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMeshExt {
+    long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
+    long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
+    void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
+    void extractTetMeshSurface(VoidPtr tetrahedra, unsigned long numTetrahedra, boolean sixteenBitIndices, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+    void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+};
+
+[Prefix="physx::"]
+interface PxTetrahedronMeshFlags {
+    void PxTetrahedronMeshFlags(octet flags);
+    boolean isSet(PxTetrahedronMeshFlagEnum flag);
+    void raise(PxTetrahedronMeshFlagEnum flag);
+    void clear(PxTetrahedronMeshFlagEnum flag);
+};
+
 [Prefix="physx::"]
 interface PxTolerancesScale {
     void PxTolerancesScale();
@@ -2545,6 +2749,14 @@ interface PxTriangleMesh {
 PxTriangleMesh implements PxRefCounted;
 
 [Prefix="physx::"]
+interface PxTriangleMeshAnalysisResults {
+    void PxTriangleMeshAnalysisResults(unsigned long flags);
+    boolean isSet(PxTriangleMeshAnalysisResultEnum flag);
+    void raise(PxTriangleMeshAnalysisResultEnum flag);
+    void clear(PxTriangleMeshAnalysisResultEnum flag);
+};
+
+[Prefix="physx::"]
 interface PxTriangleMeshDesc {
     void PxTriangleMeshDesc();
     [Value] attribute PxU16StridedData materialIndices;
@@ -2585,6 +2797,11 @@ interface PxTriggerPairFlags {
     boolean isSet(PxTriggerPairFlagEnum flag);
     void raise(PxTriggerPairFlagEnum flag);
     void clear(PxTriggerPairFlagEnum flag);
+};
+
+interface PxTypedStridedData_PxU16 {
+    attribute unsigned long stride;
+    [Const, Value] attribute PxU16Ptr data;
 };
 
 interface PxU16ConstPtr {
@@ -3327,7 +3544,7 @@ interface PxVehicleTireStickyState {
 interface PxVehicleTopLevelFunctions {
     static boolean InitVehicleExtension([Ref] PxFoundation foundation);
     static void CloseVehicleExtension();
-    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Const, Ref] Vector_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] Vector_PxReal sprungMasses);
+    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Ref] PxArray_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] PxArray_PxReal sprungMasses);
     static PxConvexMesh VehicleUnitCylinderSweepMeshCreate([Const, Ref] PxVehicleFrame vehicleFrame, [Ref] PxPhysics physics, [Const, Ref] PxCookingParams params);
     static void VehicleUnitCylinderSweepMeshDestroy(PxConvexMesh mesh);
     static readonly attribute unsigned long MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
@@ -3448,7 +3665,7 @@ interface Support {
 
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
-    [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
+    [Ref] static PxArray_PxActorPtr PxScene_getActiveActors(PxScene scene);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverPositionIterations(PxArticulationReducedCoordinate articulation);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverVelocityIterations(PxArticulationReducedCoordinate articulation);
 };
@@ -4055,6 +4272,38 @@ enum PxSolverTypeEnum {
 
 enum PxSphericalJointFlagEnum {
     "PxSphericalJointFlagEnum::eLIMIT_ENABLED"
+};
+
+enum PxTetrahedronMeshAnalysisResultEnum {
+    "PxTetrahedronMeshAnalysisResultEnum::eVALID",
+    "PxTetrahedronMeshAnalysisResultEnum::eDEGENERATE_TETRAHEDRON",
+    "PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC",
+    "PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_INVALID"
+};
+
+enum PxTetrahedronMeshFlagEnum {
+    "PxTetrahedronMeshFlagEnum::e16_BIT_INDICES"
+};
+
+enum PxTetrahedronMeshFormatEnum {
+    "PxTetrahedronMeshFormatEnum::eTET_MESH",
+    "PxTetrahedronMeshFormatEnum::eHEX_MESH"
+};
+
+enum PxTriangleMeshAnalysisResultEnum {
+    "PxTriangleMeshAnalysisResultEnum::eVALID",
+    "PxTriangleMeshAnalysisResultEnum::eZERO_VOLUME",
+    "PxTriangleMeshAnalysisResultEnum::eOPEN_BOUNDARIES",
+    "PxTriangleMeshAnalysisResultEnum::eSELF_INTERSECTIONS",
+    "PxTriangleMeshAnalysisResultEnum::eINCONSISTENT_TRIANGLE_ORIENTATION",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_ACUTE_ANGLED_TRIANGLES",
+    "PxTriangleMeshAnalysisResultEnum::eEDGE_SHARED_BY_MORE_THAN_TWO_TRIANGLES",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_DUPLICATE_POINTS",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_INVALID_POINTS",
+    "PxTriangleMeshAnalysisResultEnum::eREQUIRES_32BIT_INDEX_BUFFER",
+    "PxTriangleMeshAnalysisResultEnum::eTRIANGLE_INDEX_OUT_OF_RANGE",
+    "PxTriangleMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC",
+    "PxTriangleMeshAnalysisResultEnum::eMESH_IS_INVALID"
 };
 
 enum PxTriangleMeshFlagEnum {
