@@ -6360,7 +6360,9 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getTetrahedronMe
 }
 JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getTetrahedraRemap(JNIEnv*, jclass, jlong _address) {
     physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
-    return (jlong) self->getTetrahedraRemap();
+    static thread_local PxU32ConstPtr _cache = self->getTetrahedraRemap();
+    _cache = self->getTetrahedraRemap();
+    return (jlong) &_cache;
 }
 JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getLocalBounds(JNIEnv*, jclass, jlong _address) {
     physx::PxTetrahedronMesh* self = (physx::PxTetrahedronMesh*) _address;
@@ -6384,18 +6386,6 @@ JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedro
 JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1createPointsToTetrahedronMap(JNIEnv*, jclass, jlong _address, jlong tetMeshVertices, jlong tetMeshIndices, jlong pointsToEmbed, jlong barycentricCoordinates, jlong tetLinks) {
     physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
     self->createPointsToTetrahedronMap(*((PxArray_PxVec3*) tetMeshVertices), *((PxArray_PxU32*) tetMeshIndices), *((PxArray_PxVec3*) pointsToEmbed), *((PxArray_PxVec4*) barycentricCoordinates), *((PxArray_PxU32*) tetLinks));
-}
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles));
-}
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJJ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles, jlong surfaceTriangleToTet) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet);
-}
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJIZJJZ(JNIEnv*, jclass, jlong _address, jlong tetrahedra, jint numTetrahedra, jboolean sixteenBitIndices, jlong surfaceTriangles, jlong surfaceTriangleToTet, jboolean flipTriangleOrientation) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((void*) tetrahedra, numTetrahedra, sixteenBitIndices, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet, flipTriangleOrientation);
 }
 JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles) {
     physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
@@ -13975,7 +13965,7 @@ JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxMaterialConst__1get(JNIEnv
 }
 JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxMaterialConst__1set(JNIEnv*, jclass, jlong _address, jint index, jlong value) {
     PxArray_PxMaterialConst* self = (PxArray_PxMaterialConst*) _address;
-    self->set(index, (physx::PxMaterial*) value);
+    self->set(index, *((PxMaterialConstPtr*) value));
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxMaterialConst__1begin(JNIEnv*, jclass, jlong _address) {
     PxArray_PxMaterialConst* self = (PxArray_PxMaterialConst*) _address;
@@ -14327,7 +14317,7 @@ JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxActorPtr__1get(JNIEnv*, jc
 }
 JNIEXPORT void JNICALL Java_physx_support_PxArray_1PxActorPtr__1set(JNIEnv*, jclass, jlong _address, jint index, jlong value) {
     PxArray_PxActorPtr* self = (PxArray_PxActorPtr*) _address;
-    self->set(index, (physx::PxActor*) value);
+    self->set(index, *((PxActorPtr*) value));
 }
 JNIEXPORT jlong JNICALL Java_physx_support_PxArray_1PxActorPtr__1begin(JNIEnv*, jclass, jlong _address) {
     PxArray_PxActorPtr* self = (PxArray_PxActorPtr*) _address;
@@ -14910,7 +14900,7 @@ JNIEXPORT jlong JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1getData(J
 }
 JNIEXPORT void JNICALL Java_physx_support_PxTypedStridedData_1PxU16__1setData(JNIEnv*, jclass, jlong _address, jlong value) {
     PxTypedStridedData_PxU16* _self = (PxTypedStridedData_PxU16*) _address;
-    _self->data = *((PxU16Ptr*) value);
+    _self->data = *((PxU16ConstPtr*) value);
 }
 
 // PassThroughFilterShader

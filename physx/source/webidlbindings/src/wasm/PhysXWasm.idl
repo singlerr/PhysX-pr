@@ -313,7 +313,7 @@ interface PxArray_PxActorPtr {
     void PxArray_PxActorPtr();
     void PxArray_PxActorPtr(unsigned long size);
     PxActor get(unsigned long index);
-    void set(unsigned long index, [Const] PxActor value);
+    void set(unsigned long index, [Const, Ref] PxActorPtr value);
     PxActorPtr begin();
     unsigned long size();
     void pushBack(PxActor value);
@@ -346,7 +346,7 @@ interface PxArray_PxMaterialConst {
     void PxArray_PxMaterialConst();
     void PxArray_PxMaterialConst(unsigned long size);
     [Const] PxMaterial get(unsigned long index);
-    void set(unsigned long index, [Const] PxMaterial value);
+    void set(unsigned long index, [Const, Ref] PxMaterialConstPtr value);
     PxMaterialConstPtr begin();
     unsigned long size();
     void pushBack([Const] PxMaterial value);
@@ -2640,11 +2640,11 @@ interface PxTetMaker {
 [Prefix="physx::", NoDelete]
 interface PxTetrahedronMesh {
     unsigned long getNbVertices();
-    PxVec3 getVertices();
+    [Const] PxVec3 getVertices();
     unsigned long getNbTetrahedrons();
-    VoidPtr getTetrahedrons();
+    [Const] VoidPtr getTetrahedrons();
     [Value] PxTetrahedronMeshFlags getTetrahedronMeshFlags();
-    PxU32ConstPtr getTetrahedraRemap();
+    [Value] PxU32ConstPtr getTetrahedraRemap();
     [Value] PxBounds3 getLocalBounds();
 };
 PxTetrahedronMesh implements PxRefCounted;
@@ -2674,7 +2674,6 @@ interface PxTetrahedronMeshExt {
     long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
     long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
     void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
-    void extractTetMeshSurface(VoidPtr tetrahedra, unsigned long numTetrahedra, boolean sixteenBitIndices, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
     void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
 };
 
@@ -2801,7 +2800,7 @@ interface PxTriggerPairFlags {
 
 interface PxTypedStridedData_PxU16 {
     attribute unsigned long stride;
-    [Const, Value] attribute PxU16Ptr data;
+    [Value] attribute PxU16ConstPtr data;
 };
 
 interface PxU16ConstPtr {
