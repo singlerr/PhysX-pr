@@ -2053,8 +2053,12 @@ interface PxRaycastResult {
 };
 PxRaycastResult implements PxRaycastCallback;
 
+interface PxRealConstPtr {
+};
+
 interface PxRealPtr {
 };
+PxRealPtr implements PxRealConstPtr;
 
 [Prefix="physx::", NoDelete]
 interface PxRefCounted {
@@ -2671,10 +2675,10 @@ interface PxTetrahedronMeshDesc {
 
 [Prefix="physx::", NoDelete]
 interface PxTetrahedronMeshExt {
-    long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
-    long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
-    void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
-    void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+    static long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
+    static long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
+    static void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
+    static void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
 };
 
 [Prefix="physx::"]
@@ -2684,6 +2688,14 @@ interface PxTetrahedronMeshFlags {
     void raise(PxTetrahedronMeshFlagEnum flag);
     void clear(PxTetrahedronMeshFlagEnum flag);
 };
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMeshGeometry {
+    void PxTetrahedronMeshGeometry(PxTetrahedronMesh mesh);
+    boolean isValid();
+    attribute PxTetrahedronMesh tetrahedronMesh;
+};
+PxTetrahedronMeshGeometry implements PxGeometry;
 
 [Prefix="physx::"]
 interface PxTolerancesScale {
@@ -3669,6 +3681,49 @@ interface SupportFunctions {
     static unsigned long PxArticulationReducedCoordinate_getMinSolverVelocityIterations(PxArticulationReducedCoordinate articulation);
 };
 
+interface VHACDConvexHull {
+    void VHACDConvexHull();
+    [Value] attribute Vector_VHACDVertex m_points;
+    [Value] attribute Vector_VHACDTriangle m_triangles;
+    attribute double m_volume;
+    attribute unsigned long m_meshId;
+};
+
+[Prefix="VHACD::"]
+interface VHACDImpl {
+    void VHACDImpl();
+    boolean Compute([Const, Ref] PxRealConstPtr points, unsigned long countPoints, [Const, Ref] PxU32ConstPtr triangles, unsigned long countTriangles, [Const, Ref] VHACDParameters params);
+    unsigned long GetNConvexHulls();
+    boolean GetConvexHull(unsigned long index, [Ref] VHACDConvexHull ch);
+};
+
+interface VHACDParameters {
+    void VHACDParameters();
+    attribute unsigned long m_maxConvexHulls;
+    attribute unsigned long m_resolution;
+    attribute double m_minimumVolumePercentErrorAllowed;
+    attribute unsigned long m_maxRecursionDepth;
+    attribute boolean m_shrinkWrap;
+    attribute unsigned long m_maxNumVerticesPerCH;
+    attribute boolean m_asyncACD;
+    attribute unsigned long m_minEdgeLength;
+    attribute boolean m_findBestPlane;
+};
+
+interface VHACDTriangle {
+    void VHACDTriangle();
+    attribute unsigned long mI0;
+    attribute unsigned long mI1;
+    attribute unsigned long mI2;
+};
+
+interface VHACDVertex {
+    void VHACDVertex();
+    attribute double mX;
+    attribute double mY;
+    attribute double mZ;
+};
+
 interface Vector_PxActorPtr {
     void Vector_PxActorPtr();
     void Vector_PxActorPtr(unsigned long size);
@@ -3786,6 +3841,22 @@ interface Vector_PxVec4 {
     PxVec4 data();
     unsigned long size();
     void push_back([Ref] PxVec4 value);
+    void clear();
+};
+
+interface Vector_VHACDTriangle {
+    [Ref] VHACDTriangle at(unsigned long index);
+    VHACDTriangle data();
+    unsigned long size();
+    void push_back([Ref] VHACDTriangle value);
+    void clear();
+};
+
+interface Vector_VHACDVertex {
+    [Ref] VHACDVertex at(unsigned long index);
+    VHACDVertex data();
+    unsigned long size();
+    void push_back([Ref] VHACDVertex value);
     void clear();
 };
 

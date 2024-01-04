@@ -35,50 +35,52 @@ ELSE()
 ENDIF()
 
 SET(PHYSX_CXX_FLAGS "${OSX_BITNESS} ${ARCH_SIMD_FLAG} -std=c++11 -fno-rtti -fno-exceptions -ffunction-sections -fdata-sections \
-    -Werror -ferror-limit=0 -Wall -Wextra -fstrict-aliasing -Wstrict-aliasing=2 -Weverything\
-    -Wno-cast-qual \
-    -Wno-double-promotion \
-    -Wno-unknown-warning-option \
-    -Wno-documentation-deprecated-sync \
-    -Wno-documentation-unknown-command \
-    -Wno-float-equal \
-    -Wno-padded \
-    -Wno-weak-vtables \
+    -ferror-limit=0 -Wall -Wextra -Werror -fstrict-aliasing -Wstrict-aliasing=2 -Weverything\
+    -Wno-alloca \
+    -Wno-atomic-implicit-seq-cst \
+    -Wno-c++98-compat-pedantic \
     -Wno-cast-align \
     -Wno-conversion \
-    -Wno-missing-noreturn \
-    -Wno-missing-variable-declarations \
-    -Wno-shift-sign-overflow \
     -Wno-covered-switch-default \
+    -Wno-deprecated \
+    -Wno-documentation-deprecated-sync \
+    -Wno-documentation-unknown-command \
     -Wno-exit-time-destructors \
+    -Wno-float-equal \
     -Wno-global-constructors \
+    -Wno-cast-qual \
+    -Wno-unknown-warning-option \
+    -Wno-missing-noreturn \
     -Wno-missing-prototypes \
+    -Wno-missing-variable-declarations \
+    -Wno-newline-eof \
+    -Wno-non-virtual-dtor \
+    -Wno-old-style-cast \
+    -Wno-padded \
+    -Wno-suggest-destructor-override \
+    -Wno-suggest-override \
+    -Wno-switch-enum \
+    -Wno-undefined-reinterpret-cast \
     -Wno-unreachable-code \
+    -Wno-shift-sign-overflow \
     -Wno-unused-macros \
     -Wno-unused-member-function \
+    -Wno-unused-private-field \
     -Wno-used-but-marked-unused \
     -Wno-weak-template-vtables \
-    -Wno-deprecated \
-    -Wno-non-virtual-dtor \
+    -Wno-weak-vtables \
     -Wno-invalid-noreturn \
     -Wno-return-type-c-linkage \
     -Wno-reserved-id-macro \
-    -Wno-c++98-compat-pedantic \
     -Wno-unused-local-typedef \
-    -Wno-old-style-cast \
-    -Wno-newline-eof \
-    -Wno-unused-private-field \
-    -Wno-undefined-reinterpret-cast \
     -Wno-invalid-offsetof \
     -Wno-zero-as-null-pointer-constant \
-    -Wno-atomic-implicit-seq-cst \
-    -Wno-suggest-destructor-override \
-    -Wno-suggest-override \
-    -Wno-alloca \
-    -Wno-switch-enum \
     -Wno-unused-but-set-variable \
     -Wno-shadow-field \
     -Wno-unused-variable \
+    -Wno-double-promotion \
+    -Wno-extra-semi \
+    -Wno-conditional-uninitialized \
     -Wno-unused-parameter \
 " CACHE INTERNAL "PhysX CXX")
 

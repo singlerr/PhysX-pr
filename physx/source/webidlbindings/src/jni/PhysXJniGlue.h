@@ -6375,29 +6375,23 @@ JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMesh__1getLocalBounds(J
 JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxTetrahedronMeshExt);
 }
-JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronContainingPoint(JNIEnv*, jclass, jlong _address, jlong mesh, jlong point, jlong bary, jfloat tolerance) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    return (jint) self->findTetrahedronContainingPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary), tolerance);
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronContainingPoint(JNIEnv*, jclass, jlong mesh, jlong point, jlong bary, jfloat tolerance) {
+    return (jint) physx::PxTetrahedronMeshExt::findTetrahedronContainingPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary), tolerance);
 }
-JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronClosestToPoint(JNIEnv*, jclass, jlong _address, jlong mesh, jlong point, jlong bary) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    return (jint) self->findTetrahedronClosestToPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary));
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1findTetrahedronClosestToPoint(JNIEnv*, jclass, jlong mesh, jlong point, jlong bary) {
+    return (jint) physx::PxTetrahedronMeshExt::findTetrahedronClosestToPoint((physx::PxTetrahedronMesh*) mesh, *((physx::PxVec3*) point), *((physx::PxVec4*) bary));
 }
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1createPointsToTetrahedronMap(JNIEnv*, jclass, jlong _address, jlong tetMeshVertices, jlong tetMeshIndices, jlong pointsToEmbed, jlong barycentricCoordinates, jlong tetLinks) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->createPointsToTetrahedronMap(*((PxArray_PxVec3*) tetMeshVertices), *((PxArray_PxU32*) tetMeshIndices), *((PxArray_PxVec3*) pointsToEmbed), *((PxArray_PxVec4*) barycentricCoordinates), *((PxArray_PxU32*) tetLinks));
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1createPointsToTetrahedronMap(JNIEnv*, jclass, jlong tetMeshVertices, jlong tetMeshIndices, jlong pointsToEmbed, jlong barycentricCoordinates, jlong tetLinks) {
+    physx::PxTetrahedronMeshExt::createPointsToTetrahedronMap(*((PxArray_PxVec3*) tetMeshVertices), *((PxArray_PxU32*) tetMeshIndices), *((PxArray_PxVec3*) pointsToEmbed), *((PxArray_PxVec4*) barycentricCoordinates), *((PxArray_PxU32*) tetLinks));
 }
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles));
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJ(JNIEnv*, jclass, jlong mesh, jlong surfaceTriangles) {
+    physx::PxTetrahedronMeshExt::extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles));
 }
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJJ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet);
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJ(JNIEnv*, jclass, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet) {
+    physx::PxTetrahedronMeshExt::extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet);
 }
-JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJJZ(JNIEnv*, jclass, jlong _address, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet, jboolean flipTriangleOrientation) {
-    physx::PxTetrahedronMeshExt* self = (physx::PxTetrahedronMeshExt*) _address;
-    self->extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet, flipTriangleOrientation);
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshExt__1extractTetMeshSurface__JJJZ(JNIEnv*, jclass, jlong mesh, jlong surfaceTriangles, jlong surfaceTriangleToTet, jboolean flipTriangleOrientation) {
+    physx::PxTetrahedronMeshExt::extractTetMeshSurface((physx::PxTetrahedronMesh*) mesh, *((PxArray_PxU32*) surfaceTriangles), (PxArray_PxU32*) surfaceTriangleToTet, flipTriangleOrientation);
 }
 
 // PxTetrahedronMeshFlags
@@ -6424,6 +6418,26 @@ JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1clear(JNIEnv
 }
 JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshFlags__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
     delete (physx::PxTetrahedronMeshFlags*) _address;
+}
+
+// PxTetrahedronMeshGeometry
+JNIEXPORT jint JNICALL Java_physx_geometry_PxTetrahedronMeshGeometry__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(physx::PxTetrahedronMeshGeometry);
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshGeometry__1PxTetrahedronMeshGeometry(JNIEnv*, jclass, jlong mesh) {
+    return (jlong) new physx::PxTetrahedronMeshGeometry((physx::PxTetrahedronMesh*) mesh);
+}
+JNIEXPORT jboolean JNICALL Java_physx_geometry_PxTetrahedronMeshGeometry__1isValid(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshGeometry* self = (physx::PxTetrahedronMeshGeometry*) _address;
+    return (jboolean) self->isValid();
+}
+JNIEXPORT jlong JNICALL Java_physx_geometry_PxTetrahedronMeshGeometry__1getTetrahedronMesh(JNIEnv*, jclass, jlong _address) {
+    physx::PxTetrahedronMeshGeometry* _self = (physx::PxTetrahedronMeshGeometry*) _address;
+    return (jlong) _self->tetrahedronMesh;
+}
+JNIEXPORT void JNICALL Java_physx_geometry_PxTetrahedronMeshGeometry__1setTetrahedronMesh(JNIEnv*, jclass, jlong _address, jlong value) {
+    physx::PxTetrahedronMeshGeometry* _self = (physx::PxTetrahedronMeshGeometry*) _address;
+    _self->tetrahedronMesh = (physx::PxTetrahedronMesh*) value;
 }
 
 // PxTriangle
@@ -13809,6 +13823,14 @@ JNIEXPORT void JNICALL Java_physx_support_PxRealPtr__1delete_1native_1instance(J
     delete (PxRealPtr*) _address;
 }
 
+// PxRealConstPtr
+JNIEXPORT jint JNICALL Java_physx_support_PxRealConstPtr__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(PxRealConstPtr);
+}
+JNIEXPORT void JNICALL Java_physx_support_PxRealConstPtr__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (PxRealConstPtr*) _address;
+}
+
 // PxActorPtr
 JNIEXPORT jint JNICALL Java_physx_support_PxActorPtr__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(PxActorPtr);
@@ -19258,6 +19280,287 @@ JNIEXPORT jint JNICALL Java_physx_vehicle2_PxVehicleTireDirectionModesEnum__1get
 }
 JNIEXPORT jint JNICALL Java_physx_vehicle2_PxVehicleTireDirectionModesEnum__1geteLATERAL(JNIEnv*, jclass) {
     return PxVehicleTireDirectionModesEnum::eLATERAL;
+}
+
+// VHACDImpl
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDImpl__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(VHACD::VHACDImpl);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDImpl__1VHACDImpl(JNIEnv*, jclass) {
+    return (jlong) new VHACD::VHACDImpl();
+}
+JNIEXPORT jboolean JNICALL Java_physx_vhacd_VHACDImpl__1Compute(JNIEnv*, jclass, jlong _address, jlong points, jint countPoints, jlong triangles, jint countTriangles, jlong params) {
+    VHACD::VHACDImpl* self = (VHACD::VHACDImpl*) _address;
+    return (jboolean) self->Compute(*((PxRealConstPtr*) points), countPoints, *((PxU32ConstPtr*) triangles), countTriangles, *((VHACDParameters*) params));
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDImpl__1GetNConvexHulls(JNIEnv*, jclass, jlong _address) {
+    VHACD::VHACDImpl* self = (VHACD::VHACDImpl*) _address;
+    return (jint) self->GetNConvexHulls();
+}
+JNIEXPORT jboolean JNICALL Java_physx_vhacd_VHACDImpl__1GetConvexHull(JNIEnv*, jclass, jlong _address, jint index, jlong ch) {
+    VHACD::VHACDImpl* self = (VHACD::VHACDImpl*) _address;
+    return (jboolean) self->GetConvexHull(index, *((VHACDConvexHull*) ch));
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDImpl__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (VHACD::VHACDImpl*) _address;
+}
+
+// VHACDParameters
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(VHACDParameters);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDParameters__1_1placement_1new_1VHACDParameters(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) VHACDParameters();
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDParameters__1VHACDParameters(JNIEnv*, jclass) {
+    return (jlong) new VHACDParameters();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (VHACDParameters*) _address;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1getM_1maxConvexHulls(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jint) _self->m_maxConvexHulls;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1maxConvexHulls(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_maxConvexHulls = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1getM_1resolution(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jint) _self->m_resolution;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1resolution(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_resolution = value;
+}
+JNIEXPORT jdouble JNICALL Java_physx_vhacd_VHACDParameters__1getM_1minimumVolumePercentErrorAllowed(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jdouble) _self->m_minimumVolumePercentErrorAllowed;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1minimumVolumePercentErrorAllowed(JNIEnv*, jclass, jlong _address, jdouble value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_minimumVolumePercentErrorAllowed = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1getM_1maxRecursionDepth(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jint) _self->m_maxRecursionDepth;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1maxRecursionDepth(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_maxRecursionDepth = value;
+}
+JNIEXPORT jboolean JNICALL Java_physx_vhacd_VHACDParameters__1getM_1shrinkWrap(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jboolean) _self->m_shrinkWrap;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1shrinkWrap(JNIEnv*, jclass, jlong _address, jboolean value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_shrinkWrap = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1getM_1maxNumVerticesPerCH(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jint) _self->m_maxNumVerticesPerCH;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1maxNumVerticesPerCH(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_maxNumVerticesPerCH = value;
+}
+JNIEXPORT jboolean JNICALL Java_physx_vhacd_VHACDParameters__1getM_1asyncACD(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jboolean) _self->m_asyncACD;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1asyncACD(JNIEnv*, jclass, jlong _address, jboolean value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_asyncACD = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDParameters__1getM_1minEdgeLength(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jint) _self->m_minEdgeLength;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1minEdgeLength(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_minEdgeLength = value;
+}
+JNIEXPORT jboolean JNICALL Java_physx_vhacd_VHACDParameters__1getM_1findBestPlane(JNIEnv*, jclass, jlong _address) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    return (jboolean) _self->m_findBestPlane;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDParameters__1setM_1findBestPlane(JNIEnv*, jclass, jlong _address, jboolean value) {
+    VHACDParameters* _self = (VHACDParameters*) _address;
+    _self->m_findBestPlane = value;
+}
+
+// VHACDConvexHull
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDConvexHull__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(VHACDConvexHull);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDConvexHull__1_1placement_1new_1VHACDConvexHull(JNIEnv*, jclass, jlong _placement_address) {
+    return (jlong) new((void*)_placement_address) VHACDConvexHull();
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDConvexHull__1VHACDConvexHull(JNIEnv*, jclass) {
+    return (jlong) new VHACDConvexHull();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDConvexHull__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (VHACDConvexHull*) _address;
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDConvexHull__1getM_1points(JNIEnv*, jclass, jlong _address) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    return (jlong) &_self->m_points;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDConvexHull__1setM_1points(JNIEnv*, jclass, jlong _address, jlong value) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    _self->m_points = *((Vector_VHACDVertex*) value);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDConvexHull__1getM_1triangles(JNIEnv*, jclass, jlong _address) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    return (jlong) &_self->m_triangles;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDConvexHull__1setM_1triangles(JNIEnv*, jclass, jlong _address, jlong value) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    _self->m_triangles = *((Vector_VHACDTriangle*) value);
+}
+JNIEXPORT jdouble JNICALL Java_physx_vhacd_VHACDConvexHull__1getM_1volume(JNIEnv*, jclass, jlong _address) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    return (jdouble) _self->m_volume;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDConvexHull__1setM_1volume(JNIEnv*, jclass, jlong _address, jdouble value) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    _self->m_volume = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDConvexHull__1getM_1meshId(JNIEnv*, jclass, jlong _address) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    return (jint) _self->m_meshId;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDConvexHull__1setM_1meshId(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDConvexHull* _self = (VHACDConvexHull*) _address;
+    _self->m_meshId = value;
+}
+
+// VHACDVertex
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDVertex__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(VHACDVertex);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDVertex__1VHACDVertex(JNIEnv*, jclass) {
+    return (jlong) new VHACDVertex();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDVertex__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (VHACDVertex*) _address;
+}
+JNIEXPORT jdouble JNICALL Java_physx_vhacd_VHACDVertex__1getMX(JNIEnv*, jclass, jlong _address) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    return (jdouble) _self->mX;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDVertex__1setMX(JNIEnv*, jclass, jlong _address, jdouble value) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    _self->mX = value;
+}
+JNIEXPORT jdouble JNICALL Java_physx_vhacd_VHACDVertex__1getMY(JNIEnv*, jclass, jlong _address) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    return (jdouble) _self->mY;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDVertex__1setMY(JNIEnv*, jclass, jlong _address, jdouble value) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    _self->mY = value;
+}
+JNIEXPORT jdouble JNICALL Java_physx_vhacd_VHACDVertex__1getMZ(JNIEnv*, jclass, jlong _address) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    return (jdouble) _self->mZ;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDVertex__1setMZ(JNIEnv*, jclass, jlong _address, jdouble value) {
+    VHACDVertex* _self = (VHACDVertex*) _address;
+    _self->mZ = value;
+}
+
+// VHACDTriangle
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDTriangle__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(VHACDTriangle);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_VHACDTriangle__1VHACDTriangle(JNIEnv*, jclass) {
+    return (jlong) new VHACDTriangle();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDTriangle__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (VHACDTriangle*) _address;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDTriangle__1getMI0(JNIEnv*, jclass, jlong _address) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    return (jint) _self->mI0;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDTriangle__1setMI0(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    _self->mI0 = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDTriangle__1getMI1(JNIEnv*, jclass, jlong _address) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    return (jint) _self->mI1;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDTriangle__1setMI1(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    _self->mI1 = value;
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_VHACDTriangle__1getMI2(JNIEnv*, jclass, jlong _address) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    return (jint) _self->mI2;
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_VHACDTriangle__1setMI2(JNIEnv*, jclass, jlong _address, jint value) {
+    VHACDTriangle* _self = (VHACDTriangle*) _address;
+    _self->mI2 = value;
+}
+
+// Vector_VHACDVertex
+JNIEXPORT jint JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(Vector_VHACDVertex);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1at(JNIEnv*, jclass, jlong _address, jint index) {
+    Vector_VHACDVertex* self = (Vector_VHACDVertex*) _address;
+    return (jlong) &self->at(index);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1data(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDVertex* self = (Vector_VHACDVertex*) _address;
+    return (jlong) self->data();
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1size(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDVertex* self = (Vector_VHACDVertex*) _address;
+    return (jint) self->size();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1push_1back(JNIEnv*, jclass, jlong _address, jlong value) {
+    Vector_VHACDVertex* self = (Vector_VHACDVertex*) _address;
+    self->push_back(*((VHACDVertex*) value));
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1clear(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDVertex* self = (Vector_VHACDVertex*) _address;
+    self->clear();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDVertex__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (Vector_VHACDVertex*) _address;
+}
+
+// Vector_VHACDTriangle
+JNIEXPORT jint JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1_1sizeOf(JNIEnv*, jclass) {
+    return sizeof(Vector_VHACDTriangle);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1at(JNIEnv*, jclass, jlong _address, jint index) {
+    Vector_VHACDTriangle* self = (Vector_VHACDTriangle*) _address;
+    return (jlong) &self->at(index);
+}
+JNIEXPORT jlong JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1data(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDTriangle* self = (Vector_VHACDTriangle*) _address;
+    return (jlong) self->data();
+}
+JNIEXPORT jint JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1size(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDTriangle* self = (Vector_VHACDTriangle*) _address;
+    return (jint) self->size();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1push_1back(JNIEnv*, jclass, jlong _address, jlong value) {
+    Vector_VHACDTriangle* self = (Vector_VHACDTriangle*) _address;
+    self->push_back(*((VHACDTriangle*) value));
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1clear(JNIEnv*, jclass, jlong _address) {
+    Vector_VHACDTriangle* self = (Vector_VHACDTriangle*) _address;
+    self->clear();
+}
+JNIEXPORT void JNICALL Java_physx_vhacd_Vector_1VHACDTriangle__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
+    delete (Vector_VHACDTriangle*) _address;
 }
 
 

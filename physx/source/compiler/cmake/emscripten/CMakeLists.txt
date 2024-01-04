@@ -74,15 +74,18 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Wstrict-aliasing=2 -W
     -Wno-zero-as-null-pointer-constant \
     -Wno-reserved-identifier \
     -Wno-undefined-func-template \
-	-Wno-cast-qual \
-	-Wno-double-promotion \
-	-Wno-unsafe-buffer-usage \
-	-Wno-unsupported-floating-point-opt \
-	-Wno-unused-but-set-variable \
-	-Wno-unused-parameter \
-	-Wno-unused-variable \
-	-Wno-switch-default \
-	-Wno-invalid-offsetof \
+    -Wno-cast-qual \
+    -Wno-double-promotion \
+    -Wno-extra-semi \
+    -Wno-conditional-uninitialized \
+    -Wno-unused-parameter \
+    -Wno-unsafe-buffer-usage \
+    -Wno-unsupported-floating-point-opt \
+    -Wno-unused-but-set-variable \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-switch-default \
+    -Wno-invalid-offsetof \
 ")
 
 # Set to true to enable multi-threading - works but is difficult to use

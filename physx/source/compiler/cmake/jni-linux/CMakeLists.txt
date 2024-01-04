@@ -74,8 +74,11 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Wstrict-aliasing=2 -W
     -Wno-zero-as-null-pointer-constant \
     -Wno-reserved-identifier \
     -Wno-undefined-func-template \
-	-Wno-cast-qual \
-	-Wno-double-promotion \
+    -Wno-cast-qual \
+    -Wno-double-promotion \
+    -Wno-extra-semi \
+    -Wno-conditional-uninitialized \
+    -Wno-unused-parameter \
 ")
 
 

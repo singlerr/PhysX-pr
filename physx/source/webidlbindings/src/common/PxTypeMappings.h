@@ -13,6 +13,7 @@ typedef const physx::PxU8* PxU8ConstPtr;
 typedef const physx::PxU16* PxU16ConstPtr;
 typedef const physx::PxU32* PxU32ConstPtr;
 typedef const physx::PxI32* PxI32ConstPtr;
+typedef const physx::PxReal* PxRealConstPtr;
 typedef const physx::PxMaterial* PxMaterialConstPtr;
 typedef physx::PxU8* PxU8Ptr;
 typedef physx::PxU16* PxU16Ptr;
