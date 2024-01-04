@@ -20,7 +20,7 @@ def cmakeExt():
 
 
 def filterPreset(presetName):
-    winPresetFilter = ['win','switch','crosscompile','jni-android']
+    winPresetFilter = ['win','switch','crosscompile']
     if sys.platform == 'win32':
         if any(presetName.find(elem) != -1 for elem in winPresetFilter):
             return True
@@ -179,7 +179,7 @@ class CMakePreset:
             outString = outString + '-G Xcode'
         # jni android
         elif self.targetPlatform == 'jni-android':
-            outString = outString + '-G \"MinGW Makefiles\"'
+            outString = outString + '-G \"Unix Makefiles\"'
         # Linux
         elif self.targetPlatform in ['linux', 'linuxAarch64']:
             if self.generator is not None and self.generator == 'ninja':
@@ -267,7 +267,7 @@ class CMakePreset:
                 outString = outString + ' -DANDROID_NDK=' + \
                     os.environ['ANDROID_NDK_HOME']
                 outString = outString + ' -DCMAKE_MAKE_PROGRAM=\"' + \
-                    os.environ['ANDROID_NDK_HOME'] + '\\prebuilt\\windows-x86_64\\bin\\make.exe\"'
+                    os.environ['ANDROID_NDK_HOME'] + '/prebuilt/linux-x86_64/bin/make\"'
             return outString
         elif self.targetPlatform == 'emscripten':
             outString = outString + ' -DTARGET_BUILD_PLATFORM=emscripten'
