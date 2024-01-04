@@ -1,5 +1,5 @@
 #include "../common/WebIdlBindings.h"
-#include "../common/VhacdBindings.h"
+//#include "../common/VhacdBindings.h"
 
 #include "../common/vehicle/Base.cpp"
 #include "../common/vehicle/DirectDrivetrain.cpp"
