@@ -60,6 +60,7 @@ SET(PHYSX_CXX_FLAGS "${OSX_BITNESS} ${ARCH_SIMD_FLAG} -std=c++11 -fno-rtti -fno-
     -Wno-suggest-destructor-override \
     -Wno-suggest-override \
     -Wno-switch-enum \
+    -Wno-undef \
     -Wno-undefined-reinterpret-cast \
     -Wno-unreachable-code \
     -Wno-shift-sign-overflow \

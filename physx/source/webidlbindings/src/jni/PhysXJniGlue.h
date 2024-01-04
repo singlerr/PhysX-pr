@@ -18430,22 +18430,6 @@ JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams_
     physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
     _self->wheelIdsInTrackOrder[_index] = value;
 }
-JNIEXPORT jfloat JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1getTorqueRatios(JNIEnv*, jclass, jlong _address, jint _index) {
-    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    return (jfloat) _self->torqueRatios[_index];
-}
-JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1setTorqueRatios(JNIEnv*, jclass, jlong _address, jint _index, jfloat value) {
-    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    _self->torqueRatios[_index] = value;
-}
-JNIEXPORT jfloat JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1getAveWheelSpeedRatios(JNIEnv*, jclass, jlong _address, jint _index) {
-    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    return (jfloat) _self->aveWheelSpeedRatios[_index];
-}
-JNIEXPORT void JNICALL Java_physx_vehicle2_PxVehicleTankDriveDifferentialParams__1setAveWheelSpeedRatios(JNIEnv*, jclass, jlong _address, jint _index, jfloat value) {
-    physx::vehicle2::PxVehicleTankDriveDifferentialParams* _self = (physx::vehicle2::PxVehicleTankDriveDifferentialParams*) _address;
-    _self->aveWheelSpeedRatios[_index] = value;
-}
 
 // PxVehicleTankDriveTransmissionCommandState
 JNIEXPORT jint JNICALL Java_physx_vehicle2_PxVehicleTankDriveTransmissionCommandState__1_1sizeOf(JNIEnv*, jclass) {
