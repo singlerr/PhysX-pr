@@ -375,6 +375,17 @@ interface PxArray_PxReal {
     void clear();
 };
 
+interface PxArray_PxShapePtr {
+    void PxArray_PxShapePtr();
+    void PxArray_PxShapePtr(unsigned long size);
+    PxShape get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxShapePtr value);
+    PxShapePtr begin();
+    unsigned long size();
+    void pushBack(PxShape value);
+    void clear();
+};
+
 interface PxArray_PxSweepHit {
     void PxArray_PxSweepHit();
     void PxArray_PxSweepHit(unsigned long size);
@@ -2118,6 +2129,7 @@ interface PxRigidActor {
     boolean attachShape([Ref] PxShape shape);
     void detachShape([Ref] PxShape shape, optional boolean wakeOnLostTouch);
     unsigned long getNbShapes();
+    unsigned long getShapes(PxShapePtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
     unsigned long getNbConstraints();
 };
 PxRigidActor implements PxActor;
@@ -2481,6 +2493,9 @@ interface PxShapeFlags {
     boolean isSet(PxShapeFlagEnum flag);
     void raise(PxShapeFlagEnum flag);
     void clear(PxShapeFlagEnum flag);
+};
+
+interface PxShapePtr {
 };
 
 [Prefix="physx::"]
