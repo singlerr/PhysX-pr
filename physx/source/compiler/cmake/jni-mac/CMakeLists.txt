@@ -22,7 +22,7 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2023 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2024 NVIDIA Corporation. All rights reserved.
 
 IF(PX_OUTPUT_ARCH STREQUAL "arm")
     SET(OSX_BITNESS "-arch arm64")
@@ -96,7 +96,7 @@ SET(PHYSX_CXX_FLAGS_CHECKED "-O3 -g3 -gdwarf-2" CACHE INTERNAL "PhysX Checked CX
 SET(PHYSX_CXX_FLAGS_PROFILE "-O3" CACHE INTERNAL "PhysX Profile CXX Flags")
 SET(PHYSX_CXX_FLAGS_RELEASE "-O3" CACHE INTERNAL "PhysX Release CXX Flags")
 
-# These flags are local to the directory the CMakeLists.txt is in
+# These flags are local to the directory the CMakeLists.txt is in, so don't get carried over to OTHER CMakeLists.txt (thus the CACHE variables above)
 SET(CMAKE_CXX_FLAGS ${PHYSX_CXX_FLAGS})
 
 SET(CMAKE_CXX_FLAGS_DEBUG   ${PHYSX_CXX_FLAGS_DEBUG})
@@ -110,9 +110,7 @@ ELSE()
 	SET(PUBLIC_RELEASE_FLAG "PX_PUBLIC_RELEASE=0")
 ENDIF()
 
-#set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
-
-# Controls PX_NVTX for all projects on Mac
+# Controls PX_NVTX for all projects
 SET(NVTX_FLAG "PX_NVTX=0")
 
 # Disable OmniPVD for all projects on Mac
@@ -138,11 +136,10 @@ INCLUDE(PhysXCooking.cmake)
 INCLUDE(PhysXExtensions.cmake)
 INCLUDE(PhysXVehicle.cmake)
 INCLUDE(PhysXVehicle2.cmake)
-INCLUDE(PhysXPvdSDK.cmake)
-INCLUDE(PhysXTask.cmake)
 INCLUDE(SceneQuery.cmake)
 INCLUDE(SimulationController.cmake)
-INCLUDE(FastXml.cmake)
+INCLUDE(PhysXPvdSDK.cmake)
+INCLUDE(PhysXTask.cmake)
 INCLUDE(jni-mac/PhysXJniBindings.cmake)
 
 # Set folder PhysX SDK to all common SDK source projects
@@ -158,7 +155,6 @@ SET_PROPERTY(TARGET LowLevelAABB PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET LowLevelDynamics PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET SceneQuery PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET SimulationController PROPERTY FOLDER "PhysX SDK")
-SET_PROPERTY(TARGET FastXml PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET PhysXPvdSDK PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET PhysXTask PROPERTY FOLDER "PhysX SDK")
 SET_PROPERTY(TARGET PhysXFoundation PROPERTY FOLDER "PhysX SDK")

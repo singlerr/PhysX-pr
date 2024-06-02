@@ -22,7 +22,7 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2022 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2024 NVIDIA Corporation. All rights reserved.
 
 #
 # Build SceneQuery
@@ -31,6 +31,7 @@
 SET(SCENEQUERY_PLATFORM_INCLUDES
 	PRIVATE ${PHYSX_SOURCE_DIR}/Common/src/mac
 )
+
 
 # Use generator expressions to set config specific preprocessor definitions
 SET(SCENEQUERY_COMPILE_DEFS
@@ -45,3 +46,4 @@ SET(SCENEQUERY_COMPILE_DEFS
 )
 
 SET(SCENEQUERY_LIBTYPE OBJECT)
+

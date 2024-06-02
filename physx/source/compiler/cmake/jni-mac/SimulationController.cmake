@@ -22,15 +22,15 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2022 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2024 NVIDIA Corporation. All rights reserved.
 
 #
 # Build SimulationController
 #
 
 SET(SIMULATIONCONTROLLER_PLATFORM_INCLUDES
-	${PHYSX_SOURCE_DIR}/Common/src/mac
-	${PHYSX_SOURCE_DIR}/LowLevel/mac/include
+	${PHYSX_SOURCE_DIR}/common/src/mac
+	${PHYSX_SOURCE_DIR}/lowlevel/mac/include
 )
 
 # Use generator expressions to set config specific preprocessor definitions
@@ -46,3 +46,5 @@ SET(SIMULATIONCONTROLLER_COMPILE_DEFS
 )
 
 SET(SIMULATIONCONTROLLER_LIBTYPE OBJECT)
+
+

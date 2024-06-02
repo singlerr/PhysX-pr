@@ -114,7 +114,6 @@ typedef physx::PxArticulationFlag::Enum PxArticulationFlagEnum;
 typedef physx::PxArticulationJointType::Enum PxArticulationJointTypeEnum;
 typedef physx::PxArticulationKinematicFlag::Enum PxArticulationKinematicFlagEnum;
 typedef physx::PxArticulationMotion::Enum PxArticulationMotionEnum;
-typedef physx::PxArticulationSensorFlag::Enum PxArticulationSensorFlagEnum;
 typedef physx::PxBaseFlag::Enum PxBaseFlagEnum;
 typedef physx::PxBroadPhaseType::Enum PxBroadPhaseTypeEnum;
 typedef physx::PxBVHBuildStrategy::Enum PxBVHBuildStrategyEnum;

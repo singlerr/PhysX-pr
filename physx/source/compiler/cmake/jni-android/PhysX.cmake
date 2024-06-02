@@ -22,14 +22,13 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2022 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2024 NVIDIA Corporation. All rights reserved.
 
 #
 # Build PhysX (PROJECT not SOLUTION)
 #
 
 SET(PHYSX_PLATFORM_INCLUDES
-	${NVTOOLSEXT_INCLUDE_DIRS}
 )
 
 SET(PHYSX_PLATFORM_OBJECT_FILES
@@ -41,16 +40,10 @@ SET(PHYSX_PLATFORM_OBJECT_FILES
 	$<TARGET_OBJECTS:SimulationController>	
 )
 
-# Required for some callbacks taking CUstream as an argument even when building with PX_SUPPORT_GPU_PHYSX = 0
-SET(PHYSX_CUDATYPES_GPU_HEADERS
-	${PHYSX_ROOT_DIR}/include/cudamanager/PxCudaTypes.h
-)
-SOURCE_GROUP(include\\cudamanager FILES ${PHYSX_CUDATYPES_GPU_HEADERS})
-
 SET(PHYSX_PLATFORM_SRC_FILES
 	${PX_SOURCE_DIR}/device/linux/PhysXIndicatorLinux.cpp
 	${PX_SOURCE_DIR}/gpu/PxGpu.cpp
-	${PX_SOURCE_DIR}/gpu/PxPhysXGpuModuleLoader.cpp 
+	${PX_SOURCE_DIR}/gpu/PxPhysXGpuModuleLoader.cpp
 	
 	${PHYSX_CUDATYPES_GPU_HEADERS}
 	

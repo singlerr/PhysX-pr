@@ -22,13 +22,15 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
-## Copyright (c) 2008-2022 NVIDIA Corporation. All rights reserved.
+## Copyright (c) 2008-2024 NVIDIA Corporation. All rights reserved.
 
 #
 # Build PhysXCharacterKinematic
 #
 
+# Use generator expressions to set config specific preprocessor definitions
 SET(PHYSXCHARACTERKINEMATICS_COMPILE_DEFS
+
 	# Common to all configurations
 	${PHYSX_ANDROID_COMPILE_DEFS};PX_PHYSX_STATIC_LIB;
 	
