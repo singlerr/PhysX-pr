@@ -447,11 +447,7 @@ namespace Dy
 	{
 		if (mJcalcDirty)
 		{
-#ifdef __APPLE__
-			jcalcFalse(mArticulationData);
-#else
 			jcalc(mArticulationData);
-#endif
 			mJcalcDirty = false;
 		}
 
