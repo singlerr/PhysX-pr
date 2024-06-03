@@ -363,11 +363,7 @@ namespace Dy
 		// the updateKinematic functions rely on updated joint frames.
 		if (mJcalcDirty)
 		{
-#ifdef __APPLE__
-			jcalcFalse(data);
-#else
 			jcalc(data);
-#endif
 		}
 		mJcalcDirty = false;
 

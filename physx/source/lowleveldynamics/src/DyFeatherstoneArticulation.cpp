@@ -3435,16 +3435,6 @@ namespace Dy
 		mArticulationData.setDofs(totalDof);
 	}
 
-#ifdef __APPLE__
-	void FeatherstoneArticulation::jcalcTrue(ArticulationData& data) {
-	    jcalc<true>(data);
-	}
-
-	void FeatherstoneArticulation::jcalcFalse(ArticulationData& data) {
-	    jcalc<false>(data);
-	}
-#endif
-
 	//compute link's spatial inertia tensor
 	void  FeatherstoneArticulation::computeSpatialInertia(ArticulationData& data)
 	{

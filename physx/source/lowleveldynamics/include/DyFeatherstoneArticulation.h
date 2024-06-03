@@ -886,10 +886,6 @@ namespace Dy
 		//this function calculates motion subspace matrix(s) for all tree joint
 		template<bool immediateMode = false>
 		void jcalc(ArticulationData& data);
-#ifdef __APPLE__
-		void jcalcTrue(ArticulationData& data);
-		void jcalcFalse(ArticulationData& data);
-#endif
 
 		//this function calculates loop joint constraint subspace matrix(s) and active force
 		//subspace matrix

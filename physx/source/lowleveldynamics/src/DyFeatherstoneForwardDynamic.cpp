@@ -1455,11 +1455,7 @@ namespace Dy
 		if (articulation->mJcalcDirty) 
 		{	
 			articulation->mJcalcDirty = false;
-#ifdef __APPLE__
-			articulation->jcalcFalse(data);
-#else
 			articulation->jcalc(data);
-#endif
 		}
 
 		articulation->computeUnconstrainedVelocitiesInternal(gravity, invLengthScale);
@@ -1485,11 +1481,7 @@ namespace Dy
 		if (articulation->mJcalcDirty) 
 		{	
 			articulation->mJcalcDirty = false;
-#ifdef __APPLE__
-			articulation->jcalcFalse(data);
-#else
 			articulation->jcalc(data);
-#endif
 		}
 
 		articulation->computeUnconstrainedVelocitiesInternal(gravity, invLengthScale, externalForcesEveryTgsIterationEnabled);
