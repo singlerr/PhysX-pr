@@ -4105,6 +4105,12 @@ enum PxHitFlagEnum {
     "PxHitFlagEnum::eMODIFIABLE_FLAGS"
 };
 
+enum PxQueryHitType {
+    "PxQueryHitType::eNONE",
+    "PxQueryHitType::eBLOCK",
+    "PxQueryHitType::eTOUCH"
+};
+
 enum PxIDENTITYEnum {
     "PxIDENTITYEnum::PxIdentity"
 };
