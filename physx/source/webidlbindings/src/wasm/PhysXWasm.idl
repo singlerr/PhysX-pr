@@ -1621,6 +1621,7 @@ PxJoint implements PxBase;
 
 [Prefix="physx::"]
 interface PxJointAngularLimitPair {
+    void PxJointAngularLimitPair(float lowerLimit, float upperLimit);
     void PxJointAngularLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
     attribute float upper;
     attribute float lower;
@@ -1629,6 +1630,7 @@ PxJointAngularLimitPair implements PxJointLimitParameters;
 
 [Prefix="physx::"]
 interface PxJointLimitCone {
+    void PxJointLimitCone(float yLimitAngle, float zLimitAngle);
     void PxJointLimitCone(float yLimitAngle, float zLimitAngle, [Const, Ref] PxSpring spring);
     attribute float yAngle;
     attribute float zAngle;
@@ -1647,6 +1649,7 @@ interface PxJointLimitParameters {
 
 [Prefix="physx::"]
 interface PxJointLimitPyramid {
+    void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax);
     void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, [Const, Ref] PxSpring spring);
     attribute float yAngleMin;
     attribute float yAngleMax;
