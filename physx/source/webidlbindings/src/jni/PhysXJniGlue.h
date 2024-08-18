@@ -4682,7 +4682,16 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxJoint__1setUserData(JNIEnv*, jcla
 JNIEXPORT jint JNICALL Java_physx_extensions_PxJointAngularLimitPair__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxJointAngularLimitPair);
 }
-JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointAngularLimitPair__1PxJointAngularLimitPair(JNIEnv*, jclass, jfloat lowerLimit, jfloat upperLimit, jlong spring) {
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointAngularLimitPair__1_1placement_1new_1PxJointAngularLimitPair__JFF(JNIEnv*, jclass, jlong _placement_address, jfloat lowerLimit, jfloat upperLimit) {
+    return (jlong) new((void*)_placement_address) physx::PxJointAngularLimitPair(lowerLimit, upperLimit);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointAngularLimitPair__1_1placement_1new_1PxJointAngularLimitPair__JFFJ(JNIEnv*, jclass, jlong _placement_address, jfloat lowerLimit, jfloat upperLimit, jlong spring) {
+    return (jlong) new((void*)_placement_address) physx::PxJointAngularLimitPair(lowerLimit, upperLimit, *((physx::PxSpring*) spring));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointAngularLimitPair__1PxJointAngularLimitPair__FF(JNIEnv*, jclass, jfloat lowerLimit, jfloat upperLimit) {
+    return (jlong) new physx::PxJointAngularLimitPair(lowerLimit, upperLimit);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointAngularLimitPair__1PxJointAngularLimitPair__FFJ(JNIEnv*, jclass, jfloat lowerLimit, jfloat upperLimit, jlong spring) {
     return (jlong) new physx::PxJointAngularLimitPair(lowerLimit, upperLimit, *((physx::PxSpring*) spring));
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxJointAngularLimitPair__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
@@ -4709,7 +4718,16 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxJointAngularLimitPair__1setLower(
 JNIEXPORT jint JNICALL Java_physx_extensions_PxJointLimitCone__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxJointLimitCone);
 }
-JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitCone__1PxJointLimitCone(JNIEnv*, jclass, jfloat yLimitAngle, jfloat zLimitAngle, jlong spring) {
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitCone__1_1placement_1new_1PxJointLimitCone__JFF(JNIEnv*, jclass, jlong _placement_address, jfloat yLimitAngle, jfloat zLimitAngle) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLimitCone(yLimitAngle, zLimitAngle);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitCone__1_1placement_1new_1PxJointLimitCone__JFFJ(JNIEnv*, jclass, jlong _placement_address, jfloat yLimitAngle, jfloat zLimitAngle, jlong spring) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLimitCone(yLimitAngle, zLimitAngle, *((physx::PxSpring*) spring));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitCone__1PxJointLimitCone__FF(JNIEnv*, jclass, jfloat yLimitAngle, jfloat zLimitAngle) {
+    return (jlong) new physx::PxJointLimitCone(yLimitAngle, zLimitAngle);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitCone__1PxJointLimitCone__FFJ(JNIEnv*, jclass, jfloat yLimitAngle, jfloat zLimitAngle, jlong spring) {
     return (jlong) new physx::PxJointLimitCone(yLimitAngle, zLimitAngle, *((physx::PxSpring*) spring));
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxJointLimitCone__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
@@ -4781,7 +4799,16 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxJointLimitParameters__1setDamping
 JNIEXPORT jint JNICALL Java_physx_extensions_PxJointLimitPyramid__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxJointLimitPyramid);
 }
-JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitPyramid__1PxJointLimitPyramid(JNIEnv*, jclass, jfloat yLimitAngleMin, jfloat yLimitAngleMax, jfloat zLimitAngleMin, jfloat zLimitAngleMax, jlong spring) {
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitPyramid__1_1placement_1new_1PxJointLimitPyramid__JFFFF(JNIEnv*, jclass, jlong _placement_address, jfloat yLimitAngleMin, jfloat yLimitAngleMax, jfloat zLimitAngleMin, jfloat zLimitAngleMax) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLimitPyramid(yLimitAngleMin, yLimitAngleMax, zLimitAngleMin, zLimitAngleMax);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitPyramid__1_1placement_1new_1PxJointLimitPyramid__JFFFFJ(JNIEnv*, jclass, jlong _placement_address, jfloat yLimitAngleMin, jfloat yLimitAngleMax, jfloat zLimitAngleMin, jfloat zLimitAngleMax, jlong spring) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLimitPyramid(yLimitAngleMin, yLimitAngleMax, zLimitAngleMin, zLimitAngleMax, *((physx::PxSpring*) spring));
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitPyramid__1PxJointLimitPyramid__FFFF(JNIEnv*, jclass, jfloat yLimitAngleMin, jfloat yLimitAngleMax, jfloat zLimitAngleMin, jfloat zLimitAngleMax) {
+    return (jlong) new physx::PxJointLimitPyramid(yLimitAngleMin, yLimitAngleMax, zLimitAngleMin, zLimitAngleMax);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLimitPyramid__1PxJointLimitPyramid__FFFFJ(JNIEnv*, jclass, jfloat yLimitAngleMin, jfloat yLimitAngleMax, jfloat zLimitAngleMin, jfloat zLimitAngleMax, jlong spring) {
     return (jlong) new physx::PxJointLimitPyramid(yLimitAngleMin, yLimitAngleMax, zLimitAngleMin, zLimitAngleMax, *((physx::PxSpring*) spring));
 }
 JNIEXPORT void JNICALL Java_physx_extensions_PxJointLimitPyramid__1delete_1native_1instance(JNIEnv*, jclass, jlong _address) {
@@ -4824,6 +4851,9 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxJointLimitPyramid__1setZAngleMax(
 JNIEXPORT jint JNICALL Java_physx_extensions_PxJointLinearLimit__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxJointLinearLimit);
 }
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLinearLimit__1_1placement_1new_1PxJointLinearLimit(JNIEnv*, jclass, jlong _placement_address, jfloat extent, jlong spring) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLinearLimit(extent, *((physx::PxSpring*) spring));
+}
 JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLinearLimit__1PxJointLinearLimit(JNIEnv*, jclass, jfloat extent, jlong spring) {
     return (jlong) new physx::PxJointLinearLimit(extent, *((physx::PxSpring*) spring));
 }
@@ -4842,6 +4872,9 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxJointLinearLimit__1setValue(JNIEn
 // PxJointLinearLimitPair
 JNIEXPORT jint JNICALL Java_physx_extensions_PxJointLinearLimitPair__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxJointLinearLimitPair);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLinearLimitPair__1_1placement_1new_1PxJointLinearLimitPair(JNIEnv*, jclass, jlong _placement_address, jfloat lowerLimit, jfloat upperLimit, jlong spring) {
+    return (jlong) new((void*)_placement_address) physx::PxJointLinearLimitPair(lowerLimit, upperLimit, *((physx::PxSpring*) spring));
 }
 JNIEXPORT jlong JNICALL Java_physx_extensions_PxJointLinearLimitPair__1PxJointLinearLimitPair(JNIEnv*, jclass, jfloat lowerLimit, jfloat upperLimit, jlong spring) {
     return (jlong) new physx::PxJointLinearLimitPair(lowerLimit, upperLimit, *((physx::PxSpring*) spring));
@@ -5077,6 +5110,9 @@ JNIEXPORT void JNICALL Java_physx_extensions_PxSphericalJointFlags__1delete_1nat
 // PxSpring
 JNIEXPORT jint JNICALL Java_physx_extensions_PxSpring__1_1sizeOf(JNIEnv*, jclass) {
     return sizeof(physx::PxSpring);
+}
+JNIEXPORT jlong JNICALL Java_physx_extensions_PxSpring__1_1placement_1new_1PxSpring(JNIEnv*, jclass, jlong _placement_address, jfloat stiffness, jfloat damping) {
+    return (jlong) new((void*)_placement_address) physx::PxSpring(stiffness, damping);
 }
 JNIEXPORT jlong JNICALL Java_physx_extensions_PxSpring__1PxSpring(JNIEnv*, jclass, jfloat stiffness, jfloat damping) {
     return (jlong) new physx::PxSpring(stiffness, damping);
