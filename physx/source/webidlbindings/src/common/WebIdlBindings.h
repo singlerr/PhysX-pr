@@ -337,6 +337,50 @@ struct PxTopLevelFunctions {
     static physx::PxHeightField* CreateHeightField(const physx::PxHeightFieldDesc &desc) {
         return PxCreateHeightField(desc);
     }
+
+    static physx::PxRigidDynamic* CreateDynamicFromShape(physx::PxPhysics& sdk, const physx::PxTransform& transform, physx::PxShape& shape, physx::PxReal density) {
+        return PxCreateDynamic(sdk, transform, shape, density);
+    }
+
+    static physx::PxRigidDynamic* CreateDynamic(physx::PxPhysics& sdk, const physx::PxTransform& transform, const physx::PxGeometry& geometry, physx::PxMaterial& material, physx::PxReal density, const physx::PxTransform& shapeOffset = physx::PxTransform(physx::PxIdentity)) {
+        return PxCreateDynamic(sdk, transform, geometry, material, density, shapeOffset);
+    }
+
+    static physx::PxRigidDynamic* CreateKinematicFromShape(physx::PxPhysics& sdk, const physx::PxTransform& transform, physx::PxShape& shape, physx::PxReal density) {
+        return PxCreateKinematic(sdk, transform, shape, density);
+    }
+
+    static physx::PxRigidDynamic* CreateKinematic(physx::PxPhysics& sdk, const physx::PxTransform& transform, const physx::PxGeometry& geometry, physx::PxMaterial& material, physx::PxReal density, const physx::PxTransform& shapeOffset = physx::PxTransform(physx::PxIdentity)) {
+        return PxCreateKinematic(sdk, transform, geometry, material, density, shapeOffset);
+    }
+
+    static physx::PxRigidStatic* CreateStaticFromShape(physx::PxPhysics& sdk, const physx::PxTransform& transform, physx::PxShape& shape) {
+        return PxCreateStatic(sdk, transform, shape);
+    }
+
+    static physx::PxRigidStatic* CreateStatic(physx::PxPhysics& sdk, const physx::PxTransform& transform, const physx::PxGeometry& geometry, physx::PxMaterial& material, const physx::PxTransform& shapeOffset) {
+        return PxCreateStatic(sdk, transform, geometry, material, shapeOffset);
+    }
+
+    static physx::PxRigidStatic* CreatePlane(physx::PxPhysics& sdk, const physx::PxPlane& plane, physx::PxMaterial& material) {
+        return PxCreatePlane(sdk, plane, material);
+    }
+
+    static physx::PxShape* CloneShape(physx::PxPhysics& physics, const physx::PxShape& from, bool isExclusive) {
+        return PxCloneShape(physics, from, isExclusive);
+    }
+
+    static physx::PxRigidStatic* CloneStatic(physx::PxPhysics& physicsSDK, const physx::PxTransform& transform, const physx::PxRigidActor& from) {
+        return PxCloneStatic(physicsSDK, transform, from);
+    }
+
+    static physx::PxRigidDynamic* CloneDynamic(physx::PxPhysics& physicsSDK, const physx::PxTransform& transform, const physx::PxRigidDynamic& from) {
+        return PxCloneDynamic(physicsSDK, transform, from);
+    }
+
+    static void ScaleRigidActor(physx::PxRigidActor& actor, physx::PxReal scale, bool scaleMassProps) {
+        return PxScaleRigidActor(actor, scale, scaleMassProps);
+    }
 };
 
 struct PxVehicleTopLevelFunctions {
