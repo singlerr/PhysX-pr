@@ -2734,6 +2734,8 @@ interface PxTopLevelFunctions {
     static PxRigidDynamic CloneDynamic([Ref] PxPhysics physicsSDK, [Const, Ref] PxTransform transform, [Const, Ref] PxRigidDynamic from);
 
     static void ScaleRigidActor([Ref] PxRigidActor actor, float scale, boolean scaleMassProps);
+
+    static void IntegrateTransform([Const, Ref] PxTransform curTrans, [Const, Ref] PxVec3 linvel, [Const, Ref] PxVec3 angvel, float timeStep, [Ref] PxTransform result);
 };
 
 [Prefix="physx::"]
