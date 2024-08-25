@@ -381,6 +381,10 @@ struct PxTopLevelFunctions {
     static void ScaleRigidActor(physx::PxRigidActor& actor, physx::PxReal scale, bool scaleMassProps) {
         return PxScaleRigidActor(actor, scale, scaleMassProps);
     }
+
+    static void IntegrateTransform(const physx::PxTransform& curTrans, const physx::PxVec3& linvel, const physx::PxVec3& angvel, physx::PxReal timeStep, physx::PxTransform& result) {
+        return PxIntegrateTransform(curTrans, linvel, angvel, timeStep, result);
+    }
 };
 
 struct PxVehicleTopLevelFunctions {
