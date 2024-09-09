@@ -337,6 +337,14 @@ struct PxTopLevelFunctions {
     static physx::PxHeightField* CreateHeightField(const physx::PxHeightFieldDesc &desc) {
         return PxCreateHeightField(desc);
     }
+
+    static bool CookTriangleMesh(const physx::PxCookingParams& params, const physx::PxTriangleMeshDesc& desc, physx::PxOutputStream& stream) {
+        return PxCookTriangleMesh(params, desc, stream);
+    }
+
+    static bool CookConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc, physx::PxOutputStream& stream) {
+        return PxCookConvexMesh(params, desc, stream);
+    }
 };
 
 struct PxVehicleTopLevelFunctions {
