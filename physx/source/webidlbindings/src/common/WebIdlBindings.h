@@ -400,6 +400,7 @@ struct PxTopLevelFunctions {
 
     static bool CookConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc, physx::PxOutputStream& stream) {
         return PxCookConvexMesh(params, desc, stream);
+    }
 };
 
 struct PxVehicleTopLevelFunctions {
