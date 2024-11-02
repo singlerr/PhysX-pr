@@ -427,6 +427,7 @@ interface PxArray_PxU8 {
     VoidPtr begin();
     unsigned long size();
     void pushBack(octet value);
+    void setFromBuffer(VoidPtr buffer, unsigned long size);
     void clear();
 };
 
@@ -3772,7 +3773,6 @@ interface Vector_PxU8 {
     unsigned long size();
     void push_back(octet value);
     void clear();
-    void setFromBuffer(VoidPtr buffer, unsigned long size);
 };
 
 interface Vector_PxVec3 {
