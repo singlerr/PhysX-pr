@@ -427,6 +427,7 @@ interface PxArray_PxU8 {
     VoidPtr begin();
     unsigned long size();
     void pushBack(octet value);
+    void setFromBuffer(VoidPtr buffer, unsigned long size);
     void clear();
 };
 
@@ -1873,6 +1874,8 @@ interface PxPhysics {
     PxRigidStatic createRigidStatic([Const, Ref] PxTransform pose);
     PxRigidDynamic createRigidDynamic([Const, Ref] PxTransform pose);
     PxShape createShape([Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, optional boolean isExclusive, [Ref] optional PxShapeFlags shapeFlags);
+    PxTriangleMesh createTriangleMesh([Ref] PxInputData stream);
+    PxConvexMesh createConvexMesh([Ref] PxInputData stream);
     long getNbShapes();
     PxArticulationReducedCoordinate createArticulationReducedCoordinate();
     PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
@@ -2735,6 +2738,8 @@ interface PxTopLevelFunctions {
     static PxConvexMesh CreateConvexMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxConvexMeshDesc desc);
     static PxTriangleMesh CreateTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc);
     static PxHeightField CreateHeightField([Const, Ref] PxHeightFieldDesc desc);
+    static boolean CookTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc, [Ref] PxOutputStream stream);
+    static boolean CookConvexMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxConvexMeshDesc desc, [Ref] PxOutputStream stream);
     static readonly attribute unsigned long PHYSICS_VERSION;
 
     static PxRigidDynamic CreateDynamicFromShape([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Ref] PxShape shape, float density);
