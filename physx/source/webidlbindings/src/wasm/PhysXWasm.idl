@@ -2722,8 +2722,8 @@ PxTetrahedronMeshGeometry implements PxGeometry;
 interface PxTolerancesScale {
     void PxTolerancesScale();
     boolean isValid();
-    [Value] attribute float length;
-    [Value] attribute float speed;
+    attribute float length;
+    attribute float speed;
 };
 
 [NoDelete]
