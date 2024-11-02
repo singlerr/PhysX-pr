@@ -1711,6 +1711,12 @@ interface PxMassProperties {
 interface PxMat33 {
     void PxMat33();
     void PxMat33(PxIDENTITYEnum r);
+    void PxMat33([Const, Ref] PxVec3 col0, [Const, Ref] PxVec3 col1, [Const, Ref] PxVec3 col2);
+    [Value] PxMat33 getTranspose();
+    [Value] PxMat33 getInverse();
+    float getDeterminant();
+    [Value] PxVec3 transform([Const, Ref] PxVec3 other);
+    [Value] PxVec3 transformTranspose([Const, Ref] PxVec3 other);
     [Value] attribute PxVec3 column0;
     [Value] attribute PxVec3 column1;
     [Value] attribute PxVec3 column2;
@@ -1959,7 +1965,8 @@ interface PxPvdTransport {
 interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
-    void PxQuat(float x, float y, float z, float w);
+    void PxQuat(float nx, float ny, float nz, float nw);
+    void PxQuat(float angleRadians, [Const, Ref] PxVec3 unitAxis);
     boolean isIdentity();
     boolean isFinite();
     boolean isUnit();
@@ -2714,6 +2721,9 @@ PxTetrahedronMeshGeometry implements PxGeometry;
 [Prefix="physx::"]
 interface PxTolerancesScale {
     void PxTolerancesScale();
+    boolean isValid();
+    [Value] attribute float length;
+    [Value] attribute float speed;
 };
 
 [NoDelete]
@@ -2760,6 +2770,13 @@ interface PxTransform {
     void PxTransform();
     void PxTransform(PxIDENTITYEnum r);
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
+    [Value] PxTransform getInverse();
+    [Value] PxVec3 transform([Const, Ref] PxVec3 input);
+    [Value] PxVec3 transformInv([Const, Ref] PxVec3 input);
+    boolean isValid();
+    boolean isSane();
+    boolean isFinite();
+    [Value] PxTransform getNormalized();
     [Value] attribute PxQuat q;
     [Value] attribute PxVec3 p;
 };
